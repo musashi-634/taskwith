@@ -1,0 +1,36 @@
+version: '3'
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_volume:/var/lib/mysql
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: password
+      MYSQL_HOST: db
+    depends_on:
+      - db
+    volumes:
+      - .:/myapp
+      # https://qiita.com/shotat/items/57d049793605ffc20135
+      - /myapp/log
+      - /myapp/tmp
+      - storage:/myapp/storage
+      - vendor_bundle:/myapp/vendor/bundle
+    tty: true
+    stdin_open: true
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
+# PC上に下記で定義した名前でボリューム（データ領域）が作成される
+# コンテナを作り直したとしてもPC上に残るようにするために設定
+volumes:
+  mysql_volume:
+  storage:
+  vendor_bundle:
