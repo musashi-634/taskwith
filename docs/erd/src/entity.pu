@@ -1,0 +1,60 @@
+@startuml erd
+
+  entity "users" {
+    + id [PK] <color:gray>integer</color>
+    --
+    name <color:gray>string</color>
+    email <color:gray>string</color>
+    password <color:gray>string</color>
+    created_at <color:gray>datetime</color>
+    updated_at <color:gray>datetime</color>
+  }
+
+  entity "projects" {
+    + id [PK] <color:gray>integer</color>
+    --
+    name <color:gray>string</color>
+    detail <color:gray>text</color>
+    done <color:gray>bool</color>
+    created_at <color:gray>datetime</color>
+    updated_at <color:gray>datetime</color>
+  }
+
+  entity "tasks" {
+    + id [PK] <color:gray>integer</color>
+    --
+    # project_id [FK] <color:gray>integer</color>
+    # parent_id [FK] <color:gray>integer</color>
+    name <color:gray>string</color>
+    start_date <color:gray>date</color>
+    end_date <color:gray>date</color>
+    detail <color:gray>text</color>
+    done <color:gray>bool</color>
+    position <color:gray>integer</color>
+    lft <color:gray>integer</color>
+    rgt <color:gray>integer</color>
+    depth <color:gray>integer</color>
+    permalink <color:gray>string</color>
+    created_at <color:gray>datetime</color>
+    updated_at <color:gray>datetime</color>
+  }
+
+  entity "project_members" {
+    + id [PK] <color:gray>integer</color>
+    --
+    # project_id [FK] <color:gray>integer</color>
+    # user_id [FK] <color:gray>integer</color>
+    created_at <color:gray>datetime</color>
+    updated_at <color:gray>datetime</color>
+  }
+
+  entity "task_staffs" {
+    + id [PK] <color:gray>integer</color>
+    --
+    # task_id [FK] <color:gray>integer</color>
+    # user_id [FK] <color:gray>integer</color>
+    created_at <color:gray>datetime</color>
+    updated_at <color:gray>datetime</color>
+  }
+
+@enduml
