@@ -1,0 +1,18 @@
+@startuml erd
+
+  !include entity.pu
+
+  ' hide the spot
+  hide circle
+
+  ' avoid problems with angled crows feet
+  skinparam linetype ortho
+
+  projects ||--o{ tasks
+  projects ||..o{ project_members
+  tasks ||--o{ tasks
+  tasks ||..o{ task_staffs
+  users ||..o{ project_members
+  users ||..o{ task_staffs
+
+@enduml
