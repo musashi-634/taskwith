@@ -1,0 +1,22 @@
+inherit_from:
+  - .rubocop_airbnb.yml
+
+Rails:
+  Enabled: true # Railsへの最適化。ファイルパスからからどのチェックをするのが良いかを自動的に判断してくれる。
+
+AllCops:
+  Exclude: # 検証したくないフォルダ
+    - 'bin/**/*'
+    - 'config/environments/*'
+    - 'config/application.rb'
+    - 'config/initializers/*'
+    - 'config/spring.rb'
+    - 'db/**/*'
+    - 'lib/tasks/*'
+    - 'log/**/*'
+    - 'path/ruby'
+    - 'spec/rails_helper.rb'
+    - 'spec/spec_helper.rb'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+  NewCops: enable # rubocopのアップデート時に新ルールを自動的に有効にするかどうか
