@@ -60,4 +60,11 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # ドライバー（ブラウザに相当する機能を使用するために必要となるプログラム）の設定
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+  # 関数呼び出し時にFactoryBot.を省略する設定
+  config.include FactoryBot::Syntax::Methods
 end
