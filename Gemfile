@@ -55,6 +55,8 @@ gem "bootstrap", "~> 5.2"
 # Node.jsなしで動作するRails7において、bootstrap使用時に必要となるJavaScriptランタイム
 gem "mini_racer"
 
+gem "devise"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i(mri mingw x64_mingw)
