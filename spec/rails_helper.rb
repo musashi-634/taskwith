@@ -65,6 +65,13 @@ RSpec.configure do |config|
   config.before(:each, type: :system) do
     driven_by :rack_test
   end
+
   # 関数呼び出し時にFactoryBot.を省略する設定
   config.include FactoryBot::Syntax::Methods
+
+  # Capybaraを用いてテストする際に、Wardenのユーザー認証用のヘルパーメソッドを利用する設定
+  config.include Warden::Test::Helpers
+  config.after :each do
+    Warden.test_reset!
+  end
 end
