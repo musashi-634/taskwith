@@ -38,6 +38,58 @@ RSpec.describe 'Users', type: :system do
     end
   end
 
-  describe 'ログイン機能'
-  describe '新規登録機能'
+  describe 'ログイン機能' do
+    let(:user) { create(:user) }
+
+    it 'ログイン後にプロジェクト一覧ページに遷移し、ログインメッセージが表示されること' do
+      visit new_user_session_path
+
+      fill_in 'user[email]', with: user.email
+      fill_in 'user[password]', with: user.password
+      within 'form' do
+        click_on 'ログイン'
+      end
+
+      expect(current_path).to eq projects_path
+      expect(page).to have_content 'ログインしました。'
+    end
+  end
+
+  describe 'ログアウト機能' do
+    let(:user) { create(:user) }
+
+    before do
+      login_as(user, :scope => :user)
+      visit projects_path
+    end
+
+    it 'ログアウト後にルートパスに遷移し、ログアウトメッセージが表示されること' do
+      within 'header' do
+        click_on user.name
+        click_on 'ログアウト'
+      end
+
+      expect(current_path).to eq root_path
+      expect(page).to have_content 'ログアウトしました。'
+    end
+  end
+
+  describe 'ユーザー登録機能' do
+    let(:user) { build(:user) }
+
+    it 'ユーザー登録後にプロジェクト一覧ページに遷移し、登録完了メッセージが表示されること' do
+      visit new_user_registration_path
+
+      fill_in 'user[name]', with: user.name
+      fill_in 'user[email]', with: user.email
+      fill_in 'user[password]', with: user.password
+      fill_in 'user[password_confirmation]', with: user.password
+      within 'form' do
+        click_on 'アカウント登録'
+      end
+
+      expect(current_path).to eq projects_path
+      expect(page).to have_content 'アカウント登録が完了しました。'
+    end
+  end
 end
