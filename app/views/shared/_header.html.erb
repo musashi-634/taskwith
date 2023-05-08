@@ -1,0 +1,47 @@
+<header class="sticky-top">
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <div>
+        <% if user_signed_in? %>
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarDark">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasNavbarDark">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasNavbarDarkLabel">Menu</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <%= link_to "Home", "#", class: "nav-link active" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "Link", "#", class: "nav-link" %>
+                </li>
+              </ul>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div>
+        <% if user_signed_in? %>
+          <div class="dropdown">
+            <%= link_to current_user.name, "#", class: "dropdown-toggle text-light", data: { bs_toggle: "dropdown" } %>
+            <ul class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
+              <li><%= link_to 'アカウント設定', "#", class: "dropdown-item" %></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "dropdown-item" %>
+              </li>
+            </ul>
+          </div>
+        <% else %>
+          <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline-light me-2" %>
+          <%= link_to "ゲストログイン", "#", class: "btn btn-outline-light me-2" %>
+          <%= link_to "新規登録", new_user_registration_path, class: "btn btn-warning" %>
+        <% end %>
+      </div>
+    </div>
+  </nav>
+</header>
