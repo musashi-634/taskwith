@@ -14,8 +14,8 @@
     + id [PK] <color:gray>integer</color>
     --
     name <color:gray>string</color>
-    detail <color:gray>text</color>
-    done <color:gray>bool</color>
+    description <color:gray>text</color>
+    is_done <color:gray>boolean</color>
     created_at <color:gray>datetime</color>
     updated_at <color:gray>datetime</color>
   }
@@ -26,10 +26,10 @@
     # project_id [FK] <color:gray>integer</color>
     # parent_id [FK] <color:gray>integer</color>
     name <color:gray>string</color>
-    start_date <color:gray>date</color>
-    end_date <color:gray>date</color>
-    detail <color:gray>text</color>
-    done <color:gray>bool</color>
+    start_at <color:gray>date</color>
+    end_at <color:gray>date</color>
+    description <color:gray>text</color>
+    is_done <color:gray>boolean</color>
     position <color:gray>integer</color>
     lft <color:gray>integer</color>
     rgt <color:gray>integer</color>
