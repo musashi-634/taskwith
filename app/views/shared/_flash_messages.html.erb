@@ -1,6 +1,10 @@
 <% if notice %>
-  <p class="notice"><%= notice %></p>
+  <div data-turbo-cache="false">
+    <p class="notice"><%= notice %></p>
+  </div>
 <% end %>
 <% if alert %>
-  <p class="alert"><%= alert %></p>
+  <div data-turbo-cache="false">
+    <p class="alert"><%= alert %></p>
+  </div>
 <% end %>
