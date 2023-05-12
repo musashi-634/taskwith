@@ -4,57 +4,20 @@
     <%= link_to "New", new_project_path, class: "btn btn-primary" %>
   </div>
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 py-3">
-    <div class="col">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title mb-3">プロジェクト名</h5>
-          <p class="card-text mb-2">メンバー：</p>
-          <p class="card-text text-muted text-truncate">詳細</p>
-          <div class="btn-group">
-            <%= link_to "詳細", "#", class: "btn btn-sm btn-outline-secondary" %>
-            <%= link_to "タスク", "#", class: "btn btn-sm btn-outline-secondary" %>
+    <% @projects.each do |project| %>
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title mb-3"><%= project.name %></h5>
+            <p class="card-text mb-2">メンバー：</p>
+            <p class="card-text text-muted text-truncate"><%= project.description %></p>
+            <div class="btn-group mt-auto align-self-start">
+              <%= link_to "詳細", "#", class: "btn btn-sm btn-outline-secondary" %>
+              <%= link_to "タスク", "#", class: "btn btn-sm btn-outline-secondary" %>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title mb-3">プロジェクト名</h5>
-          <p class="card-text mb-2">メンバー：</p>
-          <p class="card-text text-muted text-truncate">詳細</p>
-          <div class="btn-group">
-            <%= link_to "詳細", "#", class: "btn btn-sm btn-outline-secondary" %>
-            <%= link_to "タスク", "#", class: "btn btn-sm btn-outline-secondary" %>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title mb-3">プロジェクト名</h5>
-          <p class="card-text mb-2">メンバー：</p>
-          <p class="card-text text-muted text-truncate">詳細</p>
-          <div class="btn-group">
-            <%= link_to "詳細", "#", class: "btn btn-sm btn-outline-secondary" %>
-            <%= link_to "タスク", "#", class: "btn btn-sm btn-outline-secondary" %>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title mb-3">プロジェクト名</h5>
-          <p class="card-text mb-2">メンバー：</p>
-          <p class="card-text text-muted text-truncate">詳細</p>
-          <div class="btn-group">
-            <%= link_to "詳細", "#", class: "btn btn-sm btn-outline-secondary" %>
-            <%= link_to "タスク", "#", class: "btn btn-sm btn-outline-secondary" %>
-          </div>
-        </div>
-      </div>
-    </div>
+    <% end %>
   </div>
 </div>
