@@ -74,4 +74,7 @@ RSpec.configure do |config|
   config.after :each do
     Warden.test_reset!
   end
+
+  # Capybaraを用いないテストで、deviseのユーザー認証用のヘルパーメソッドを利用する設定
+  config.include Devise::Test::IntegrationHelpers, type: :request
 end
