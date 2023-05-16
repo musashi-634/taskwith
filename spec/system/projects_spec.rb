@@ -25,7 +25,7 @@ RSpec.describe 'Projects', type: :system do
     before { visit projects_path }
 
     describe 'ハンバーガーメニュー' do
-      xit 'プロジェクト名が表示されていること' do
+      it 'プロジェクト名が表示されていること' do
         within '.offcanvas' do
           expect(page).to have_content project.name
         end

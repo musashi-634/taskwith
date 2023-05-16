@@ -15,7 +15,7 @@ RSpec.describe "Projects", type: :request do
       expect(response.body).to include project.description
     end
 
-    xit '表示中のプロジェクトの数量を取得できること' do
+    it '表示中のプロジェクトの数量を取得できること' do
       expect(response.body).to include "#{Project.count}件のプロジェクトを表示中"
     end
   end
