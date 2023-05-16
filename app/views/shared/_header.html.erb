@@ -12,7 +12,10 @@
             </div>
             <div class="offcanvas-body">
               <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li class="nav-item">プロジェクト
+                <li class="nav-item mb-4">
+                  <%= link_to "プロジェクト一覧", projects_path, class: "text-decoration-none text-light" %>
+                </li>
+                <li class="nav-item"><span class="fw-bold">プロジェクト</span>
                   <ul class="py-2">
                     <% @projects.each do |project| %>
                       <li class="py-1">
