@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :set_projects, if: :user_signed_in?
+  before_action :set_undone_projects, if: :user_signed_in?
 
   protected
 
@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def set_projects
-    @projects = Project.all
+  def set_undone_projects
+    @undone_projects = Project.undone
   end
 end

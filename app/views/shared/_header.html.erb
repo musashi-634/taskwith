@@ -17,7 +17,7 @@
                 </li>
                 <li class="nav-item"><span class="fw-bold">プロジェクト</span>
                   <ul class="py-2">
-                    <% @projects.each do |project| %>
+                    <% @undone_projects.each do |project| %>
                       <li class="py-1">
                         <%= link_to project.name, "#", class: "text-decoration-none text-light" %>
                       </li>
