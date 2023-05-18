@@ -16,6 +16,6 @@ class ApplicationController < ActionController::Base
   private
 
   def set_undone_projects
-    @undone_projects = Project.undone
+    @undone_projects = Project.undone.descend_by_updated_at
   end
 end

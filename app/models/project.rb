@@ -4,4 +4,6 @@ class Project < ApplicationRecord
 
   scope :undone, -> { where(is_done: false) }
   scope :done, -> { where(is_done: true) }
+
+  scope :descend_by_updated_at, -> { order(updated_at: :desc) }
 end
