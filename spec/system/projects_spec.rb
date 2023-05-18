@@ -19,25 +19,27 @@ RSpec.describe 'Projects', type: :system do
     end
   end
 
+  describe 'ヘッダー' do
+    let!(:undone_project) { create(:project, is_done: false) }
+
+    before { visit projects_path }
+
+    it 'プロジェクト名が表示されていること' do
+      within '.offcanvas' do
+        expect(page).to have_content undone_project.name
+      end
+    end
+  end
+
   describe 'プロジェクト一覧ページ' do
     let!(:undone_project) { create(:project, is_done: false) }
 
     before { visit projects_path }
 
-    describe 'ハンバーガーメニュー' do
-      it 'プロジェクト名が表示されていること' do
-        within '.offcanvas' do
-          expect(page).to have_content undone_project.name
-        end
-      end
-    end
-
-    describe 'メインコンテンツ' do
-      it 'プロジェクトの情報が表示されていること' do
-        within 'main' do
-          expect(page).to have_content undone_project.name
-          expect(page).to have_content undone_project.description
-        end
+    it 'プロジェクトの情報が表示されていること' do
+      within 'main' do
+        expect(page).to have_content undone_project.name
+        expect(page).to have_content undone_project.description
       end
     end
   end
