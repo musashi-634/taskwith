@@ -4,5 +4,9 @@ Rails.application.routes.draw do
   root 'home#index'
   resources :home, only: :index
   devise_for :users
+
+  namespace :projects do
+    resources :done, only: :index
+  end
   resources :projects
 end

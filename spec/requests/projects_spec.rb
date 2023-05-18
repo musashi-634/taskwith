@@ -19,4 +19,18 @@ RSpec.describe "Projects", type: :request do
       expect(response.body).to include "#{Project.undone.count}件のプロジェクトを表示中"
     end
   end
+
+  describe "GET /projects/done" do
+    let(:user) { create(:user) }
+    let!(:done_project) { create(:project, :done) }
+
+    before do
+      sign_in user
+      get projects_done_index_path
+    end
+
+    it '完了したプロジェクト名を取得できること' do
+      expect(response.body).to include done_project.name
+    end
+  end
 end
