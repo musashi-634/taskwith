@@ -1,0 +1,31 @@
+<div class="container">
+  <h1 class="mt-5">完了プロジェクト一覧</h1>
+  <div class="d-flex justify-content-end">
+    <%= link_to "戻る", :back %>
+  </div>
+  <div class="row justify-content-center">
+    <div class="table-responsive col-lg-8">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th scope="col"><%= t('activerecord.attributes.project.name') %></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @done_projects.each do |project| %>
+            <tr>
+              <td><%= project.name %></td>
+              <td>
+                <div class="float-end">
+                  <%= link_to "未完了に戻す", "#", class: "btn btn-primary btn-sm" %>
+                  <%= link_to "削除", "#", class: "btn btn-secondary btn-sm" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

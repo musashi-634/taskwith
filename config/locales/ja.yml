@@ -1,0 +1,12 @@
+ja:
+  activerecord:
+    models:
+      project: プロジェクト
+    attributes:
+      project:
+        name: プロジェクト名
+        description: 説明
+        is_done: 完了
+  attributes:
+    created_at: 作成日時
+    updated_at: 更新日時
