@@ -16,15 +16,19 @@ RSpec.describe 'Projects', type: :system do
 
       expect(current_path).to eq projects_path
       expect(page).to have_content 'プロジェクトを作成しました。'
+      expect(Project.last.users).to eq [user]
     end
   end
 
   describe 'ヘッダー' do
-    let!(:undone_project) { create(:project, is_done: false) }
+    let(:undone_project) { create(:project, is_done: false) }
 
-    before { visit projects_path }
+    before do
+      undone_project.users << user
+      visit projects_path
+    end
 
-    it 'プロジェクト名が表示されていること' do
+    it '自分が割り当てられた未完了プロジェクト名が表示されていること' do
       within '.offcanvas' do
         expect(page).to have_content undone_project.name
       end
@@ -32,14 +36,18 @@ RSpec.describe 'Projects', type: :system do
   end
 
   describe 'プロジェクト一覧ページ' do
-    let!(:undone_project) { create(:project, is_done: false) }
+    let(:undone_project) { create(:project, is_done: false) }
 
-    before { visit projects_path }
+    before do
+      undone_project.users << user
+      visit projects_path
+    end
 
-    it 'プロジェクトの情報が表示されていること' do
-      within 'main' do
+    it '未完了プロジェクトの情報が表示されていること' do
+      within '.card' do
         expect(page).to have_content undone_project.name
         expect(page).to have_content undone_project.description
+        expect(page).to have_content user.name
       end
     end
   end
