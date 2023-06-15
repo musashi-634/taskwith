@@ -16,6 +16,7 @@
     name <color:gray>string</color>
     description <color:gray>text</color>
     is_done <color:gray>boolean</color>
+    is_archived <color:gray>boolean</color>
     created_at <color:gray>datetime</color>
     updated_at <color:gray>datetime</color>
   }
