@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    @undone_projects = Project.undone.descend_by_updated_at.includes(:users).order("users.name ASC")
+    @projects = Project.not_archived.descend_by_updated_at.includes(:users).order("users.name ASC")
   end
 
   def new
