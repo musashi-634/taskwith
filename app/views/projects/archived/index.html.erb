@@ -1,5 +1,5 @@
 <div class="container">
-  <h1 class="mt-5">完了プロジェクト一覧</h1>
+  <h1 class="mt-5">アーカイブ済みのプロジェクト一覧</h1>
   <div class="d-flex justify-content-end">
     <%= link_to "戻る", :back %>
   </div>
@@ -13,12 +13,12 @@
           </tr>
         </thead>
         <tbody>
-          <% @done_projects.each do |project| %>
+          <% @archived_projects.each do |project| %>
             <tr>
               <td><%= project.name %></td>
               <td>
                 <div class="float-end">
-                  <%= link_to "未完了に戻す", "#", class: "btn btn-primary btn-sm" %>
+                  <%= link_to "アーカイブから戻す", "#", class: "btn btn-primary btn-sm" %>
                   <%= link_to "削除", "#", class: "btn btn-secondary btn-sm" %>
                 </div>
               </td>
