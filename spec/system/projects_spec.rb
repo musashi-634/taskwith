@@ -21,32 +21,32 @@ RSpec.describe 'Projects', type: :system do
   end
 
   describe 'ヘッダー' do
-    let(:undone_project) { create(:project, is_done: false) }
+    let(:project) { create(:project, is_archived: false) }
 
     before do
-      undone_project.users << user
+      project.users << user
       visit projects_path
     end
 
-    it '自分が割り当てられた未完了プロジェクト名が表示されていること' do
+    it '自分が割り当てられたプロジェクト名が表示されていること' do
       within '.offcanvas' do
-        expect(page).to have_content undone_project.name
+        expect(page).to have_content project.name
       end
     end
   end
 
   describe 'プロジェクト一覧ページ' do
-    let(:undone_project) { create(:project, is_done: false) }
+    let(:project) { create(:project, is_archived: false) }
 
     before do
-      undone_project.users << user
+      project.users << user
       visit projects_path
     end
 
-    it '未完了プロジェクトの情報が表示されていること' do
+    it 'プロジェクトの情報が表示されていること' do
       within '.card' do
-        expect(page).to have_content undone_project.name
-        expect(page).to have_content undone_project.description
+        expect(page).to have_content project.name
+        expect(page).to have_content project.description
         expect(page).to have_content user.name
       end
     end
