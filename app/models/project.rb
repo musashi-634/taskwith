@@ -4,6 +4,7 @@ class Project < ApplicationRecord
 
   validates :name, presence: true
   validates :is_done, inclusion: [true, false]
+  validates :is_archived, inclusion: [true, false]
 
   scope :not_archived, -> { where(is_archived: false) }
   scope :archived, -> { where(is_archived: true) }
