@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    @undone_projects = Project.undone.descend_by_updated_at.includes(:users).order("users.name ASC")
+    @projects = Project.not_archived.descend_by_updated_at.includes(:users).order("users.name ASC")
   end
 
   def new
@@ -9,7 +9,8 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(
-      **params.require(:project).permit(:name, :description, :is_done), users: [current_user]
+      **params.require(:project).permit(:name, :description, :is_done, :is_archived),
+      users: [current_user]
     )
     if @project.save
       flash[:notice] = 'プロジェクトを作成しました。'

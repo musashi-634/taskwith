@@ -66,20 +66,23 @@ puts '==================== creating project ===================='
 # 新規開発業務
 Project.create!(
   name: '機構Aの騒音低減',
-  description: '製品Aの機構Aの動作音の低減。',
-  is_done: true,
+  description: '【保留】製品Aの機構Aの動作音の低減。改善要望がほとんどないため、保留。次世代機で対応する方針。',
+  is_done: false,
+  is_archived: true,
   users: [user_yamada, user_sato, user_bob]
 )
 Project.create!(
   name: '製品Bの開発',
   description: '大規模病院向けの製品Bの開発。',
   is_done: false,
+  is_archived: false,
   users: [user_yamada, user_sato, user_bob, user_alice]
 )
 Project.create!(
   name: '安全法令Aの対応',
   description: '2024年4月に施行される海外の安全法令Aの対応。設けられた安全基準に対し、2024年3月末までに全件対応必須。対象装置は、法令適用後に出荷されるもの全て。',
   is_done: false,
+  is_archived: false,
   users: [user_yamada, user_sato, user_alice]
 )
 
@@ -88,17 +91,20 @@ Project.create!(
   name: '機構Aのコード断線対応',
   description: 'A医療センターで発生した、製品Aの機構Aのコード断線の対応。',
   is_done: true,
+  is_archived: true,
   users: [user_yamada, user_suzuki, user_hoshino]
 )
 Project.create!(
   name: '機構Bのアーム破損対応',
   description: 'B市民病院で発生した、製品Aの機構Bのアーム破損の対応。',
   is_done: false,
+  is_archived: false,
   users: [user_yamada, user_suzuki, user_hoshino]
 )
 Project.create!(
   name: '機構Cのセンサ誤検知対応',
   description: 'C大学付属病院で発生した、製品Aの機構Cのセンサ誤検知の対応。',
-  is_done: false,
+  is_done: true,
+  is_archived: false,
   users: [user_yamada, user_suzuki, user_saito]
 )

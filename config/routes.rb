@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   namespace :projects do
-    resources :done, only: :index
+    resources :archived, only: :index
   end
   resources :projects
 end

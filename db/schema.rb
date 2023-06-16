@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_22_073030) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_15_051324) do
   create_table "project_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "project_id"
     t.integer "user_id"
@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_073030) do
     t.string "name"
     t.text "description"
     t.boolean "is_done", default: false, null: false
+    t.boolean "is_archived", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
