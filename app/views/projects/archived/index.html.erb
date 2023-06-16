@@ -15,7 +15,9 @@
         <tbody>
           <% @archived_projects.each do |project| %>
             <tr>
-              <td><%= project.name %></td>
+              <td class=<%= "text-black-50" if project.is_done %>>
+                <%= project.name %>
+              </td>
               <td>
                 <div class="float-end">
                   <%= link_to "アーカイブから戻す", "#", class: "btn btn-primary btn-sm" %>
