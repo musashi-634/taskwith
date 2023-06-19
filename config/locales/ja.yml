@@ -2,12 +2,20 @@ ja:
   activerecord:
     models:
       project: プロジェクト
+      task: タスク
     attributes:
       project:
         name: プロジェクト名
         description: 説明
         is_done: 完了
         is_archived: アーカイブ
+      task:
+        name: タスク名
+        start_at: 開始日
+        end_at: 終了日
+        description: 説明
+        is_done: 完了
+        row_order: 行の順番
   attributes:
     created_at: 作成日時
     updated_at: 更新日時
