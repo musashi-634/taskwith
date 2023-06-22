@@ -1,0 +1,9 @@
+<div>
+  <h1><%= @project.name %></h1>
+</div>
+
+<div>
+  <% @tasks.each do |task| %>
+    <p><%= task.name %></p>
+  <% end %>
+</div>
