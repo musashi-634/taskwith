@@ -1,0 +1,140 @@
+// 注意：bootstrapの使用が必要。
+
+body:has(.gantt-chart) {
+  height: 100vh !important;
+}
+main:has(.gantt-chart) {
+  @extend .overflow-hidden;
+}
+.gantt-chart {
+  @extend .d-grid;
+  @extend .bg-white;
+  @extend .border;
+  @extend .overflow-auto;
+  @extend .position-relative;
+  @extend .h-100;
+  @extend .small;
+  @extend .p-0;
+  grid-template-rows: 90px 1fr;
+}
+.gantt-header {
+  @extend .sticky-top;
+  @extend .bg-white;
+}
+.gantt-row {
+  @extend .d-grid;
+  grid-template-columns: minmax(500px, auto);
+
+  @include media-breakpoint-up(sm) {
+    grid-template-columns: 500px 1fr;
+  }
+}
+.gantt-task-header,
+.gantt-task-content {
+  @extend .d-grid;
+  @extend .bg-white;
+  @extend .position-sticky;
+  @extend .start-0;
+  grid-template-columns: 2fr 1fr 80px 80px;
+  border-right: 1px solid var(--bs-gray-300);
+  border-bottom: 1px solid var(--bs-gray-300);
+  z-index: 3;
+
+  &>div {
+    @extend .d-grid;
+    @extend .p-1;
+    place-items: center;
+
+    &:not(:last-child) {
+      border-right: 1px dotted var(--bs-gray-300);
+    }
+  }
+}
+.gantt-task-content>div:first-child {
+  place-items: center start;
+}
+.gantt-scale-header {
+  @extend .d-none;
+  @extend .d-sm-grid;
+  grid-template-rows: 1fr 2fr;
+}
+.gantt-timeline-row {
+  @extend .d-none;
+  @extend .d-sm-grid;
+  grid-template-columns: repeat(42, 30px);
+  border-bottom: 1px solid var(--bs-gray-300);
+}
+.gantt-months>div,
+.gantt-days>div {
+  @extend .d-grid;
+  place-items: center;
+  border-right: 1px dotted var(--bs-gray-300);
+}
+.gantt-days {
+  &>div {
+    @extend .text-center;
+  }
+  .today {
+    @extend .position-relative;
+
+    &::after {
+      @extend .bg-danger;
+      @extend .position-absolute;
+      @extend .d-block;
+      content: "";
+      bottom: 1px;
+      transform: rotate(45deg);
+      height: 9px;
+      width: 9px;
+    }
+  }
+}
+.weekend {
+  @extend .bg-secondary;
+  @extend .bg-opacity-10;
+}
+.gantt-body {
+  @extend .d-grid;
+
+  &>div {
+    grid-area: 1 / 1;
+  }
+}
+.vertical-lines {
+  .gantt-timeline-row>div:not(:last-child) {
+    border-right: 1px dotted var(--bs-gray-300);
+  }
+  .today {
+    @extend .position-relative;
+
+    &::after {
+      @extend .bg-danger;
+      @extend .position-absolute;
+      @extend .start-0;
+      @extend .end-0;
+      @extend .my-0;
+      @extend .mx-auto;
+      @extend .h-100;
+      @extend .d-block;
+      content: "";
+      width: 1px;
+      z-index: 2;
+    }
+  }
+}
+.gantt-tasks .gantt-row:nth-child(odd) {
+  .gantt-timeline-row,
+  .gantt-task-content {
+    @extend .bg-secondary;
+    @extend .bg-opacity-10;
+  }
+}
+.gantt-bar {
+  @extend .bg-primary;
+  @extend .rounded;
+  @extend .position-relative;
+  @extend .h-75;
+  @extend .my-auto;
+  @extend .mx-0;
+  z-index: 1;
+}
