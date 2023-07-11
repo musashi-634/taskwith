@@ -3,7 +3,7 @@
     <h1 class="fs-5 fw-bold"><%= @project.name %></h1>
   </div>
   <div class="row overflow-hidden">
-    <div class="gantt-chart">
+    <div class="gantt-chart" style="--timeline-column-num: <%= @timeline_dates.length %>;">
       <div class="gantt-header gantt-row">
         <div class="gantt-task-header">
           <div>タスク名</div>
@@ -13,52 +13,20 @@
         </div>
         <div class="gantt-scale-header">
           <div class="gantt-months gantt-timeline-row">
-            <div style="grid-column: 1 / 12;">2022/11</div>
-            <div style="grid-column: 12 / 43;">2022/12</div>
+            <% filter_first_day_of_month_with_grid(@timeline_dates).each do |first_day_of_month, start_grid| %>
+              <div style="grid-column: <%= start_grid %> / <%= calculate_end_grid(start_grid, first_day_of_month, first_day_of_month.end_of_month) %>;">
+                <%= first_day_of_month.to_fs(:month) %>
+              </div>
+            <% end %>
           </div>
           <div class="gantt-days gantt-timeline-row">
-            <div class="weekend" style="grid-column: 1;">20<br>日</div>
-            <div style="grid-column: 2;">21<br>月</div>
-            <div style="grid-column: 3;">22<br>火</div>
-            <div style="grid-column: 4;">23<br>水</div>
-            <div style="grid-column: 5;">24<br>木</div>
-            <div style="grid-column: 6;">25<br>金</div>
-            <div class="weekend" style="grid-column: 7;">26<br>土</div>
-            <div class="weekend" style="grid-column: 8;">27<br>日</div>
-            <div style="grid-column: 9;">28<br>月</div>
-            <div style="grid-column: 10;">29<br>火</div>
-            <div style="grid-column: 11;">30<br>水</div>
-            <div style="grid-column: 12;">1<br>木</div>
-            <div class="today" style="grid-column: 13;">2<br>金</div>
-            <div class="weekend" style="grid-column: 14;">3<br>土</div>
-            <div class="weekend" style="grid-column: 15;">4<br>日</div>
-            <div style="grid-column: 16;">5<br>月</div>
-            <div style="grid-column: 17;">6<br>火</div>
-            <div style="grid-column: 18;">7<br>水</div>
-            <div style="grid-column: 19;">8<br>木</div>
-            <div style="grid-column: 20;">9<br>金</div>
-            <div class="weekend" style="grid-column: 21;">10<br>土</div>
-            <div class="weekend" style="grid-column: 22;">11<br>日</div>
-            <div style="grid-column: 23;">12<br>月</div>
-            <div style="grid-column: 24;">13<br>火</div>
-            <div style="grid-column: 25;">14<br>水</div>
-            <div style="grid-column: 26;">15<br>木</div>
-            <div style="grid-column: 27;">16<br>金</div>
-            <div class="weekend" style="grid-column: 28;">17<br>土</div>
-            <div class="weekend" style="grid-column: 29;">18<br>日</div>
-            <div style="grid-column: 30;">19<br>月</div>
-            <div style="grid-column: 31;">20<br>火</div>
-            <div style="grid-column: 32;">21<br>水</div>
-            <div style="grid-column: 33;">22<br>木</div>
-            <div style="grid-column: 34;">23<br>金</div>
-            <div class="weekend" style="grid-column: 35;">24<br>土</div>
-            <div class="weekend" style="grid-column: 36;">25<br>日</div>
-            <div style="grid-column: 37;">26<br>月</div>
-            <div style="grid-column: 38;">27<br>火</div>
-            <div style="grid-column: 39;">28<br>水</div>
-            <div style="grid-column: 40;">29<br>木</div>
-            <div style="grid-column: 41;">30<br>金</div>
-            <div class="weekend" style="grid-column: 42;">31<br>土</div>
+            <% @timeline_dates.each.with_index(1) do |date, column| %>
+              <div class="<%= "today" if date == @today %><%= " weekend" if weekend?(date) %>" style="grid-column: <%= column %>;">
+                <%= date.day %>
+                <br>
+                <%= date.to_fs(:japanese_day_of_week) %>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>
@@ -66,48 +34,9 @@
         <div class="vertical-lines gantt-row">
           <div class="gantt-task-content"></div>
           <div class="gantt-timeline-row">
-            <div class="weekend" style="grid-column: 1;"></div>
-            <div style="grid-column: 2;"></div>
-            <div style="grid-column: 3;"></div>
-            <div style="grid-column: 4;"></div>
-            <div style="grid-column: 5;"></div>
-            <div style="grid-column: 6;"></div>
-            <div class="weekend" style="grid-column: 7;"></div>
-            <div class="weekend" style="grid-column: 8;"></div>
-            <div style="grid-column: 9;"></div>
-            <div style="grid-column: 10;"></div>
-            <div style="grid-column: 11;"></div>
-            <div style="grid-column: 12;"></div>
-            <div class="today" style="grid-column: 13;"></div>
-            <div class="weekend" style="grid-column: 14;"></div>
-            <div class="weekend" style="grid-column: 15;"></div>
-            <div style="grid-column: 16;"></div>
-            <div style="grid-column: 17;"></div>
-            <div style="grid-column: 18;"></div>
-            <div style="grid-column: 19;"></div>
-            <div style="grid-column: 20;"></div>
-            <div class="weekend" style="grid-column: 21;"></div>
-            <div class="weekend" style="grid-column: 22;"></div>
-            <div style="grid-column: 23;"></div>
-            <div style="grid-column: 24;"></div>
-            <div style="grid-column: 25;"></div>
-            <div style="grid-column: 26;"></div>
-            <div style="grid-column: 27;"></div>
-            <div class="weekend" style="grid-column: 28;"></div>
-            <div class="weekend" style="grid-column: 29;"></div>
-            <div style="grid-column: 30;"></div>
-            <div style="grid-column: 31;"></div>
-            <div style="grid-column: 32;"></div>
-            <div style="grid-column: 33;"></div>
-            <div style="grid-column: 34;"></div>
-            <div class="weekend" style="grid-column: 35;"></div>
-            <div class="weekend" style="grid-column: 36;"></div>
-            <div style="grid-column: 37;"></div>
-            <div style="grid-column: 38;"></div>
-            <div style="grid-column: 39;"></div>
-            <div style="grid-column: 40;"></div>
-            <div style="grid-column: 41;"></div>
-            <div class="weekend" style="grid-column: 42;"></div>
+            <% @timeline_dates.each.with_index(1) do |date, column| %>
+              <div class="<%= "today" if date == @today %><%= " weekend" if weekend?(date) %>" style="grid-column: <%= column %>;"></div>
+            <% end %>
           </div>
         </div>
         <div class="gantt-tasks">
@@ -119,7 +48,7 @@
               <div>2022/11/24</div>
             </div>
             <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: 5 / 6"></div>
+              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/11/24".to_date, "2022/11/24".to_date) %>"></div>
             </div>
           </div>
           <div class="gantt-row">
@@ -130,7 +59,7 @@
               <div>2022/11/29</div>
             </div>
             <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: 5 / 11"></div>
+              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/11/24".to_date, "2022/11/29".to_date) %>"></div>
             </div>
           </div>
           <div class="gantt-row">
@@ -141,7 +70,7 @@
               <div>2022/12/2</div>
             </div>
             <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: 5 / 14"></div>
+              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/11/24".to_date, "2022/12/2".to_date) %>"></div>
             </div>
           </div>
           <div class="gantt-row">
@@ -152,7 +81,7 @@
               <div>2022/12/5</div>
             </div>
             <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: 16 / 17"></div>
+              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/5".to_date, "2022/12/5".to_date) %>"></div>
             </div>
           </div>
           <div class="gantt-row">
@@ -163,7 +92,7 @@
               <div>2022/12/7</div>
             </div>
             <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: 17 / 19"></div>
+              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/6".to_date, "2022/12/7".to_date) %>"></div>
             </div>
           </div>
           <div class="gantt-row">
@@ -174,7 +103,7 @@
               <div>2022/12/9</div>
             </div>
             <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: 19 / 21"></div>
+              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/8".to_date, "2022/12/9".to_date) %>"></div>
             </div>
           </div>
           <div class="gantt-row">
@@ -185,7 +114,7 @@
               <div>2022/12/16</div>
             </div>
             <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: 21 / 28"></div>
+              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/10".to_date, "2022/12/16".to_date) %>"></div>
             </div>
           </div>
           <div class="gantt-row">
@@ -196,7 +125,7 @@
               <div>2022/12/19</div>
             </div>
             <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: 28 / 31"></div>
+              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/17".to_date, "2022/12/19".to_date) %>"></div>
             </div>
           </div>
           <div class="gantt-row">
@@ -207,7 +136,7 @@
               <div>2022/12/20</div>
             </div>
             <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: 31 / 32"></div>
+              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/20".to_date, "2022/12/20".to_date) %>"></div>
             </div>
           </div>
         </div>
