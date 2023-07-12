@@ -6,10 +6,10 @@
     <div class="gantt-chart" style="--timeline-column-num: <%= @timeline_dates.length %>;">
       <div class="gantt-header gantt-row">
         <div class="gantt-task-header">
-          <div>タスク名</div>
+          <div><%= t('activerecord.attributes.task.name') %></div>
           <div>担当者</div>
-          <div>開始日</div>
-          <div>終了日</div>
+          <div><%= t('activerecord.attributes.task.start_at') %></div>
+          <div><%= t('activerecord.attributes.task.end_at') %></div>
         </div>
         <div class="gantt-scale-header">
           <div class="gantt-months gantt-timeline-row">
@@ -40,105 +40,21 @@
           </div>
         </div>
         <div class="gantt-tasks">
-          <div class="gantt-row">
-            <div class="gantt-task-content">
-              <div>ロゴ提出期限</div>
-              <div>クライアント</div>
-              <div>2022/11/24</div>
-              <div>2022/11/24</div>
+          <% @tasks.each do |task| %>
+            <div class="gantt-row">
+              <div class="gantt-task-content">
+                <div><%= task.name %></div>
+                <div></div>
+                <div><%= task.start_at.to_fs(:date) %></div>
+                <div><%= task.end_at.to_fs(:date) %></div>
+              </div>
+              <div class="gantt-timeline-row">
+                <div class="gantt-bar"
+                     style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, task.start_at.to_date, task.end_at.to_date) %>"
+                ></div>
+              </div>
             </div>
-            <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/11/24".to_date, "2022/11/24".to_date) %>"></div>
-            </div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task-content">
-              <div>写真素材期限</div>
-              <div>クライアント</div>
-              <div>2022/11/24</div>
-              <div>2022/11/29</div>
-            </div>
-            <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/11/24".to_date, "2022/11/29".to_date) %>"></div>
-            </div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task-content">
-              <div>テキスト素材期限</div>
-              <div>クライアント</div>
-              <div>2022/11/24</div>
-              <div>2022/12/2</div>
-            </div>
-            <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/11/24".to_date, "2022/12/2".to_date) %>"></div>
-            </div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task-content">
-              <div>デザイン提出</div>
-              <div></div>
-              <div>2022/12/5</div>
-              <div>2022/12/5</div>
-            </div>
-            <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/5".to_date, "2022/12/5".to_date) %>"></div>
-            </div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task-content">
-              <div>デザイン戻し</div>
-              <div>クライアント</div>
-              <div>2022/12/6</div>
-              <div>2022/12/7</div>
-            </div>
-            <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/6".to_date, "2022/12/7".to_date) %>"></div>
-            </div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task-content">
-              <div>デザイン提出FIX</div>
-              <div></div>
-              <div>2022/12/8</div>
-              <div>2022/12/9</div>
-            </div>
-            <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/8".to_date, "2022/12/9".to_date) %>"></div>
-            </div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task-content">
-              <div>コーディング</div>
-              <div></div>
-              <div>2022/12/10</div>
-              <div>2022/12/16</div>
-            </div>
-            <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/10".to_date, "2022/12/16".to_date) %>"></div>
-            </div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task-content">
-              <div>テストUPチェック</div>
-              <div></div>
-              <div>2022/12/17</div>
-              <div>2022/12/19</div>
-            </div>
-            <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/17".to_date, "2022/12/19".to_date) %>"></div>
-            </div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task-content">
-              <div>本番UP</div>
-              <div></div>
-              <div>2022/12/20</div>
-              <div>2022/12/20</div>
-            </div>
-            <div class="gantt-timeline-row">
-              <div class="gantt-bar" style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, "2022/12/20".to_date, "2022/12/20".to_date) %>"></div>
-            </div>
-          </div>
+          <% end %>
         </div>
       </div>
     </div>
