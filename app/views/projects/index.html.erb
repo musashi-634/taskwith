@@ -20,7 +20,7 @@
             <p class="card-text text-black-50 text-truncate"><%= project.description %></p>
             <div class="btn-group mt-auto align-self-start">
               <%= link_to "詳細", "#", class: "btn btn-sm btn-outline-secondary" %>
-              <%= link_to "タスク", "#", class: "btn btn-sm btn-outline-secondary" %>
+              <%= link_to "タスク", project_tasks_path(project), class: "btn btn-sm btn-outline-secondary" %>
             </div>
           </div>
         </div>

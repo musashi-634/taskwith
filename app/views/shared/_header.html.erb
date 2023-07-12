@@ -19,7 +19,7 @@
                   <ul class="py-2">
                     <% @my_projects.each do |project| %>
                       <li class="py-1">
-                        <%= link_to project.name, "#", class: "text-decoration-none text-light" %>
+                        <%= link_to project.name, project_tasks_path(project), class: "text-decoration-none text-light" %>
                       </li>
                     <% end %>
                   </ul>
