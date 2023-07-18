@@ -1,9 +1,15 @@
-<div class="container-fluid d-flex flex-column h-100">
-  <div class="my-3">
-    <h1 class="fs-5 fw-bold"><%= @project.name %></h1>
+<div class="container-fluid d-flex flex-column h-100"
+     data-controller="gantt-chart"
+     data-gantt-chart-offset-day-value="-2">
+  <div class="my-3 d-flex align-items-center justify-content-between">
+    <h1 class="fs-5 fw-bold m-0"><%= @project.name %></h1>
+    <button class="btn btn-primary btn-sm"
+            data-action="click->gantt-chart#scrollToToday">今日</button>
   </div>
   <div class="row overflow-hidden">
-    <div class="gantt-chart" style="--timeline-column-num: <%= @timeline_dates.length %>;">
+    <div class="gantt-chart"
+         style="--timeline-column-num: <%= @timeline_dates.length %>;"
+         data-gantt-chart-target="chart">
       <div class="gantt-header gantt-row">
         <div class="gantt-task-header">
           <div><%= t('activerecord.attributes.task.name') %></div>
@@ -21,7 +27,9 @@
           </div>
           <div class="gantt-days gantt-timeline-row">
             <% @timeline_dates.each.with_index(1) do |date, column| %>
-              <div class="<%= "today" if date == @today %><%= " weekend" if weekend?(date) %>" style="grid-column: <%= column %>;">
+              <div class="<%= "today" if date == @today %><%= " weekend" if weekend?(date) %>"
+                   style="grid-column: <%= column %>;"
+                   data-gantt-chart-target="<%= "today" if date == @today %>">
                 <%= date.day %>
                 <br>
                 <%= date.to_fs(:japanese_day_of_week) %>
