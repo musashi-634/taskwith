@@ -19,9 +19,10 @@
         </div>
         <div class="gantt-scale-header">
           <div class="gantt-months gantt-timeline-row">
-            <% filter_first_day_of_month_with_grid(@timeline_dates).each do |first_day_of_month, start_grid| %>
-              <div style="grid-column: <%= start_grid %> / <%= calculate_end_grid(start_grid, first_day_of_month, first_day_of_month.end_of_month) %>;">
-                <%= first_day_of_month.to_fs(:month) %>
+            <% filter_month_start_dates_with_grid(@timeline_dates).each do |month_start_date, start_grid| %>
+              <div style="<%= calculate_grid_column(
+                                @timeline_dates, month_start_date, month_start_date.end_of_month, known_start_grid: start_grid) %>">
+                <%= month_start_date.to_fs(:month) %>
               </div>
             <% end %>
           </div>
@@ -58,7 +59,7 @@
               </div>
               <div class="gantt-timeline-row">
                 <div class="gantt-bar"
-                     style="grid-column: <%= calculate_grid_column_in_timeline(@timeline_dates, task.start_at.to_date, task.end_at.to_date) %>"
+                     style="<%= calculate_grid_column(@timeline_dates, task.start_at.to_date, task.end_at.to_date) %>"
                 ></div>
               </div>
             </div>
