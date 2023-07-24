@@ -139,3 +139,11 @@ main:has(.gantt-chart) {
   @extend .mx-0;
   z-index: 1;
 }
+.done-task {
+  .gantt-task-content {
+    @extend .text-black-50;
+  }
+  .gantt-bar {
+    @extend .bg-secondary;
+  }
+}

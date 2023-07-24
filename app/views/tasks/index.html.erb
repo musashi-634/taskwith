@@ -50,7 +50,7 @@
         </div>
         <div class="gantt-tasks">
           <% @tasks.each do |task| %>
-            <div class="gantt-row">
+            <div class="gantt-row <%= "done-task" if task.is_done %>">
               <div class="gantt-task-content">
                 <div><%= task.name %></div>
                 <div></div>
