@@ -8,5 +8,7 @@ Rails.application.routes.draw do
   namespace :projects do
     resources :archived, only: :index
   end
-  resources :projects
+  resources :projects do
+    resources :tasks
+  end
 end

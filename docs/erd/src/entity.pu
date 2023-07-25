@@ -31,7 +31,7 @@
     end_at <color:gray>date</color>
     description <color:gray>text</color>
     is_done <color:gray>boolean</color>
-    position <color:gray>integer</color>
+    row_order <color:gray>integer</color>
     lft <color:gray>integer</color>
     rgt <color:gray>integer</color>
     depth <color:gray>integer</color>
