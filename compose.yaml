@@ -18,12 +18,12 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/myapp
+      - .:/taskwith
       # https://qiita.com/shotat/items/57d049793605ffc20135
-      - /myapp/log
-      - /myapp/tmp
-      - storage:/myapp/storage
-      - vendor_bundle:/myapp/vendor/bundle
+      - /taskwith/log
+      - /taskwith/tmp
+      - storage:/taskwith/storage
+      - vendor_bundle:/taskwith/vendor/bundle
     tty: true
     stdin_open: true
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
