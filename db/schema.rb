@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_19_065721) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_02_055835) do
+  create_table "organizations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "project_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "project_id"
     t.integer "user_id"
@@ -20,6 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_19_065721) do
   end
 
   create_table "projects", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "organization_id"
     t.string "name"
     t.text "description"
     t.boolean "is_done", default: false, null: false
@@ -41,6 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_19_065721) do
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "organization_id"
     t.string "name"
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false

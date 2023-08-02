@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  belongs_to :organization, optional: true
+
   has_many :project_members, dependent: :destroy
   has_many :projects, through: :project_members
 
