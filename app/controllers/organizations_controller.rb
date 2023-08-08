@@ -1,4 +1,6 @@
 class OrganizationsController < ApplicationController
+  skip_before_action :block_user_belongs_to_no_organization, only: :new
+
   def new
     if current_user.organization.present?
       flash[:alert] = 'すでに組織に所属しています。'
@@ -7,7 +9,6 @@ class OrganizationsController < ApplicationController
   end
 
   def show
-    redirect_to new_organization_path if current_user.organization.blank?
     @organization = current_user.organization
   end
 end
