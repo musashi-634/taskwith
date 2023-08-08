@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Tasks', type: :system do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :with_organization) }
 
   before { login_as(user, :scope => :user) }
 
