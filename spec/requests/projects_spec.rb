@@ -7,20 +7,31 @@ RSpec.describe "Projects", type: :request do
 
   describe "GET /projects" do
     context 'ユーザーが組織に所属している場合' do
-      let(:project) { create(:project, is_archived: false) }
+      let!(:organization) { create(:organization, users: [user]) }
 
-      before do
-        project.organization.users << user
-        get projects_path
+      context 'プロジェクトが所属組織のものである場合' do
+        let!(:project) { create(:project, is_archived: false, organization: organization) }
+
+        before { get projects_path }
+
+        it 'プロジェクト情報を取得できること' do
+          expect(response.body).to include project.name
+          expect(response.body).to include project.description
+        end
+
+        it '表示中のプロジェクトの数量を取得できること' do
+          expect(response.body).to include "#{Project.where(is_archived: false).count}件のプロジェクトを表示中"
+        end
       end
 
-      it 'プロジェクト情報を取得できること' do
-        expect(response.body).to include project.name
-        expect(response.body).to include project.description
-      end
+      context 'プロジェクトが他の組織のものである場合' do
+        let!(:project) { create(:project, is_archived: false) }
 
-      it '表示中のプロジェクトの数量を取得できること' do
-        expect(response.body).to include "#{Project.where(is_archived: false).count}件のプロジェクトを表示中"
+        before { get projects_path }
+
+        it 'プロジェクト情報を取得できないこと' do
+          expect(response.body).not_to include project.name
+        end
       end
     end
 
@@ -56,15 +67,26 @@ RSpec.describe "Projects", type: :request do
 
   describe "GET /projects/archived" do
     context 'ユーザーが組織に所属している場合' do
-      let(:archived_project) { create(:project, :archived) }
+      let!(:organization) { create(:organization, users: [user]) }
 
-      before do
-        archived_project.organization.users << user
-        get projects_archived_index_path
+      context 'プロジェクトが所属組織のものである場合' do
+        let!(:archived_project) { create(:project, :archived, organization: organization) }
+
+        before { get projects_archived_index_path }
+
+        it 'アーカイブ済みのプロジェクト名を取得できること' do
+          expect(response.body).to include archived_project.name
+        end
       end
 
-      it 'アーカイブ済みのプロジェクト名を取得できること' do
-        expect(response.body).to include archived_project.name
+      context 'プロジェクトが他の組織のものである場合' do
+        let!(:archived_project) { create(:project, :archived) }
+
+        before { get projects_archived_index_path }
+
+        it 'アーカイブ済みのプロジェクト名を取得できないこと' do
+          expect(response.body).not_to include archived_project.name
+        end
       end
     end
 

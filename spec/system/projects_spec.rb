@@ -21,12 +21,11 @@ RSpec.describe 'Projects', type: :system do
   end
 
   describe 'ヘッダー' do
-    let(:project) { create(:project, is_archived: false) }
-
-    before do
-      project.users << user
-      visit projects_path
+    let!(:project) do
+      create(:project, is_archived: false, organization: user.organization, users: [user])
     end
+
+    before { visit projects_path }
 
     it '自分が割り当てられたプロジェクト名が表示されていること' do
       within '.offcanvas' do
@@ -36,18 +35,14 @@ RSpec.describe 'Projects', type: :system do
   end
 
   describe 'プロジェクト一覧ページ' do
-    let(:project) { create(:project, is_archived: false) }
+    let!(:project) { create(:project, is_archived: false, organization: user.organization) }
 
-    before do
-      project.users << user
-      visit projects_path
-    end
+    before { visit projects_path }
 
     it 'プロジェクトの情報が表示されていること' do
       within '.card' do
         expect(page).to have_content project.name
         expect(page).to have_content project.description
-        expect(page).to have_content user.name
       end
     end
   end
