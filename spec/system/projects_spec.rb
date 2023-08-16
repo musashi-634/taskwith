@@ -16,6 +16,7 @@ RSpec.describe 'Projects', type: :system do
 
       expect(current_path).to eq projects_path
       expect(page).to have_content 'プロジェクトを作成しました。'
+      expect(Project.last.organization).to eq user.organization
       expect(Project.last.users).to eq [user]
     end
   end
