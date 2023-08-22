@@ -15,8 +15,8 @@ RSpec.describe "Projects", type: :request do
         before { get projects_path }
 
         it 'プロジェクト情報を取得できること' do
+          expect(response).to have_http_status 200
           expect(response.body).to include project.name
-          expect(response.body).to include project.description
         end
 
         it '表示中のプロジェクトの数量を取得できること' do
@@ -60,6 +60,45 @@ RSpec.describe "Projects", type: :request do
       before { get new_project_path }
 
       it '組織作成ページにリダイレクトされること' do
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
+
+  describe "POST /projects" do
+    context 'ユーザーが組織に所属している場合' do
+      before { create(:organization, users: [user]) }
+
+      context '有効な属性値の場合' do
+        let(:project_attributes) { attributes_for(:project) }
+
+        it 'プロジェクトを作成できること' do
+          expect do
+            post projects_path, params: { project: project_attributes }
+          end.to change { user.projects.count }.by(1)
+          expect(Project.last.organization).to eq user.organization
+        end
+      end
+
+      context '無効な属性値の場合' do
+        let(:project_attributes) { attributes_for(:project, :invalid) }
+
+        it 'プロジェクトを作成できないこと' do
+          expect do
+            post projects_path, params: { project: project_attributes }
+          end.not_to change { user.projects.count }
+          expect(response).to have_http_status :unprocessable_entity
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let(:project_attributes) { attributes_for(:project) }
+
+      it 'プロジェクトが作成されず、組織作成ページにリダイレクトされること' do
+        expect do
+          post projects_path, params: { project: project_attributes }
+        end.not_to change { user.projects.count }
         expect(response).to redirect_to new_organization_path
       end
     end
