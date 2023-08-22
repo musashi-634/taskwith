@@ -1,6 +1,7 @@
 class ProjectsController < ApplicationController
   def index
-    @projects = Project.not_archived.descend_by_updated_at.includes(:users).order("users.name ASC")
+    @projects = current_user.organization.projects.not_archived.
+      descend_by_updated_at.includes(:users).order("users.name ASC")
   end
 
   def new
@@ -10,6 +11,7 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.new(
       **params.require(:project).permit(:name, :description, :is_done, :is_archived),
+      organization: current_user.organization,
       users: [current_user]
     )
     if @project.save

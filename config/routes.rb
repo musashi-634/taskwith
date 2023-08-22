@@ -3,7 +3,11 @@ Rails.application.routes.draw do
 
   root 'home#index'
   resources :home, only: :index
+
   devise_for :users
+
+  resource :organization
+  resolve('Organization') { [:organization] } # 単数形リソースでform_withを機能させるため
 
   namespace :projects do
     resources :archived, only: :index

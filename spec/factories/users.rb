@@ -4,4 +4,8 @@ FactoryBot.define do
     sequence(:email) { |n| "test#{n}@example.com" }
     password { 'f4k3p455w0rd' }
   end
+
+  trait :with_organization do
+    association :organization
+  end
 end

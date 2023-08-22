@@ -8,6 +8,8 @@
   ' avoid problems with angled crows feet
   skinparam linetype ortho
 
+  organizations ||--o{ projects
+  organizations ||..|{ users
   projects ||--o{ tasks
   projects ||..o{ project_members
   tasks ||--o{ tasks

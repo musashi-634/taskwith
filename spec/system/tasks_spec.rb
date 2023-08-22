@@ -1,17 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe 'Tasks', type: :system do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :with_organization) }
 
   before { login_as(user, :scope => :user) }
 
   describe 'プロジェクトタスク一覧ページ' do
-    describe 'プロジェクト情報' do
-      let(:project) { create(:project) }
+    let(:project) { create(:project, organization: user.organization) }
 
-      before do
-        visit project_tasks_path(project)
-      end
+    describe 'プロジェクト情報' do
+      before { visit project_tasks_path(project) }
 
       it '指定したプロジェクト名が表示されていること' do
         within 'main' do
@@ -21,11 +19,9 @@ RSpec.describe 'Tasks', type: :system do
     end
 
     describe 'タスク情報' do
-      let(:task) { create(:task, :done) }
+      let!(:task) { create(:task, :done, project: project) }
 
-      before do
-        visit project_tasks_path(task.project)
-      end
+      before { visit project_tasks_path(project) }
 
       it '完了タスクがグレーアウトされていること' do
         within '.gantt-tasks' do

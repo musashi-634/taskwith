@@ -1,8 +1,17 @@
 @startuml erd
 
+  entity "organizations" {
+    + id [PK] <color:gray>integer</color>
+    --
+    name <color:gray>string</color>
+    created_at <color:gray>datetime</color>
+    updated_at <color:gray>datetime</color>
+  }
+
   entity "users" {
     + id [PK] <color:gray>integer</color>
     --
+    # organization_id [FK] <color:gray>integer</color>
     name <color:gray>string</color>
     email <color:gray>string</color>
     password <color:gray>string</color>
@@ -13,6 +22,7 @@
   entity "projects" {
     + id [PK] <color:gray>integer</color>
     --
+    # organization_id [FK] <color:gray>integer</color>
     name <color:gray>string</color>
     description <color:gray>text</color>
     is_done <color:gray>boolean</color>

@@ -2,15 +2,15 @@
   <h1 class="mt-5">新規プロジェクト作成</h1>
   <%= form_with model: @project do |f| %>
     <%= render "shared/error_messages", object: @project %>
-    <div class="field">
+    <div>
       <%= f.label :name %><br />
       <%= f.text_field :name, autofocus: true %>
     </div>
-    <div class="field">
+    <div>
       <%= f.label :description %><br />
       <%= f.text_area :description %>
     </div>
-    <div class="actions">
+    <div>
       <%= f.submit "作成" %>
     </div>
   <% end %>

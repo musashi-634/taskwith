@@ -39,7 +39,7 @@ RSpec.describe 'Users', type: :system do
   end
 
   describe 'ログイン機能' do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :with_organization) }
 
     it 'ログイン後にプロジェクト一覧ページに遷移し、ログインメッセージが表示されること' do
       visit new_user_session_path
@@ -56,7 +56,7 @@ RSpec.describe 'Users', type: :system do
   end
 
   describe 'ログアウト機能' do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :with_organization) }
 
     before do
       login_as(user, :scope => :user)
@@ -77,7 +77,7 @@ RSpec.describe 'Users', type: :system do
   describe 'ユーザー登録機能' do
     let(:user) { build(:user) }
 
-    it 'ユーザー登録後にプロジェクト一覧ページに遷移し、登録完了メッセージが表示されること' do
+    it 'ユーザー登録後に組織作成ページに遷移し、登録完了メッセージが表示されること' do
       visit new_user_registration_path
 
       fill_in 'user[name]', with: user.name
@@ -88,7 +88,7 @@ RSpec.describe 'Users', type: :system do
         click_on 'アカウント登録'
       end
 
-      expect(current_path).to eq projects_path
+      expect(current_path).to eq new_organization_path
       expect(page).to have_content 'アカウント登録が完了しました。'
     end
   end

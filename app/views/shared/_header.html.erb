@@ -35,6 +35,7 @@
             <%= link_to current_user.name, "#", class: "dropdown-toggle text-light", data: { bs_toggle: "dropdown" } %>
             <ul class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
               <li><%= link_to 'アカウント設定', "#", class: "dropdown-item" %></li>
+              <li><%= link_to '組織設定', organization_path, class: "dropdown-item" %></li>
               <li><hr class="dropdown-divider"></li>
               <li>
                 <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "dropdown-item" %>

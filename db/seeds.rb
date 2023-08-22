@@ -6,9 +6,18 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+puts '==================== creating organization ===================='
+
+jmd_organization = Organization.create!(
+  name: '株式会社JMD'
+)
+kanagawa_steel_organization = Organization.create!(
+  name: '神奈川製鉄株式会社'
+)
+
 puts '==================== creating user ===================='
 
-# 「組織の構図」
+# 「JMD株式会社の組織構図」
 #
 # 山田課長 @製品開発部　機械設計グループ
 #   |-- 佐藤リーダー（新規開発業務）
@@ -20,67 +29,74 @@ puts '==================== creating user ===================='
 
 USER_PASSWORD = 'test123'
 
-yamada_user = User.create!(
+yamada_user = jmd_organization.users.create!(
   name: '山田　太郎',
   email: 'taro.yamada@example.com',
   password: USER_PASSWORD,
-  password_confirmation: USER_PASSWORD
 )
-sato_user = User.create!(
+sato_user = jmd_organization.users.create!(
   name: '佐藤　守',
   email: 'mamoru.sato@example.com',
   password: USER_PASSWORD,
-  password_confirmation: USER_PASSWORD
 )
-alice_user = User.create!(
+alice_user = jmd_organization.users.create!(
   name: 'Alice.W',
   email: 'alice.williams@example.com',
   password: USER_PASSWORD,
-  password_confirmation: USER_PASSWORD
 )
-bob_user = User.create!(
+bob_user = jmd_organization.users.create!(
   name: 'Bob.J',
   email: 'bob.johnson@example.com',
   password: USER_PASSWORD,
-  password_confirmation: USER_PASSWORD
 )
-suzuki_user = User.create!(
+suzuki_user = jmd_organization.users.create!(
   name: '鈴木　咲',
   email: 'saki.suzuki@example.com',
   password: USER_PASSWORD,
-  password_confirmation: USER_PASSWORD
 )
-hoshino_user = User.create!(
+hoshino_user = jmd_organization.users.create!(
   name: '星野　結衣',
   email: 'yui.hoshino@example.com',
   password: USER_PASSWORD,
-  password_confirmation: USER_PASSWORD
 )
-saito_user = User.create!(
+saito_user = jmd_organization.users.create!(
   name: '斎藤　修',
   email: 'osamu.saito@example.com',
   password: USER_PASSWORD,
-  password_confirmation: USER_PASSWORD
+)
+
+# 神奈川製鉄株式会社
+tanaka_user = kanagawa_steel_organization.users.create!(
+  name: '田中　花子',
+  email: 'hanako.tanaka@example.com',
+  password: USER_PASSWORD,
+)
+
+# 無所属
+User.create!(
+  name: '山下　次郎',
+  email: 'jiro.yamashita@example.com',
+  password: USER_PASSWORD,
 )
 
 puts '==================== creating project ===================='
 
 # 新規開発業務
-noise_reduction_project = Project.create!(
+noise_reduction_project = jmd_organization.projects.create!(
   name: '機構Aの騒音低減',
   description: '【保留】製品Aの機構Aの動作音の低減。改善要望がほとんどないため、保留。次世代機で対応する方針。',
   is_done: false,
   is_archived: true,
   users: [yamada_user, sato_user, bob_user]
 )
-product_development_project = Project.create!(
+product_development_project = jmd_organization.projects.create!(
   name: '製品Bの開発',
   description: '大規模病院向けの製品Bの開発。',
   is_done: false,
   is_archived: false,
   users: [yamada_user, sato_user, bob_user, alice_user]
 )
-safety_regulations_project = Project.create!(
+safety_regulations_project = jmd_organization.projects.create!(
   name: '安全法令Aの対応',
   description: '20XX年XX月に施行される海外の安全法令Aの対応。設けられた安全基準に対し、全件対応必須。対象装置は、法令適用後に出荷されるもの全て。',
   is_done: false,
@@ -89,26 +105,40 @@ safety_regulations_project = Project.create!(
 )
 
 # 不具合対応業務
-cable_disconnection_project = Project.create!(
+cable_disconnection_project = jmd_organization.projects.create!(
   name: '機構Aのコード断線対応',
   description: 'A医療センターで発生した、製品Aの機構Aのコード断線の対応。',
   is_done: true,
   is_archived: true,
   users: [yamada_user, suzuki_user, hoshino_user]
 )
-arm_breaking_project = Project.create!(
+arm_breaking_project = jmd_organization.projects.create!(
   name: '機構Bのアーム破損対応',
   description: 'B市民病院で発生した、製品Aの機構Bのアーム破損の対応。',
   is_done: false,
   is_archived: false,
   users: [yamada_user, suzuki_user, hoshino_user]
 )
-sensor_false_detection_project = Project.create!(
+sensor_false_detection_project = jmd_organization.projects.create!(
   name: '機構Cのセンサ誤検知対応',
   description: 'C大学付属病院で発生した、製品Aの機構Cのセンサ誤検知の対応。',
   is_done: true,
   is_archived: false,
   users: [yamada_user, suzuki_user, saito_user]
+)
+
+# 神奈川製鉄株式会社
+material_research_project = kanagawa_steel_organization.projects.create!(
+  name: '高強度かつ軽量な材料の研究',
+  is_done: false,
+  is_archived: false,
+  users: [tanaka_user]
+)
+car_frame_project = kanagawa_steel_organization.projects.create!(
+  name: '自動車フレームの開発',
+  is_done: true,
+  is_archived: true,
+  users: [tanaka_user]
 )
 
 puts '==================== creating task ===================='
@@ -352,4 +382,22 @@ sensor_false_detection_project.tasks.create!(
   description: '',
   is_done: true,
   row_order: 5
+)
+
+# 神奈川製鉄株式会社
+material_research_project.tasks.create!(
+  name: 'CFRPの組成検討',
+  start_at: THIS_MONDAY.weeks_ago(4),
+  end_at: THIS_FRIDAY.weeks_since(8),
+  description: '',
+  is_done: false,
+  row_order: 1
+)
+car_frame_project.tasks.create!(
+  name: '抗酸化皮膜の耐久試験',
+  start_at: THIS_MONDAY.weeks_ago(2),
+  end_at: THIS_FRIDAY.weeks_ago(1),
+  description: '',
+  is_done: true,
+  row_order: 1
 )
