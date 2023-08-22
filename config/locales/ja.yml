@@ -6,6 +6,7 @@ ja:
       task: タスク
     attributes:
       organization:
+        id: 組織ID
         name: 組織名
       project:
         name: プロジェクト名
