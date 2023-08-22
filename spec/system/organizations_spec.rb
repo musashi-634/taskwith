@@ -16,7 +16,6 @@ RSpec.describe 'Organizations', type: :system do
 
       expect(current_path).to eq organization_path
       expect(page).to have_content '組織を作成しました。'
-      expect(Organization.last.users).to eq [user]
     end
   end
 
