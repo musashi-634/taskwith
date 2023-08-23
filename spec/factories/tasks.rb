@@ -7,5 +7,10 @@ FactoryBot.define do
     trait :done do
       is_done { true }
     end
+
+    factory :task_with_time_span do
+      start_at { Time.zone.now }
+      end_at { start_at }
+    end
   end
 end
