@@ -11,14 +11,16 @@ RSpec.describe "Tasks", type: :request do
 
       context '所属組織のプロジェクトの場合' do
         let(:project) { create(:project, organization: organization) }
-        let!(:task) { create(:task, project: project) }
+        let!(:task) do
+          create(:task, start_at: '2023/7/1'.to_date, end_at: '2023/7/2'.to_date, project: project)
+        end
 
         before { get project_tasks_path(project) }
 
         it 'タスク情報を取得できること' do
           expect(response.body).to include task.name
-          expect(response.body).to include task.start_at.to_fs(:date)
-          expect(response.body).to include task.end_at.to_fs(:date)
+          expect(response.body).to include '2023/7/1'
+          expect(response.body).to include '2023/7/2'
         end
       end
 
