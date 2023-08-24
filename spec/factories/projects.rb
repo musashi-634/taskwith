@@ -3,8 +3,6 @@ FactoryBot.define do
     association :organization
 
     name { '新製品開発' }
-    is_done { false }
-    is_archived { false }
 
     trait :invalid do
       name { nil }

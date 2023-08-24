@@ -321,14 +321,14 @@ arm_breaking_project.tasks.create!(
 arm_breaking_project.tasks.create!(
   name: '設計検証',
   start_at: THIS_MONDAY.weeks_since(5),
-  end_at: THIS_FRIDAY.weeks_since(10),
+  end_at: nil,
   description: '',
   is_done: false,
   row_order: 3
 )
 arm_breaking_project.tasks.create!(
   name: 'QAへの入検',
-  start_at: THIS_MONDAY.weeks_since(11),
+  start_at: nil,
   end_at: THIS_FRIDAY.weeks_since(12),
   description: '',
   is_done: false,
@@ -336,8 +336,8 @@ arm_breaking_project.tasks.create!(
 )
 arm_breaking_project.tasks.create!(
   name: '変更連絡書の発行',
-  start_at: THIS_MONDAY.weeks_since(15),
-  end_at: THIS_FRIDAY.weeks_since(15),
+  start_at: nil,
+  end_at: nil,
   description: '',
   is_done: false,
   row_order: 5

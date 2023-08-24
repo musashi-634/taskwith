@@ -3,14 +3,14 @@ FactoryBot.define do
     association :project
 
     name { '3Dモデル設計' }
-    start_at { '2023/7/1'.to_date }
-    end_at { '2023/7/10'.to_date }
-    description { '筐体と機構を優先すること。' }
-    is_done { false }
-    row_order { nil }
 
     trait :done do
       is_done { true }
+    end
+
+    factory :task_with_time_span do
+      start_at { Time.zone.now }
+      end_at { start_at }
     end
   end
 end
