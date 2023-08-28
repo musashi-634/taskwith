@@ -50,6 +50,4 @@ test:
 #
 production:
   <<: *default
-  database: taskwith_production
-  username: taskwith
-  password: <%= ENV["TASKWITH_DATABASE_PASSWORD"] %>
+  url: <%= ENV['JAWSDB_URL']&.sub('mysql://', 'mysql2://') %>
