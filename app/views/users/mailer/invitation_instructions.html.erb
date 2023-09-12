@@ -1,6 +1,6 @@
 <p><%= t("users.mailer.invitation_instructions.hello", email: @resource.email) %></p>
 
-<p><%= t("users.mailer.invitation_instructions.someone_invited_you", url: root_url) %></p>
+<p><%= t("users.mailer.invitation_instructions.someone_invited_you", user_name: @resource.invited_by.name, user_email: @resource.invited_by.email, organization_name: @resource.invited_by.organization.name) %></p>
 
 <p><%= link_to t("users.mailer.invitation_instructions.accept"), accept_invitation_url(@resource, invitation_token: @token) %></p>
 
