@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
-  before_action :block_user_belongs_to_no_organization,
-    unless: -> { devise_controller? || params[:controller] == 'home' }
+  before_action :block_user_belongs_to_no_organization, unless: :devise_controller?
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_my_projects, if: :user_signed_in?
 

@@ -92,4 +92,27 @@ RSpec.describe 'Users', type: :system do
       expect(page).to have_content 'アカウント登録が完了しました。'
     end
   end
+
+  describe 'ユーザー招待機能' do
+    let(:user) { create(:user, :with_organization) }
+    let(:invitee) { build(:user) }
+
+    before do
+      login_as(user, :scope => :user)
+      visit organization_path
+    end
+
+    it '招待メールが送信されること' do
+      click_on '招待'
+      expect(current_path).to eq new_user_invitation_path
+
+      expect do
+        fill_in 'user[email]', with: invitee.email
+        click_on '招待メールを送る'
+      end.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+      expect(current_path).to eq organization_path
+      expect(page).to have_content "招待メールが#{invitee.email}に送信されました。"
+    end
+  end
 end
