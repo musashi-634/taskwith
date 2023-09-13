@@ -85,4 +85,95 @@ RSpec.describe "Users::Invitations", type: :request do
       end
     end
   end
+
+  describe "GET /users/invitation/accept" do
+    let(:user) { User.invite!(email: build(:user).email, skip_invitation: true) }
+
+    context 'URLパラメータに有効なinvitation_tokenが含まれる場合' do
+      before { get accept_user_invitation_path(invitation_token: user.raw_invitation_token) }
+
+      it 'ユーザー招待承認ページにアクセスできること' do
+        expect(response).to have_http_status 200
+        expect(response.body).to include 'パスワードを設定する'
+      end
+    end
+
+    context 'URLパラメータに有効なinvitation_tokenが含まれない場合' do
+      before { get accept_user_invitation_path }
+
+      it 'ルートパスにリダイレクトされること' do
+        expect(response).to redirect_to root_path
+        expect(flash[:alert]).to eq '招待コードが不正です。'
+      end
+    end
+  end
+
+  describe "PATCH /users/invitation" do
+    let(:user) { create(:user, :with_organization) }
+    let!(:invitee) { User.invite!({ email: build(:user).email, skip_invitation: true }, user) }
+
+    before { patch user_invitation_path, params: { user: user_attributes } }
+
+    context 'URLパラメータに有効なinvitation_tokenが含まれる場合' do
+      context '有効な属性値の場合' do
+        let(:user_attributes) do
+          attributes_for(:user).slice(:name, :password, :password_confirmation).
+            merge({
+              organization_id: user.organization.id,
+              invitation_token: invitee.raw_invitation_token,
+            })
+        end
+
+        it '招待された組織に参加できること' do
+          expect { invitee.reload }.to change { invitee.organization }.from(nil).to(user.organization)
+        end
+
+        it 'ユーザー名が設定されること' do
+          expect { invitee.reload }.to change { invitee.name }.from(nil).to(user_attributes[:name])
+        end
+
+        it 'パスワードが設定されること' do
+          expect { invitee.reload }.to change {
+            invitee.valid_password?(user_attributes[:password])
+          }.from(nil).to(true)
+        end
+      end
+
+      context '無効な属性値の場合' do
+        let(:user_attributes) do
+          attributes_for(:user, :invalid).slice(:name, :password, :password_confirmation).
+            merge({
+              organization_id: user.organization.id,
+              invitation_token: invitee.raw_invitation_token,
+            })
+        end
+
+        it '招待された組織に参加できないこと' do
+          expect { invitee.reload }.not_to change { invitee.organization }.from(nil)
+          expect(response).to have_http_status :unprocessable_entity
+        end
+      end
+    end
+
+    context 'URLパラメータに有効なinvitation_tokenが含まれない場合' do
+      let(:user_attributes) do
+        attributes_for(:user).slice(:name, :password, :password_confirmation).
+          merge({ organization_id: user.organization.id })
+      end
+
+      it '招待された組織に参加できないこと' do
+        expect { invitee.reload }.not_to change { invitee.organization }.from(nil)
+      end
+
+      it 'ユーザー名が設定されないこと' do
+        expect { invitee.reload }.not_to change { invitee.name }.from(nil)
+      end
+
+      it 'パスワードが設定されないこと' do
+        expect { invitee.reload }.not_to change {
+          invitee.valid_password?(user_attributes[:password])
+        }.from(nil)
+      end
+    end
+  end
 end

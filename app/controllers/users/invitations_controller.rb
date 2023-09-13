@@ -6,4 +6,8 @@ class Users::InvitationsController < Devise::InvitationsController
   def after_invite_path_for(inviter, invitee = nil) # rubocop:disable Airbnb/OptArgParameters
     organization_path
   end
+
+  def after_accept_path_for(resource)
+    projects_path
+  end
 end

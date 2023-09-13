@@ -83,7 +83,7 @@ RSpec.describe 'Users', type: :system do
       fill_in 'user[name]', with: user.name
       fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: user.password
-      fill_in 'user[password_confirmation]', with: user.password
+      fill_in 'user[password_confirmation]', with: user.password_confirmation
       within 'form' do
         click_on 'アカウント登録'
       end
@@ -102,7 +102,8 @@ RSpec.describe 'Users', type: :system do
       visit organization_path
     end
 
-    it '招待メールが送信されること' do
+    it '招待メールが送信され、メール内のリンクから組織に参加できること' do
+      # 組織への招待
       click_on '招待'
       expect(current_path).to eq new_user_invitation_path
 
@@ -113,6 +114,25 @@ RSpec.describe 'Users', type: :system do
 
       expect(current_path).to eq organization_path
       expect(page).to have_content "招待メールが#{invitee.email}に送信されました。"
+
+      logout(:user)
+
+      # 招待された組織への参加
+      invitation_mail = ActionMailer::Base.deliveries.last
+      join_organization_url = URI.extract(invitation_mail.html_part.body.to_s)[0]
+
+      visit join_organization_url
+      expect(page).to have_content 'パスワードを設定する'
+
+      expect do
+        fill_in 'user[name]', with: invitee.name
+        fill_in 'user[password]', with: invitee.password
+        fill_in 'user[password_confirmation]', with: invitee.password_confirmation
+        click_on 'パスワードを設定する'
+      end.to change { User.last.organization }.from(nil).to(user.organization)
+
+      expect(current_path).to eq projects_path
+      expect(page).to have_content 'パスワードが設定されました。お使いのアカウントでログインできます。'
     end
   end
 end
