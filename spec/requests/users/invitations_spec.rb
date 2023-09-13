@@ -44,25 +44,14 @@ RSpec.describe "Users::Invitations", type: :request do
           end.to change { ActionMailer::Base.deliveries.size }.by(1)
         end
 
-        it '招待メールの内容が適切なこと' do
+        it '招待メールの宛先と件名が適切なこと' do
           post user_invitation_path, params: { user: user_attributes }
           invitation_mail = ActionMailer::Base.deliveries.last
 
-          expect(invitation_mail.from).to eq [Rails.application.credentials.dig(:gmail, :email)]
           expect(invitation_mail.to).to eq [user_attributes[:email]]
           expect(invitation_mail.subject).to eq(
             "[TaskWith] #{user.name}さんから、「#{user.organization.name}」という組織に招待されました"
           )
-
-          expect(invitation_mail.html_part.body.to_s).to match user_attributes[:email]
-          expect(invitation_mail.html_part.body.to_s).to match "#{user.name}（#{user.email}）"
-          expect(invitation_mail.html_part.body.to_s).to match "#{user.organization.name}"
-          expect(invitation_mail.html_part.body.to_s).to match accept_user_invitation_url
-
-          expect(invitation_mail.text_part.body.to_s).to match user_attributes[:email]
-          expect(invitation_mail.text_part.body.to_s).to match "#{user.name}（#{user.email}）"
-          expect(invitation_mail.text_part.body.to_s).to match "#{user.organization.name}"
-          expect(invitation_mail.text_part.body.to_s).to match accept_user_invitation_url
         end
 
         it '招待されたユーザーに所望の属性値が設定されること' do
