@@ -13,7 +13,7 @@ class UserMailer < Devise::Mailer
 
   def invitation_instructions(record, token, opts = {})
     opts[:subject] = t(
-      "users.mailer.invitation_instructions.subject",
+      "devise.mailer.invitation_instructions.user_subject",
       user_name: record.invited_by.name,
       organization_name: record.invited_by.organization.name
     )

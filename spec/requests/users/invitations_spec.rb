@@ -14,7 +14,7 @@ RSpec.describe "Users::Invitations", type: :request do
 
       it 'ユーザー招待作成ページにアクセスできること' do
         expect(response).to have_http_status 200
-        expect(response.body).to include '招待する'
+        expect(response.body).to include '招待の作成'
       end
     end
 
@@ -32,10 +32,10 @@ RSpec.describe "Users::Invitations", type: :request do
 
     before { sign_in user }
 
-    context 'ユーザーが組織に所属している場合' do
+    context '招待作成者が組織に所属している場合' do
       before { create(:organization, users: [user]) }
 
-      context '有効な属性値の場合' do
+      context '新規ユーザーを招待する場合' do
         let(:user_attributes) { attributes_for(:user).slice(:email) }
 
         it '招待メールを送信できること' do
@@ -54,11 +54,63 @@ RSpec.describe "Users::Invitations", type: :request do
           )
         end
 
-        it '招待されたユーザーに所望の属性値が設定されること' do
+        it '被招待者に所望の属性値が設定されること' do
           post user_invitation_path, params: { user: user_attributes }
 
           expect(User.last.email).to eq user_attributes[:email]
           expect(User.last.invited_by).to eq user
+        end
+      end
+
+      context '組織に所属していない既存のユーザーを招待する場合' do
+        let(:invitee) { create(:user) }
+        let(:user_attributes) { { email: invitee.email } }
+
+        it '組織に参加できること' do
+          post user_invitation_path, params: { user: user_attributes }
+          expect { invitee.reload }.
+            to change { invitee.organization }.from(nil).to(user.organization)
+        end
+
+        it '招待作成者が設定されること' do
+          post user_invitation_path, params: { user: user_attributes }
+          expect { invitee.reload }.to change { invitee.invited_by }.from(nil).to(user)
+        end
+
+        it '招待承認日時が設定されること' do
+          post user_invitation_path, params: { user: user_attributes }
+          expect { invitee.reload }.to change { invitee.invitation_accepted_at }.from(nil)
+        end
+
+        it 'パスワードが変更されていないこと' do
+          post user_invitation_path, params: { user: user_attributes }
+          expect { invitee.reload }.not_to change {
+            invitee.valid_password?(invitee.password)
+          }.from(true)
+        end
+
+        it '招待メールが送信されていないこと' do
+          expect do
+            post user_invitation_path, params: { user: user_attributes }
+          end.not_to change { ActionMailer::Base.deliveries.size }
+        end
+      end
+
+      context '組織に所属している既存のユーザーを招待する場合' do
+        let(:invitee) { create(:user, :with_organization) }
+        let(:user_attributes) { { email: invitee.email } }
+
+        before { post user_invitation_path, params: { user: user_attributes } }
+
+        it '組織に参加できないこと' do
+          expect { invitee.reload }.
+            not_to change { invitee.organization }.from(invitee.organization)
+          expect(flash[:alert]).to eq "#{invitee.email}はすでにいずれかの組織に所属しています。"
+          expect(response).to have_http_status :unprocessable_entity
+        end
+
+        it '招待作成者が設定されないこと' do
+          expect { invitee.reload }.not_to change { invitee.invited_by }.from(nil)
         end
       end
 
@@ -74,14 +126,28 @@ RSpec.describe "Users::Invitations", type: :request do
       end
     end
 
-    context 'ユーザーが組織に所属していない場合' do
-      let(:user_attributes) { attributes_for(:user).slice(:email) }
+    context '招待作成者が組織に所属していない場合' do
+      context '既存のユーザーを指定した場合' do
+        let(:invitee) { create(:user) }
+        let(:user_attributes) { { email: invitee.email } }
 
-      it '招待メールが送信されず、組織作成ページにリダイレクトされること' do
-        expect do
-          post user_invitation_path, params: { user: user_attributes }
-        end.not_to change { ActionMailer::Base.deliveries.size }
-        expect(response).to redirect_to new_organization_path
+        it '被招待者が組織に参加できず、組織作成ページにリダイレクトされること' do
+          expect do
+            post user_invitation_path, params: { user: user_attributes }
+          end.not_to change { invitee.reload.organization }.from(nil)
+          expect(response).to redirect_to new_organization_path
+        end
+      end
+
+      context 'その他の場合' do
+        let(:user_attributes) { attributes_for(:user).slice(:email) }
+
+        it '招待メールが送信されず、組織作成ページにリダイレクトされること' do
+          expect do
+            post user_invitation_path, params: { user: user_attributes }
+          end.not_to change { ActionMailer::Base.deliveries.size }
+          expect(response).to redirect_to new_organization_path
+        end
       end
     end
   end
@@ -94,7 +160,7 @@ RSpec.describe "Users::Invitations", type: :request do
 
       it 'ユーザー招待承認ページにアクセスできること' do
         expect(response).to have_http_status 200
-        expect(response.body).to include 'パスワードを設定する'
+        expect(response.body).to include 'アカウント情報の設定'
       end
     end
 
