@@ -83,13 +83,78 @@ RSpec.describe 'Users', type: :system do
       fill_in 'user[name]', with: user.name
       fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: user.password
-      fill_in 'user[password_confirmation]', with: user.password
+      fill_in 'user[password_confirmation]', with: user.password_confirmation
       within 'form' do
         click_on 'アカウント登録'
       end
 
       expect(current_path).to eq new_organization_path
       expect(page).to have_content 'アカウント登録が完了しました。'
+    end
+  end
+
+  describe 'ユーザー招待機能' do
+    let(:user) { create(:user, :with_organization) }
+
+    before { login_as(user, :scope => :user) }
+
+    context '新規ユーザーを招待する場合' do
+      let(:invitee) { build(:user) }
+
+      it '招待メールが送信され、メール内のリンクから組織に参加できること' do
+        # 組織への招待
+        visit organization_path
+
+        click_on '招待'
+        expect(current_path).to eq new_user_invitation_path
+
+        expect do
+          fill_in 'user[email]', with: invitee.email
+          click_on '招待する'
+        end.to change { ActionMailer::Base.deliveries.size }.by(1)
+
+        expect(current_path).to eq organization_path
+        expect(page).to have_content "招待メールが#{invitee.email}に送信されました。"
+
+        logout(:user)
+
+        # 招待された組織への参加
+        invitation_mail = ActionMailer::Base.deliveries.last
+        join_organization_url = URI.extract(invitation_mail.html_part.body.to_s)[0]
+
+        visit join_organization_url
+        expect(page).to have_content 'アカウント情報の設定'
+
+        expect do
+          fill_in 'user[name]', with: invitee.name
+          fill_in 'user[password]', with: invitee.password
+          fill_in 'user[password_confirmation]', with: invitee.password_confirmation
+          click_on 'アカウント情報を設定する'
+        end.to change { User.last.organization }.from(nil).to(user.organization)
+
+        expect(current_path).to eq projects_path
+        expect(page).to have_content 'アカウント情報が設定されました。お使いのアカウントでログインできます。'
+      end
+    end
+
+    context '既存のユーザーを招待する場合' do
+      let(:invitee) { create(:user) }
+
+      it '招待と同時に組織に参加できること' do
+        visit organization_path
+
+        click_on '招待'
+        expect(current_path).to eq new_user_invitation_path
+
+        expect do
+          fill_in 'user[email]', with: invitee.email
+          click_on '招待する'
+        end.to change { invitee.reload.organization }.from(nil).to(user.organization)
+
+        expect(current_path).to eq organization_path
+        expect(page).to have_content "#{invitee.email}が組織に参加しました。"
+        expect(page).to have_content invitee.name
+      end
     end
   end
 end

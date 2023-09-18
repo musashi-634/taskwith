@@ -1,4 +1,6 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "from@example.com"
+  default(
+    from: email_address_with_name(Rails.application.credentials.dig(:gmail, :email), 'TaskWith')
+  )
   layout "mailer"
 end

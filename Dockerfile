@@ -2,6 +2,11 @@
 FROM ruby:3.2.2
 RUN mkdir /taskwith
 WORKDIR /taskwith
+
+RUN apt-get update && apt-get install -y \
+    vim \
+  && rm -rf /var/lib/apt/lists/*
+
 COPY Gemfile /taskwith/Gemfile
 COPY Gemfile.lock /taskwith/Gemfile.lock
 
