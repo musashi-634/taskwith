@@ -191,7 +191,8 @@ RSpec.describe "Users::Invitations", type: :request do
         end
 
         it '招待された組織に参加できること' do
-          expect { invitee.reload }.to change { invitee.organization }.from(nil).to(user.organization)
+          expect { invitee.reload }.
+            to change { invitee.organization }.from(nil).to(user.organization)
         end
 
         it 'ユーザー名が設定されること' do
