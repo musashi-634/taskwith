@@ -9,9 +9,8 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @project = Project.new(
+    @project = current_user.organization.projects.new(
       **params.require(:project).permit(:name, :description, :is_done, :is_archived),
-      organization: current_user.organization,
       users: [current_user]
     )
     if @project.save
