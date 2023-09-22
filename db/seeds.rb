@@ -152,7 +152,6 @@ noise_reduction_project.tasks.create!(
   end_at: nil,
   description: '',
   is_done: false,
-  row_order: 1
 )
 
 product_development_project.tasks.create!(
@@ -161,7 +160,6 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(1),
   description: '筐体と機構を優先すること。',
   is_done: true,
-  row_order: 1
 )
 product_development_project.tasks.create!(
   name: '図面作成',
@@ -169,7 +167,6 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(1),
   description: '',
   is_done: false,
-  row_order: 2
 )
 product_development_project.tasks.create!(
   name: '部品手配',
@@ -177,7 +174,6 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(1),
   description: '4台分手配。手配可能なものがあれば順次手配する。',
   is_done: false,
-  row_order: 3
 )
 product_development_project.tasks.create!(
   name: '組立',
@@ -185,7 +181,6 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(7),
   description: '',
   is_done: false,
-  row_order: 4
 )
 product_development_project.tasks.create!(
   name: '設計検証',
@@ -193,7 +188,6 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(11),
   description: '',
   is_done: false,
-  row_order: 5
 )
 product_development_project.tasks.create!(
   name: 'QAへの入検',
@@ -201,7 +195,6 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(15),
   description: '',
   is_done: false,
-  row_order: 6
 )
 
 safety_regulations_project.tasks.create!(
@@ -210,7 +203,6 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(8),
   description: '',
   is_done: true,
-  row_order: 1
 )
 safety_regulations_project.tasks.create!(
   name: '3Dモデル設計',
@@ -218,7 +210,6 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(6),
   description: '',
   is_done: true,
-  row_order: 2
 )
 safety_regulations_project.tasks.create!(
   name: '図面作成',
@@ -226,7 +217,6 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(5),
   description: '',
   is_done: true,
-  row_order: 3
 )
 safety_regulations_project.tasks.create!(
   name: '部品手配',
@@ -234,7 +224,6 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(5),
   description: '',
   is_done: true,
-  row_order: 4
 )
 safety_regulations_project.tasks.create!(
   name: '設計検証',
@@ -242,7 +231,6 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY,
   description: '',
   is_done: false,
-  row_order: 5
 )
 safety_regulations_project.tasks.create!(
   name: 'QAへの入検',
@@ -250,7 +238,6 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(1),
   description: '',
   is_done: false,
-  row_order: 6
 )
 safety_regulations_project.tasks.create!(
   name: '変更連絡書の発行',
@@ -258,7 +245,6 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(3),
   description: '',
   is_done: false,
-  row_order: 7
 )
 
 cable_disconnection_project.tasks.create!(
@@ -267,7 +253,6 @@ cable_disconnection_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(14),
   description: '',
   is_done: true,
-  row_order: 1
 )
 cable_disconnection_project.tasks.create!(
   name: '試作手配',
@@ -275,7 +260,6 @@ cable_disconnection_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(13),
   description: '',
   is_done: true,
-  row_order: 2
 )
 cable_disconnection_project.tasks.create!(
   name: '設計検証',
@@ -283,7 +267,6 @@ cable_disconnection_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(6),
   description: '',
   is_done: true,
-  row_order: 3
 )
 cable_disconnection_project.tasks.create!(
   name: 'QAへの入検',
@@ -291,7 +274,6 @@ cable_disconnection_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(5),
   description: '',
   is_done: true,
-  row_order: 4
 )
 cable_disconnection_project.tasks.create!(
   name: '変更連絡書の発行',
@@ -299,7 +281,6 @@ cable_disconnection_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(3),
   description: '',
   is_done: true,
-  row_order: 5
 )
 
 arm_breaking_project.tasks.create!(
@@ -308,7 +289,6 @@ arm_breaking_project.tasks.create!(
   end_at: THIS_FRIDAY,
   description: '',
   is_done: false,
-  row_order: 1
 )
 arm_breaking_project.tasks.create!(
   name: '試作手配',
@@ -316,7 +296,6 @@ arm_breaking_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(1),
   description: '',
   is_done: false,
-  row_order: 2
 )
 arm_breaking_project.tasks.create!(
   name: '設計検証',
@@ -324,7 +303,6 @@ arm_breaking_project.tasks.create!(
   end_at: nil,
   description: '',
   is_done: false,
-  row_order: 3
 )
 arm_breaking_project.tasks.create!(
   name: 'QAへの入検',
@@ -332,7 +310,6 @@ arm_breaking_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(12),
   description: '',
   is_done: false,
-  row_order: 4
 )
 arm_breaking_project.tasks.create!(
   name: '変更連絡書の発行',
@@ -340,7 +317,6 @@ arm_breaking_project.tasks.create!(
   end_at: nil,
   description: '',
   is_done: false,
-  row_order: 5
 )
 
 sensor_false_detection_project.tasks.create!(
@@ -349,7 +325,6 @@ sensor_false_detection_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(12),
   description: '',
   is_done: true,
-  row_order: 1
 )
 sensor_false_detection_project.tasks.create!(
   name: '試作手配',
@@ -357,7 +332,6 @@ sensor_false_detection_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(11),
   description: '',
   is_done: true,
-  row_order: 2
 )
 sensor_false_detection_project.tasks.create!(
   name: '設計検証',
@@ -365,7 +339,6 @@ sensor_false_detection_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(4),
   description: '',
   is_done: true,
-  row_order: 3
 )
 sensor_false_detection_project.tasks.create!(
   name: 'QAへの入検',
@@ -373,7 +346,6 @@ sensor_false_detection_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(3),
   description: '',
   is_done: true,
-  row_order: 4
 )
 sensor_false_detection_project.tasks.create!(
   name: '変更連絡書の発行',
@@ -381,7 +353,6 @@ sensor_false_detection_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(1),
   description: '',
   is_done: true,
-  row_order: 5
 )
 
 # 神奈川製鉄株式会社
@@ -391,7 +362,6 @@ material_research_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(8),
   description: '',
   is_done: false,
-  row_order: 1
 )
 car_frame_project.tasks.create!(
   name: '抗酸化皮膜の耐久試験',
@@ -399,5 +369,4 @@ car_frame_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(1),
   description: '',
   is_done: true,
-  row_order: 1
 )
