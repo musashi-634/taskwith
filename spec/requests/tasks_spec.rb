@@ -84,6 +84,7 @@ RSpec.describe "Tasks", type: :request do
             expect do
               post project_tasks_path(project), params: { task: task_attributes }
             end.to change { project.tasks.count }.by(1)
+            expect(project.tasks.last.row_order).to be_truthy
           end
         end
 
