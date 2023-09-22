@@ -3,11 +3,12 @@
   <%= form_with model: @project do |f| %>
     <%= render "shared/error_messages", object: @project %>
     <div>
-      <%= f.label :name %><br />
+      <%= f.label :name %>
+      <span class="badge bg-danger">必須</span><br>
       <%= f.text_field :name, autofocus: true %>
     </div>
     <div>
-      <%= f.label :description %><br />
+      <%= f.label :description %><br>
       <%= f.text_area :description %>
     </div>
     <div>

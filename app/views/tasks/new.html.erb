@@ -3,7 +3,8 @@
   <%= form_with model: [@project, @task] do |f| %>
     <%= render "shared/error_messages", object: @task %>
     <div>
-      <%= f.label :name %><br>
+      <%= f.label :name %>
+      <span class="badge bg-danger">必須</span><br>
       <%= f.text_field :name, autofocus: true %>
     </div>
     <div>
