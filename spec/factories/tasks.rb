@@ -4,6 +4,10 @@ FactoryBot.define do
 
     name { '3Dモデル設計' }
 
+    trait :invalid do
+      name { nil }
+    end
+
     trait :done do
       is_done { true }
     end

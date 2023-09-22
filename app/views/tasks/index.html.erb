@@ -12,7 +12,11 @@
          data-gantt-chart-target="chart">
       <div class="gantt-header gantt-row">
         <div class="gantt-task-header">
-          <div><%= t('activerecord.attributes.task.name') %></div>
+          <div class="position-relative">
+            <%= t('activerecord.attributes.task.name') %>
+            <%= link_to "+", new_project_task_path,
+                class: 'btn btn-primary position-absolute bottom-0 end-0 mb-1 me-1 px-2 py-0' %>
+          </div>
           <div>担当者</div>
           <div><%= t('activerecord.attributes.task.start_at') %></div>
           <div><%= t('activerecord.attributes.task.end_at') %></div>

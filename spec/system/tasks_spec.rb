@@ -54,4 +54,25 @@ RSpec.describe 'Tasks', type: :system do
       end
     end
   end
+
+  describe 'タスク登録機能' do
+    let(:project) { create(:project, organization: user.organization) }
+    let(:task) { build(:task) }
+
+    it 'タスクを登録できること' do
+      visit project_tasks_path(project)
+      click_on '+'
+
+      expect(current_path).to eq new_project_task_path(project)
+
+      expect do
+        fill_in 'task[name]', with: task.name
+        click_on '作成'
+      end.to change { project.tasks.count }.by(1)
+
+      expect(current_path).to eq project_tasks_path(project)
+      expect(page).to have_content 'タスクを作成しました。'
+      expect(page).to have_content task.name
+    end
+  end
 end
