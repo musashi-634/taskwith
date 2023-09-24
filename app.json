@@ -1,0 +1,40 @@
+{
+  "name": "taskwith",
+  "scripts": {
+    "postdeploy": "bundle exec rake db:schema:load db:seed"
+  },
+  "env": {
+    "DISABLE_DATABASE_ENVIRONMENT_CHECK": {
+      "value": "1"
+    },
+    "LANG": {
+      "value": "en_US.UTF-8"
+    },
+    "RACK_ENV": {
+      "value": "production"
+    },
+    "RAILS_ENV": {
+      "value": "production"
+    },
+    "RAILS_LOG_TO_STDOUT": {
+      "value": "enabled"
+    },
+    "RAILS_SERVE_STATIC_FILES": {
+      "value": "enabled"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "jawsdb"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ],
+  "stack": "heroku-22"
+}
