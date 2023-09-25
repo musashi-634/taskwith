@@ -11,7 +11,8 @@
       <%= form_with model: @organization, class: "p-4 p-md-5 border rounded-3 bg-light" do |f| %>
         <%= render "shared/error_messages", object: @organization %>
         <div class="mb-3">
-          <%= f.label :name, class: "form-label" %><br />
+          <%= f.label :name, class: "form-label" %>
+          <span class="badge bg-danger form-label">必須</span><br>
           <%= f.text_field :name, placeholder: "〇〇株式会社、プライベート", class: "form-control", autofocus: true %>
         </div>
         <div>

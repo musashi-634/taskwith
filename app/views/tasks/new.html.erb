@@ -1,11 +1,19 @@
 <div class="container">
-  <h1 class="mt-5">新規プロジェクト作成</h1>
-  <%= form_with model: @project do |f| %>
-    <%= render "shared/error_messages", object: @project %>
+  <h1 class="mt-5">新規タスク作成</h1>
+  <%= form_with model: [@project, @task] do |f| %>
+    <%= render "shared/error_messages", object: @task %>
     <div>
       <%= f.label :name %>
       <span class="badge bg-danger">必須</span><br>
       <%= f.text_field :name, autofocus: true %>
+    </div>
+    <div>
+      <%= f.label :start_at %><br>
+      <%= f.date_field :start_at %>
+    </div>
+    <div>
+      <%= f.label :end_at %><br>
+      <%= f.date_field :end_at %>
     </div>
     <div>
       <%= f.label :description %><br>
