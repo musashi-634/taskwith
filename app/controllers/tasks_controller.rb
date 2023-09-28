@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   before_action :block_user_belongs_to_other_organization
 
   def index
-    @tasks = @project.tasks.order(:row_order)
+    @tasks = @project.tasks.rank(:row_order)
 
     @today = Time.zone.today
     @timeline_dates = create_timeline_dates(@today, 3)
