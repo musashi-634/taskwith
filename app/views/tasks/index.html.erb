@@ -32,9 +32,9 @@
           </div>
           <div class="gantt-days gantt-timeline-row">
             <% @timeline_dates.each.with_index(1) do |date, column| %>
-              <div class="<%= "today" if date == @today %><%= " weekend" if weekend?(date) %>"
+              <div class="<%= "today" if column == @today_grid_column %><%= " weekend" if weekend?(date) %>"
                    style="grid-column: <%= column %>;"
-                   data-gantt-chart-target="<%= "today" if date == @today %>">
+                   data-gantt-chart-target="<%= "today" if column == @today_grid_column %>">
                 <%= date.day %>
                 <br>
                 <%= date.to_fs(:japanese_day_of_week) %>
@@ -48,7 +48,7 @@
           <div class="gantt-task-content"></div>
           <div class="gantt-timeline-row">
             <% @timeline_dates.each.with_index(1) do |date, column| %>
-              <div class="<%= "today" if date == @today %><%= " weekend" if weekend?(date) %>" style="grid-column: <%= column %>;"></div>
+              <div class="<%= " weekend" if weekend?(date) %>" style="grid-column: <%= column %>;"></div>
             <% end %>
           </div>
         </div>
@@ -65,6 +65,7 @@
                 <div class="gantt-bar"
                      style="<%= calculate_grid_column(@timeline_dates, task.start_at, task.end_at) %>"
                 ></div>
+                <div class="today-line" style="grid-column: <%= @today_grid_column %>;"></div>
               </div>
             </div>
           <% end %>
