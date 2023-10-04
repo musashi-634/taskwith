@@ -9,6 +9,8 @@ class Task < ApplicationRecord
   validate :check_period
   validates :is_done, inclusion: [true, false]
 
+  delegate :organization, to: :project
+
   private
 
   def check_period

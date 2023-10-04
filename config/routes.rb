@@ -13,6 +13,9 @@ Rails.application.routes.draw do
       resources :archived, only: :index
     end
     resources :projects do
+      namespace :tasks do
+        resources :sortings, only: :update
+      end
       resources :tasks
     end
   end

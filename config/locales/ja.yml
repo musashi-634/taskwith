@@ -19,7 +19,7 @@ ja:
         end_at: 終了日
         description: 説明
         is_done: 完了
-        row_order: 行の順番
+        row_order: ソート順序
   attributes:
     created_at: 作成日時
     updated_at: 更新日時

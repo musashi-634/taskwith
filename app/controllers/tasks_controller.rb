@@ -1,5 +1,9 @@
 class TasksController < ApplicationController
-  before_action :block_user_belongs_to_other_organization
+  before_action :set_project, only: %w(index new create)
+  before_action -> {
+    requested_object = @project || @task
+    block_user_belongs_to_other_organization(requested_object)
+  }
 
   def index
     @tasks = @project.tasks.rank(:row_order)
@@ -28,13 +32,8 @@ class TasksController < ApplicationController
 
   private
 
-  def block_user_belongs_to_other_organization
-    if action_name.start_with?(*%w(index new create))
-      @project = Project.find(params[:project_id])
-      if @project.organization != current_user.organization
-        redirect_to projects_path
-      end
-    end
+  def set_project
+    @project = Project.find(params[:project_id])
   end
 
   def create_timeline_dates(base_date, half_time_span_year)

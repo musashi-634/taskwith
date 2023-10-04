@@ -52,9 +52,9 @@
             <% end %>
           </div>
         </div>
-        <div class="gantt-tasks" data-controller="sortable">
+        <div class="gantt-tasks" data-controller="sortable" data-sortable-url-value="<%= tasks_sorting_path(id: ':id') %>">
           <% @tasks.each do |task| %>
-            <div class="gantt-row <%= "done-task" if task.is_done %>">
+            <div class="gantt-row <%= "done-task" if task.is_done %>" data-sortable-id="<%= task.id %>">
               <div class="gantt-task-content">
                 <div><%= task.name %></div>
                 <div></div>
