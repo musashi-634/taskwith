@@ -125,4 +125,43 @@ RSpec.describe "Tasks", type: :request do
       end
     end
   end
+
+  describe "GET /tasks/:id" do
+    context 'ユーザーが組織に所属している場合' do
+      let(:project) { create(:project) }
+
+      before { project.organization.users << user }
+
+      context '所属組織のタスクの場合' do
+        let(:task) { create(:task, project: project) }
+
+        before { get task_path(task) }
+
+        it 'タスク情報を取得できること' do
+          expect(response.body).to include task.name
+          expect(response).to have_http_status 200
+        end
+      end
+
+      context '他の組織のタスクの場合' do
+        let(:task) { create(:task) }
+
+        before { get task_path(task) }
+
+        it 'プロジェクト一覧ページにリダイレクトされること' do
+          expect(response).to redirect_to projects_path
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let(:task) { create(:task) }
+
+      before { get task_path(task) }
+
+      it '組織作成ページにリダイレクトされること' do
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
 end

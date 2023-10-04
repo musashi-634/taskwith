@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_project, only: %w(index new create)
+  before_action :set_task, only: %w(show edit update destroy)
   before_action -> {
     requested_object = @project || @task
     block_user_belongs_to_other_organization(requested_object)
@@ -30,10 +31,17 @@ class TasksController < ApplicationController
     end
   end
 
+  def show
+  end
+
   private
 
   def set_project
     @project = Project.find(params[:project_id])
+  end
+
+  def set_task
+    @task = Task.find(params[:id])
   end
 
   def create_timeline_dates(base_date, half_time_span_year)

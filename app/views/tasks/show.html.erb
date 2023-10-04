@@ -1,0 +1,29 @@
+<div class="container">
+  <h1 class="mt-5 mb-3">タスク詳細</h1>
+  <div>
+    <div class="mb-3">
+      <div class="fw-bold"><%= t('activerecord.attributes.task.name') %></div>
+      <div class="ms-3"><%= @task.name %></div>
+    </div>
+    <div class="mb-3">
+      <div class="fw-bold"><%= t('activerecord.attributes.task.start_at') %></div>
+      <div class="ms-3"><%= @task.start_at&.to_fs(:date) %></div>
+    </div>
+    <div class="mb-3">
+      <div class="fw-bold"><%= t('activerecord.attributes.task.end_at') %></div>
+      <div class="ms-3"><%= @task.end_at&.to_fs(:date) %></div>
+    </div>
+    <div class="mb-3">
+      <div class="fw-bold"><%= t('activerecord.attributes.task.description') %></div>
+      <div class="ms-3"><%= @task.description %></div>
+    </div>
+    <div class="mb-3">
+      <div class="fw-bold"><%= t('activerecord.attributes.task.is_done') %></div>
+      <div class="ms-3"><%= @task.display_done_state %></div>
+    </div>
+  </div>
+  <div>
+    <div><%= link_to "編集", "#" %></div>
+    <div><%= link_to "戻る", 'javascript:history.back()' %></div>
+  </div>
+</div>

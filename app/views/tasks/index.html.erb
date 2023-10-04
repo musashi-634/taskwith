@@ -54,20 +54,22 @@
         </div>
         <div class="gantt-tasks" data-controller="sortable" data-sortable-url-value="<%= tasks_sorting_path(id: ':id') %>">
           <% @tasks.each do |task| %>
-            <div class="gantt-row <%= "done-task" if task.is_done %>" data-sortable-id="<%= task.id %>">
-              <div class="gantt-task-content">
-                <div><%= task.name %></div>
-                <div></div>
-                <div><%= task.start_at.to_fs(:date) if task.start_at.present? %></div>
-                <div><%= task.end_at.to_fs(:date) if task.end_at.present? %></div>
+            <%= link_to task_path(task), class: "text-decoration-none text-dark", data: { sortable_id: task.id } do %>
+              <div class="gantt-row <%= "done-task" if task.is_done %>">
+                <div class="gantt-task-content">
+                  <div><%= task.name %></div>
+                  <div></div>
+                  <div><%= task.start_at.to_fs(:date) if task.start_at.present? %></div>
+                  <div><%= task.end_at.to_fs(:date) if task.end_at.present? %></div>
+                </div>
+                <div class="gantt-timeline-row">
+                  <div class="gantt-bar"
+                      style="<%= calculate_grid_column(@timeline_dates, task.start_at, task.end_at) %>"
+                  ></div>
+                  <div class="today-line" style="grid-column: <%= @today_grid_column %>;"></div>
+                </div>
               </div>
-              <div class="gantt-timeline-row">
-                <div class="gantt-bar"
-                     style="<%= calculate_grid_column(@timeline_dates, task.start_at, task.end_at) %>"
-                ></div>
-                <div class="today-line" style="grid-column: <%= @today_grid_column %>;"></div>
-              </div>
-            </div>
+            <% end %>
           <% end %>
         </div>
       </div>
