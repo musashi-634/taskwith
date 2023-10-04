@@ -212,6 +212,8 @@ GEM
     regexp_parser (2.7.0)
     reline (0.3.3)
       io-console (~> 0.5)
+    requestjs-rails (0.0.10)
+      rails (>= 6.0.0)
     responders (3.1.0)
       actionpack (>= 5.2)
       railties (>= 5.2)
@@ -333,6 +335,7 @@ DEPENDENCIES
   rails (~> 7.0.4, >= 7.0.4.3)
   rails-i18n
   ranked-model
+  requestjs-rails
   rspec-rails
   rubocop-airbnb
   selenium-webdriver
