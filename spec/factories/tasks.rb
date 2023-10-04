@@ -12,6 +12,10 @@ FactoryBot.define do
       is_done { true }
     end
 
+    factory :custom_task do
+      name { 'custom task' }
+    end
+
     factory :task_with_time_span do
       start_at { Time.zone.now }
       end_at { start_at }

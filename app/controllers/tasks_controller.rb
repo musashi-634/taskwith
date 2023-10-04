@@ -19,9 +19,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = @project.tasks.new(
-      params.require(:task).permit(:name, :start_at, :end_at, :description)
-    )
+    @task = @project.tasks.new(task_params)
     if @task.save
       flash[:notice] = 'タスクを作成しました。'
       redirect_to project_tasks_path(@project)
@@ -32,6 +30,19 @@ class TasksController < ApplicationController
   end
 
   def show
+  end
+
+  def edit
+  end
+
+  def update
+    if @task.update(task_params)
+      flash[:notice] = 'タスク情報を更新しました。'
+      redirect_to project_tasks_path(@task.project)
+    else
+      flash.now[:alert] = 'タスク情報を更新できませんでした。'
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   private
@@ -48,5 +59,9 @@ class TasksController < ApplicationController
     start_date = base_date.years_ago(half_time_span_year).beginning_of_month
     end_date = base_date.years_since(half_time_span_year).end_of_month
     (start_date..end_date).to_a
+  end
+
+  def task_params
+    params.require(:task).permit(:name, :start_at, :end_at, :description, :is_done)
   end
 end

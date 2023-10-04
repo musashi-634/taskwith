@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe 'Tasks', type: :system do
-  let(:user) { create(:user, :with_organization) }
+  let(:user) { create(:user) }
 
   before { login_as(user, :scope => :user) }
 
   describe 'プロジェクトタスク一覧ページ' do
-    let(:project) { create(:project, organization: user.organization) }
+    let(:project) { create(:project) }
+
+    before { project.organization.users << user }
 
     describe 'プロジェクト' do
       before { visit project_tasks_path(project) }
@@ -56,8 +58,10 @@ RSpec.describe 'Tasks', type: :system do
   end
 
   describe 'タスク登録機能' do
-    let(:project) { create(:project, organization: user.organization) }
+    let(:project) { create(:project) }
     let(:task) { build(:task) }
+
+    before { project.organization.users << user }
 
     it 'タスクを登録できること' do
       visit project_tasks_path(project)
@@ -73,6 +77,27 @@ RSpec.describe 'Tasks', type: :system do
       expect(current_path).to eq project_tasks_path(project)
       expect(page).to have_content 'タスクを作成しました。'
       expect(page).to have_content task.name
+    end
+  end
+
+  describe 'タスク編集機能' do
+    let(:task) { create(:task) }
+    let(:new_task) { build(:custom_task) }
+
+    before { task.organization.users << user }
+
+    it 'タスク情報を更新できること' do
+      visit task_path(task)
+      click_on '編集'
+
+      expect do
+        fill_in 'task[name]', with: new_task.name
+        click_on '保存'
+      end.to change { task.reload.name }.from(task.name).to(new_task.name)
+
+      expect(current_path).to eq project_tasks_path(task.project)
+      expect(page).to have_content 'タスク情報を更新しました。'
+      expect(page).to have_content new_task.name
     end
   end
 end
