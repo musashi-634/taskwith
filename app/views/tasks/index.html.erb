@@ -59,8 +59,8 @@
                 <div class="gantt-task-content">
                   <div><%= task.name %></div>
                   <div></div>
-                  <div><%= task.start_at.to_fs(:date) if task.start_at.present? %></div>
-                  <div><%= task.end_at.to_fs(:date) if task.end_at.present? %></div>
+                  <div><%= task.start_at&.to_fs(:date) %></div>
+                  <div><%= task.end_at&.to_fs(:date) %></div>
                 </div>
                 <div class="gantt-timeline-row">
                   <div class="gantt-bar"
