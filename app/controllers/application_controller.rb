@@ -21,6 +21,12 @@ class ApplicationController < ActionController::Base
     redirect_to new_organization_path if current_user.organization.blank?
   end
 
+  def block_user_belongs_to_other_organization(requested_object)
+    if requested_object.organization != current_user.organization
+      redirect_to projects_path
+    end
+  end
+
   def set_my_projects
     @my_projects = current_user.projects.not_archived.descend_by_updated_at
   end

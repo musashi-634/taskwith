@@ -9,6 +9,12 @@ class Task < ApplicationRecord
   validate :check_period
   validates :is_done, inclusion: [true, false]
 
+  delegate :organization, to: :project
+
+  def display_done_state
+    is_done ? '完了' : '未完了'
+  end
+
   private
 
   def check_period

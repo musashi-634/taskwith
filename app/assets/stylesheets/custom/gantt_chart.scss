@@ -33,13 +33,12 @@ main:has(.gantt-chart) {
 .gantt-task-header,
 .gantt-task-content {
   @extend .d-grid;
-  @extend .bg-white;
   @extend .position-sticky;
   @extend .start-0;
   grid-template-columns: 2fr 1fr 80px 80px;
   border-right: 1px solid var(--bs-gray-300);
   border-bottom: 1px solid var(--bs-gray-300);
-  z-index: 3;
+  z-index: 1;
 
   &>div {
     @extend .d-grid;
@@ -51,8 +50,15 @@ main:has(.gantt-chart) {
     }
   }
 }
-.gantt-task-content>div:first-child {
-  place-items: center start;
+.gantt-task-header {
+  background-color: var(--bs-gray-200);
+}
+.gantt-task-content {
+  @extend .bg-white;
+
+  &>div:first-child {
+    place-items: center start;
+  }
 }
 .gantt-scale-header {
   @extend .d-none;
@@ -70,6 +76,9 @@ main:has(.gantt-chart) {
   @extend .d-grid;
   place-items: center;
   border-right: 1px dotted var(--bs-gray-300);
+}
+.gantt-months>div:nth-child(odd) {
+  background-color: var(--bs-gray-200);
 }
 .gantt-days {
   &>div {
@@ -91,44 +100,21 @@ main:has(.gantt-chart) {
   }
 }
 .weekend {
-  @extend .bg-secondary;
-  @extend .bg-opacity-10;
+  background-color: var(--bs-gray-200);
 }
 .gantt-body {
   @extend .d-grid;
 
   &>div {
     grid-area: 1 / 1;
+    z-index: 1;
   }
 }
-.vertical-lines {
-  .gantt-timeline-row>div:not(:last-child) {
-    border-right: 1px dotted var(--bs-gray-300);
-  }
-  .today {
-    @extend .position-relative;
-
-    &::after {
-      @extend .bg-danger;
-      @extend .position-absolute;
-      @extend .start-0;
-      @extend .end-0;
-      @extend .my-0;
-      @extend .mx-auto;
-      @extend .h-100;
-      @extend .d-block;
-      content: "";
-      width: 1px;
-      z-index: 2;
-    }
-  }
+.vertical-lines .gantt-timeline-row>div:not(:last-child) {
+  border-right: 1px dotted var(--bs-gray-300);
 }
-.gantt-tasks .gantt-row:nth-child(odd) {
-  .gantt-timeline-row,
-  .gantt-task-content {
-    @extend .bg-secondary;
-    @extend .bg-opacity-10;
-  }
+.gantt-tasks .gantt-timeline-row>div {
+  grid-row: 1;
 }
 .gantt-bar {
   @extend .bg-primary;
@@ -137,13 +123,28 @@ main:has(.gantt-chart) {
   @extend .h-75;
   @extend .my-auto;
   @extend .mx-0;
-  z-index: 1;
 }
 .done-task {
   .gantt-task-content {
     @extend .text-black-50;
+    @extend .text-decoration-line-through;
   }
   .gantt-bar {
     @extend .bg-secondary;
+  }
+}
+.today-line {
+  @extend .position-relative;
+  @extend .d-grid;
+  place-items: center;
+  margin-right: 1px;
+  margin-bottom: -1px;
+
+  &::after {
+    @extend .bg-danger;
+    @extend .position-absolute;
+    @extend .h-100;
+    content: "";
+    width: 1px;
   }
 }
