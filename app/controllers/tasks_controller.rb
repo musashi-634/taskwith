@@ -10,7 +10,7 @@ class TasksController < ApplicationController
     @tasks = @project.tasks.rank(:row_order)
 
     today = Time.zone.today
-    @timeline_dates = create_timeline_dates(today, 3)
+    @timeline_dates = create_timeline_dates(today, 1)
     @today_grid_column = @timeline_dates.find_index(today) + 1
   end
 
