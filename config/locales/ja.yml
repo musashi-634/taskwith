@@ -20,6 +20,7 @@ ja:
         description: 説明
         is_done: 完了状態
         row_order: ソート順序
+        users: 担当者
   attributes:
     created_at: 作成日時
     updated_at: 更新日時

@@ -21,6 +21,18 @@ RSpec.describe 'Tasks', type: :system do
     end
 
     describe 'タスク' do
+      describe 'タスク情報' do
+        let!(:task) { create(:task, project: project, users: [user]) }
+
+        before { visit project_tasks_path(project) }
+
+        it '担当者が表示されていること' do
+          within '.gantt-tasks .gantt-task-content' do
+            expect(page).to have_content user.name
+          end
+        end
+      end
+
       describe 'ガントバー' do
         context 'タスク期間が指定されている場合' do
           let!(:task) { create(:task_with_time_span, project: project) }

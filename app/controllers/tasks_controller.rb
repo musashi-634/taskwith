@@ -7,7 +7,7 @@ class TasksController < ApplicationController
   }
 
   def index
-    @tasks = @project.tasks.rank(:row_order)
+    @tasks = @project.tasks.includes(:users).rank(:row_order)
 
     today = Time.zone.today
     @timeline_dates = create_timeline_dates(today, 1)

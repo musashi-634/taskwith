@@ -17,7 +17,7 @@
             <%= link_to "+", new_project_task_path,
                 class: 'btn btn-primary position-absolute bottom-0 end-0 mb-1 me-1 px-2 py-0' %>
           </div>
-          <div>担当者</div>
+          <div><%= t('activerecord.attributes.task.users') %></div>
           <div><%= t('activerecord.attributes.task.start_at') %></div>
           <div><%= t('activerecord.attributes.task.end_at') %></div>
         </div>
@@ -58,7 +58,11 @@
               <div class="gantt-row <%= "done-task" if task.is_done %>">
                 <div class="gantt-task-content">
                   <div><%= task.name %></div>
-                  <div></div>
+                  <div>
+                    <% task.users.each do |user| %>
+                      <%= user.name %><br>
+                    <% end %>
+                  </div>
                   <div><%= task.start_at&.to_fs(:date) %></div>
                   <div><%= task.end_at&.to_fs(:date) %></div>
                 </div>
