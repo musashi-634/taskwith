@@ -30,6 +30,7 @@ class TasksController < ApplicationController
   end
 
   def show
+    @task_staffs = @task.users
   end
 
   def edit

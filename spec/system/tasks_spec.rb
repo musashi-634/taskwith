@@ -69,6 +69,20 @@ RSpec.describe 'Tasks', type: :system do
     end
   end
 
+  describe 'タスク詳細ページ' do
+    let(:task) { create(:task, users: [user]) }
+
+    before { task.organization.users << user }
+
+    it '担当者が表示されていること' do
+      visit task_path(task)
+
+      within '.section-users' do
+        expect(page).to have_content user.name
+      end
+    end
+  end
+
   describe 'タスク登録機能' do
     let(:project) { create(:project) }
     let(:task) { build(:task) }
