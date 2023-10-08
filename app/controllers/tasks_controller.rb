@@ -7,7 +7,7 @@ class TasksController < ApplicationController
   }
 
   def index
-    @tasks = @project.tasks.rank(:row_order)
+    @tasks = @project.tasks.includes(:users).rank(:row_order)
 
     today = Time.zone.today
     @timeline_dates = create_timeline_dates(today, 1)
@@ -16,6 +16,7 @@ class TasksController < ApplicationController
 
   def new
     @task = @project.tasks.new
+    @project_members = @project.users
   end
 
   def create
@@ -25,14 +26,17 @@ class TasksController < ApplicationController
       redirect_to project_tasks_path(@project)
     else
       flash.now[:alert] = 'タスクを作成できませんでした。'
+      @project_members = @project.users
       render 'new', status: :unprocessable_entity
     end
   end
 
   def show
+    @task_staffs = @task.users
   end
 
   def edit
+    @project_members = @task.project.users
   end
 
   def update
@@ -41,6 +45,7 @@ class TasksController < ApplicationController
       redirect_to project_tasks_path(@task.project)
     else
       flash.now[:alert] = 'タスク情報を更新できませんでした。'
+      @project_members = @task.project.users
       render 'edit', status: :unprocessable_entity
     end
   end
@@ -62,6 +67,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:name, :start_at, :end_at, :description, :is_done)
+    params.require(:task).permit(:name, :start_at, :end_at, :description, :is_done, user_ids: [])
   end
 end

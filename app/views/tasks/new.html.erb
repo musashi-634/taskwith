@@ -20,6 +20,12 @@
       <%= f.text_area :description %>
     </div>
     <div>
+      <%= f.label :users %><br>
+      <%= f.collection_check_boxes :user_ids, @project_members, :id, :name do |b| %>
+        <%= b.label(class: 'me-3') { b.check_box + b.text } %>
+      <% end %>
+    </div>
+    <div>
       <%= f.submit "作成" %>
     </div>
   <% end %>

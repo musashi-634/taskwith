@@ -75,7 +75,7 @@ RSpec.describe "Tasks", type: :request do
       let!(:organization) { create(:organization, users: [user]) }
 
       context '所属組織のプロジェクトの場合' do
-        let(:project) { create(:project, organization: organization) }
+        let(:project) { create(:project, organization: organization, users: [user]) }
 
         context '有効な属性値の場合' do
           let(:task_attributes) { attributes_for(:task) }
@@ -85,6 +85,14 @@ RSpec.describe "Tasks", type: :request do
               post project_tasks_path(project), params: { task: task_attributes }
             end.to change { project.tasks.count }.by(1)
             expect(project.tasks.last.row_order).to be_truthy
+          end
+
+          it '担当者を登録できること' do
+            post(
+              project_tasks_path(project),
+              params: { task: task_attributes.merge(user_ids: [user.id]) }
+            )
+            expect(project.tasks.last.user_ids).to eq [user.id]
           end
         end
 
@@ -167,7 +175,7 @@ RSpec.describe "Tasks", type: :request do
 
   describe "PATCH /tasks/:id" do
     context 'ユーザーが組織に所属している場合' do
-      let(:project) { create(:project) }
+      let(:project) { create(:project, users: [user]) }
 
       before { project.organization.users << user }
 
@@ -181,6 +189,12 @@ RSpec.describe "Tasks", type: :request do
             expect do
               patch task_path(task), params: { task: task_attributes }
             end.to change { task.reload.name }.from(task.name).to(task_attributes[:name])
+          end
+
+          it '担当者を更新できること' do
+            expect do
+              patch task_path(task), params: { task: task_attributes.merge(user_ids: [user.id]) }
+            end.to change { task.reload.user_ids }.from([]).to([user.id])
           end
         end
 

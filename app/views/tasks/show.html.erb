@@ -21,6 +21,15 @@
       <div class="fw-bold"><%= t('activerecord.attributes.task.is_done') %></div>
       <div class="ms-3"><%= @task.display_done_state %></div>
     </div>
+    <div class="mb-3 section-users">
+      <div class="fw-bold"><%= t('activerecord.attributes.task.users') %></div>
+      <div class="ms-3">
+        <% @task_staffs.each_with_index do |user, i| %>
+          <%= "、" if !i.zero? %>
+          <%= user.name %>
+        <% end %>
+      </div>
+    </div>
   </div>
   <div>
     <div><%= link_to "編集", edit_task_path(@task) %></div>

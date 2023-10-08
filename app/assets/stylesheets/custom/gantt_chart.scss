@@ -43,6 +43,7 @@ main:has(.gantt-chart) {
   &>div {
     @extend .d-grid;
     @extend .p-1;
+    @extend .text-center;
     place-items: center;
 
     &:not(:last-child) {
