@@ -16,6 +16,7 @@ class TasksController < ApplicationController
 
   def new
     @task = @project.tasks.new
+    @project_members = @project.users
   end
 
   def create
@@ -25,6 +26,7 @@ class TasksController < ApplicationController
       redirect_to project_tasks_path(@project)
     else
       flash.now[:alert] = 'タスクを作成できませんでした。'
+      @project_members = @project.users
       render 'new', status: :unprocessable_entity
     end
   end
