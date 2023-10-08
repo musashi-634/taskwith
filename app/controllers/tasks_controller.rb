@@ -34,6 +34,7 @@ class TasksController < ApplicationController
   end
 
   def edit
+    @project_members = @task.project.users
   end
 
   def update
@@ -42,6 +43,7 @@ class TasksController < ApplicationController
       redirect_to project_tasks_path(@task.project)
     else
       flash.now[:alert] = 'タスク情報を更新できませんでした。'
+      @project_members = @task.project.users
       render 'edit', status: :unprocessable_entity
     end
   end
@@ -63,6 +65,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:name, :start_at, :end_at, :description, :is_done)
+    params.require(:task).permit(:name, :start_at, :end_at, :description, :is_done, user_ids: [])
   end
 end

@@ -7,6 +7,7 @@ class Task < ApplicationRecord
 
   has_many :task_staffs, dependent: :destroy
   has_many :users, through: :task_staffs
+  validates :user_ids, inclusion: { in: ->(task) { task.project.user_ids } }
 
   validates :name, presence: true
   validate :check_period

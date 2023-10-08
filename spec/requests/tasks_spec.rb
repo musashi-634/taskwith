@@ -167,7 +167,7 @@ RSpec.describe "Tasks", type: :request do
 
   describe "PATCH /tasks/:id" do
     context 'ユーザーが組織に所属している場合' do
-      let(:project) { create(:project) }
+      let(:project) { create(:project, users: [user]) }
 
       before { project.organization.users << user }
 
@@ -181,6 +181,12 @@ RSpec.describe "Tasks", type: :request do
             expect do
               patch task_path(task), params: { task: task_attributes }
             end.to change { task.reload.name }.from(task.name).to(task_attributes[:name])
+          end
+
+          it '担当者を更新できること' do
+            expect do
+              patch task_path(task), params: { task: task_attributes.merge(user_ids: [user.id]) }
+            end.to change { task.reload.user_ids }.from([]).to([user.id])
           end
         end
 

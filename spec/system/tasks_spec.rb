@@ -22,11 +22,16 @@ RSpec.describe 'Tasks', type: :system do
 
     describe 'タスク' do
       describe 'タスク情報' do
-        let!(:task) { create(:task, project: project, users: [user]) }
+        let!(:task) { create(:task, project: project) }
 
-        before { visit project_tasks_path(project) }
+        before do
+          project.users << user
+          task.users << user
+        end
 
         it '担当者が表示されていること' do
+          visit project_tasks_path(project)
+
           within '.gantt-tasks .gantt-task-content' do
             expect(page).to have_content user.name
           end
@@ -70,9 +75,13 @@ RSpec.describe 'Tasks', type: :system do
   end
 
   describe 'タスク詳細ページ' do
-    let(:task) { create(:task, users: [user]) }
+    let(:task) { create(:task) }
 
-    before { task.organization.users << user }
+    before do
+      task.organization.users << user
+      task.project.users << user
+      task.users << user
+    end
 
     it '担当者が表示されていること' do
       visit task_path(task)
