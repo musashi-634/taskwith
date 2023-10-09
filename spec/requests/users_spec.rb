@@ -1,49 +1,27 @@
 require 'rails_helper'
 
 RSpec.describe "Users", type: :request do
-  describe "GET /users/sign_in" do
-    context 'ログインしていない場合' do
-      before { get new_user_session_path }
-
-      it 'ログインページに遷移できること' do
-        expect(response).to have_http_status 200
-      end
-    end
-
+  describe "GET /users" do
     context 'ログインしている場合' do
       let(:user) { create(:user) }
 
       before do
         sign_in user
-        get new_user_session_path
+        get users_path
       end
 
-      it 'プロジェクト一覧ページにリダイレクトされること' do
-        expect(response).to redirect_to projects_path
+      it 'アカウント情報を取得できること' do
+        expect(response.body).to include 'アカウント情報'
+        expect(response.body).to include user.name
+        expect(response.body).to include user.email
       end
     end
-  end
 
-  describe "GET /users/sign_up" do
     context 'ログインしていない場合' do
-      before { get new_user_registration_path }
+      before { get users_path }
 
-      it 'ユーザー登録ページに遷移できること' do
-        expect(response).to have_http_status 200
-        expect(response.body).to include 'アカウント登録'
-      end
-    end
-
-    context 'ログインしている場合' do
-      let(:user) { create(:user) }
-
-      before do
-        sign_in user
-        get new_user_registration_path
-      end
-
-      it 'プロジェクト一覧ページにリダイレクトされること' do
-        expect(response).to redirect_to projects_path
+      it 'ログインページにリダイレクトされること' do
+        expect(response).to redirect_to user_session_path
       end
     end
   end

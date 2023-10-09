@@ -34,7 +34,7 @@
           <div class="dropdown">
             <%= link_to current_user.name, "#", class: "dropdown-toggle text-light", data: { bs_toggle: "dropdown" } %>
             <ul class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
-              <li><%= link_to 'アカウント設定', "#", class: "dropdown-item" %></li>
+              <li><%= link_to 'アカウント設定', users_path, class: "dropdown-item" %></li>
               <li><%= link_to '組織設定', organization_path, class: "dropdown-item" %></li>
               <li><hr class="dropdown-divider"></li>
               <li>

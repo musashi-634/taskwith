@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     resources :home, only: :index
 
     devise_for :users, controllers: { invitations: 'users/invitations' }
+    get 'users', to: 'users#show'
 
     resource :organization
 
