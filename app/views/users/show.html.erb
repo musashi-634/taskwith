@@ -3,7 +3,7 @@
   <div class="information border rounded mt-3 p-3">
     <div class="d-flex justify-content-between align-items-end">
       <h2 class="m-0">アカウント情報</h2>
-      <%= link_to "編集", "#" %>
+      <%= link_to "編集", edit_user_registration_path %>
     </div>
     <div class="container mt-3">
       <div class="row border-bottom p-2">
@@ -30,6 +30,13 @@
           ******
         </div>
       </div>
+    </div>
+  </div>
+  <div class="information border rounded mt-3 p-3">
+    <h3>アカウント削除</h3>
+    <div>
+      一度アカウントを削除すると、元には戻せません。
+      <%= button_to 'アカウント削除', user_registration_path, data: { turbo_confirm: '本当によろしいですか？' }, method: :delete, class: 'btn btn-danger' %>
     </div>
   </div>
 </div>
