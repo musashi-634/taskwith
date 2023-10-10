@@ -14,5 +14,11 @@ FactoryBot.define do
     trait :with_organization do
       association :organization
     end
+
+    factory :custom_user do
+      name { 'custom user' }
+      email { 'custom@example.com' }
+      password { 'custompassword' }
+    end
   end
 end

@@ -93,6 +93,44 @@ RSpec.describe 'Users', type: :system do
     end
   end
 
+  describe 'ユーザー更新機能' do
+    let(:user) { create(:user) }
+    let(:new_user) { build(:custom_user) }
+
+    before { login_as(user, :scope => :user) }
+
+    it 'ユーザー名とメールアドレスを更新できること' do
+      visit edit_user_registration_path
+
+      expect do
+        fill_in 'user[name]', with: new_user.name
+        fill_in 'user[email]', with: new_user.email
+        fill_in 'user[current_password]', with: user.password
+        click_on '更新'
+      end.to change { user.reload.name }.from(user.name).to(new_user.name)
+
+      expect(user.email).to eq new_user.email
+      expect(current_path).to eq users_path
+      expect(page).to have_content 'アカウント情報を変更しました。'
+    end
+
+    it 'パスワードを更新できること' do
+      visit edit_user_registration_path
+
+      expect do
+        fill_in 'user[name]', with: user.name
+        fill_in 'user[email]', with: user.email
+        fill_in 'user[password]', with: new_user.password
+        fill_in 'user[password_confirmation]', with: new_user.password_confirmation
+        fill_in 'user[current_password]', with: user.password
+        click_on '更新'
+      end.to change { user.reload.valid_password?(new_user.password) }.from(false).to(true)
+
+      expect(current_path).to eq users_path
+      expect(page).to have_content 'アカウント情報を変更しました。'
+    end
+  end
+
   describe 'ユーザー招待機能' do
     let(:user) { create(:user, :with_organization) }
 
