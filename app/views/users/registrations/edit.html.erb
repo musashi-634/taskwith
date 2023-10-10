@@ -4,12 +4,14 @@
   <%= render "users/shared/error_messages", resource: resource %>
 
   <div class="field">
-    <%= f.label :name %><br>
+    <%= f.label :name %>
+    <span class="badge bg-danger">必須</span><br>
     <%= f.text_field :name, autofocus: true, autocomplete: "name" %>
   </div>
 
   <div class="field">
-    <%= f.label :email %><br />
+    <%= f.label :email %>
+    <span class="badge bg-danger">必須</span><br>
     <%= f.email_field :email, autocomplete: "email" %>
   </div>
 
@@ -32,7 +34,9 @@
   </div>
 
   <div class="field">
-    <%= f.label :current_password %> <i>(<%= t('.we_need_your_current_password_to_confirm_your_changes') %>)</i><br />
+    <%= f.label :current_password %>
+    <span class="badge bg-danger">必須</span>
+    <i>(<%= t('.we_need_your_current_password_to_confirm_your_changes') %>)</i><br>
     <%= f.password_field :current_password, autocomplete: "current-password" %>
   </div>
 

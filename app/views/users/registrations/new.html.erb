@@ -13,10 +13,11 @@
   </div>
   <div class="field">
     <%= f.label :password %>
+    <span class="badge bg-danger">必須</span>
     <% if @minimum_password_length %>
     <em><%= t('users.shared.minimum_password_length', count: @minimum_password_length) %></em>
     <% end %>
-    <span class="badge bg-danger">必須</span><br>
+    <br>
     <%= f.password_field :password, autocomplete: "new-password" %>
   </div>
   <div class="field">
