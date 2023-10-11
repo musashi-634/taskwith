@@ -163,4 +163,66 @@ RSpec.describe "Users::Registrations", type: :request do
       end
     end
   end
+
+  describe "DELETE /users" do
+    let!(:user) { create(:user) }
+
+    context 'ログインしている場合' do
+      before { sign_in user }
+
+      context '組織に所属している場合' do
+        let!(:organization) { create(:organization, users: [user]) }
+
+        context '組織メンバーが1人の場合' do
+          it 'ユーザーが削除されること' do
+            expect do
+              delete user_registration_path
+            end.to change { User.count }.by(-1)
+            expect(response).to redirect_to root_path
+          end
+
+          it '所属組織が削除されること' do
+            expect do
+              delete user_registration_path
+            end.to change { Organization.count }.by(-1)
+          end
+        end
+
+        context '組織メンバーが複数の場合' do
+          before { organization.users << create(:user) }
+
+          it 'ユーザーが削除されること' do
+            expect do
+              delete user_registration_path
+            end.to change { User.count }.by(-1)
+            expect(response).to redirect_to root_path
+          end
+
+          it '所属組織が削除されないこと' do
+            expect do
+              delete user_registration_path
+            end.not_to change { Organization.count }
+          end
+        end
+      end
+
+      context '組織に所属していない場合' do
+        it 'ユーザーが削除されること' do
+          expect do
+            delete user_registration_path
+          end.to change { User.count }.by(-1)
+          expect(response).to redirect_to root_path
+        end
+      end
+    end
+
+    context 'ログインしていない場合' do
+      it 'ユーザーが削除されず、ログインページにリダイレクトされること' do
+        expect do
+          delete user_registration_path
+        end.not_to change { User.count }
+        expect(response).to redirect_to user_session_path
+      end
+    end
+  end
 end
