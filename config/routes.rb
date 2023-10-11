@@ -5,7 +5,13 @@ Rails.application.routes.draw do
     root 'home#index'
     resources :home, only: :index
 
-    devise_for :users, controllers: { invitations: 'users/invitations' }
+    devise_for(
+      :users,
+      controllers: {
+        invitations: 'users/invitations',
+        registrations: 'users/registrations',
+      }
+    )
     get 'users', to: 'users#show'
 
     resource :organization

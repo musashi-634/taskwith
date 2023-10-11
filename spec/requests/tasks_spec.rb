@@ -199,7 +199,7 @@ RSpec.describe "Tasks", type: :request do
         end
 
         context '無効な属性値の場合' do
-          let(:task_attributes) { attributes_for(:custom_task, :invalid) }
+          let(:task_attributes) { attributes_for(:task, :invalid) }
 
           it 'タスク情報を更新できないこと' do
             expect do
