@@ -14,4 +14,8 @@ class Project < ApplicationRecord
   scope :archived, -> { where(is_archived: true) }
 
   scope :descend_by_updated_at, -> { order(updated_at: :desc) }
+
+  def display_done_state
+    is_done ? '完了' : '未完了'
+  end
 end
