@@ -71,7 +71,7 @@ RSpec.describe "Projects", type: :request do
       before { create(:organization, users: [user]) }
 
       context '有効な属性値の場合' do
-        let(:project_attributes) { attributes_for(:project) }
+        let(:project_attributes) { attributes_for(:project).merge({ user_ids: [user.id] }) }
 
         it '所属組織のプロジェクトを作成できること' do
           expect do
@@ -82,7 +82,9 @@ RSpec.describe "Projects", type: :request do
       end
 
       context '無効な属性値の場合' do
-        let(:project_attributes) { attributes_for(:project, :invalid) }
+        let(:project_attributes) do
+          attributes_for(:project, :invalid).merge({ user_ids: [user.id] })
+        end
 
         it '所属組織のプロジェクトを作成できないこと' do
           expect do
@@ -94,7 +96,7 @@ RSpec.describe "Projects", type: :request do
     end
 
     context 'ユーザーが組織に所属していない場合' do
-      let(:project_attributes) { attributes_for(:project) }
+      let(:project_attributes) { attributes_for(:project).merge({ user_ids: [user.id] }) }
 
       it 'プロジェクトが作成されず、組織作成ページにリダイレクトされること' do
         expect do

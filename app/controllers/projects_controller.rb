@@ -14,10 +14,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @project = current_user.organization.projects.new(
-      **project_params,
-      users: [current_user]
-    )
+    @project = current_user.organization.projects.new(project_params)
     if @project.save
       flash[:notice] = 'プロジェクトを作成しました。'
       redirect_to projects_path

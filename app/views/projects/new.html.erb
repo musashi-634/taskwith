@@ -2,6 +2,7 @@
   <h1 class="mt-5">新規プロジェクト作成</h1>
   <%= form_with model: @project do |f| %>
     <%= render "shared/error_messages", object: @project %>
+    <%= f.hidden_field :user_ids, multiple: true, value: current_user.id %>
     <div>
       <%= f.label :name %>
       <span class="badge bg-danger">必須</span><br>
