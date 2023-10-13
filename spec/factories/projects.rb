@@ -15,5 +15,9 @@ FactoryBot.define do
     trait :archived do
       is_archived { true }
     end
+
+    factory :custom_project do
+      name { 'custom project' }
+    end
   end
 end

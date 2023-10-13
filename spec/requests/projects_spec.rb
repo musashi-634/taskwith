@@ -179,4 +179,68 @@ RSpec.describe "Projects", type: :request do
       end
     end
   end
+
+  describe "PATCH /projects/:id" do
+    context 'ユーザーが組織に所属している場合' do
+      let!(:organization) { create(:organization, users: [user]) }
+
+      context 'プロジェクトが所属組織のものである場合' do
+        let(:project) { create(:project, organization: organization) }
+
+        context '有効な属性値の場合' do
+          let(:project_attributes) { attributes_for(:custom_project) }
+
+          it 'プロジェクト情報を更新できること' do
+            expect do
+              patch project_path(project), params: { project: project_attributes }
+            end.to change { project.reload.name }.from(project.name).to(project_attributes[:name])
+          end
+
+          it 'メンバーを更新できること' do
+            expect do
+              patch(
+                project_path(project),
+                params: { project: project_attributes.merge(user_ids: [user.id]) }
+              )
+            end.to change { project.reload.user_ids }.from([]).to([user.id])
+          end
+        end
+
+        context '無効な属性値の場合' do
+          let(:project_attributes) { attributes_for(:project, :invalid) }
+
+          it 'プロジェクト情報を更新できないこと' do
+            expect do
+              patch project_path(project), params: { project: project_attributes }
+            end.not_to change { project.reload.name }.from(project.name)
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+      end
+
+      context 'プロジェクトが他の組織のものである場合' do
+        let(:project) { create(:project) }
+        let(:project_attributes) { attributes_for(:custom_project) }
+
+        it 'プロジェクト情報が更新されず、プロジェクト一覧ページにリダイレクトされること' do
+          expect do
+            patch project_path(project), params: { project: project_attributes }
+          end.not_to change { project.reload.name }.from(project.name)
+          expect(response).to redirect_to projects_path
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let(:project) { create(:project) }
+      let(:project_attributes) { attributes_for(:custom_project) }
+
+      it 'プロジェクト情報が更新されず、組織作成ページにリダイレクトされること' do
+        expect do
+          patch project_path(project), params: { project: project_attributes }
+        end.not_to change { project.reload.name }.from(project.name)
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
 end

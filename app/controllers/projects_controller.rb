@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project = current_user.organization.projects.new(
-      **params.require(:project).permit(:name, :description, :is_done, :is_archived),
+      **project_params,
       users: [current_user]
     )
     if @project.save
@@ -35,9 +35,24 @@ class ProjectsController < ApplicationController
     @organization_members = @project.organization.users
   end
 
+  def update
+    if @project.update(project_params)
+      flash[:notice] = 'プロジェクト情報を更新しました。'
+      redirect_to projects_path
+    else
+      flash.now[:alert] = 'プロジェクト情報を更新できませんでした。'
+      @organization_members = @project.organization.users
+      render 'edit', status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_project
     @project = Project.find(params[:id])
+  end
+
+  def project_params
+    params.require(:project).permit(:name, :description, :is_done, :is_archived, user_ids: [])
   end
 end
