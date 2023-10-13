@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
-  before_action :set_project, only: %w(index new create)
-  before_action :set_task, only: %w(show edit update destroy)
+  before_action :set_project, only: %i(index new create)
+  before_action :set_task, only: %i(show edit update destroy)
   before_action -> {
     requested_object = @project || @task
     block_user_belongs_to_other_organization(requested_object)
