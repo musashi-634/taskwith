@@ -31,6 +31,10 @@ class ProjectsController < ApplicationController
     @project_members = @project.users
   end
 
+  def edit
+    @organization_members = @project.organization.users
+  end
+
   private
 
   def set_project

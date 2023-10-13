@@ -141,4 +141,42 @@ RSpec.describe "Projects", type: :request do
       end
     end
   end
+
+  describe "GET /projects/:id/edit" do
+    context 'ユーザーが組織に所属している場合' do
+      let!(:organization) { create(:organization, users: [user]) }
+
+      context 'プロジェクトが所属組織のものである場合' do
+        let(:project) { create(:project, organization: organization) }
+
+        before { get edit_project_path(project) }
+
+        it 'プロジェクト編集ページにアクセスできること' do
+          expect(response).to have_http_status 200
+          expect(response.body).to include 'プロジェクト編集'
+          expect(response.body).to include project.name
+        end
+      end
+
+      context 'プロジェクトが他の組織のものである場合' do
+        let(:project) { create(:project) }
+
+        before { get edit_project_path(project) }
+
+        it 'プロジェクト一覧ページにリダイレクトされること' do
+          expect(response).to redirect_to projects_path
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let(:project) { create(:project) }
+
+      before { get edit_project_path(project) }
+
+      it '組織作成ページにリダイレクトされること' do
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
 end
