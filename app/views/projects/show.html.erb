@@ -25,7 +25,7 @@
   </div>
   <div>
     <div>
-      <%= button_to 'アーカイブ', projects_archived_index_path, params: { id: @project.id }, class: 'btn btn-primary', data: { turbo_confirm: 'プロジェクトをアーカイブします。よろしいですか？' } %>
+      <%= button_to 'アーカイブ', projects_archives_path, params: { id: @project.id }, class: 'btn btn-primary', data: { turbo_confirm: 'プロジェクトをアーカイブします。よろしいですか？' } %>
     </div>
     <div><%= link_to "編集", edit_project_path(@project) %></div>
     <div><%= link_to "戻る", 'javascript:history.back()' %></div>

@@ -1,18 +1,18 @@
 require 'rails_helper'
 
-RSpec.describe "Projects::Archived", type: :request do
+RSpec.describe "Projects::Archives", type: :request do
   let(:user) { create(:user) }
 
   before { sign_in user }
 
-  describe "GET /projects/archived" do
+  describe "GET /projects/archives" do
     context 'ユーザーが組織に所属している場合' do
       let!(:organization) { create(:organization, users: [user]) }
 
       context 'プロジェクトが所属組織のものである場合' do
         let!(:archived_project) { create(:project, :archived, organization: organization) }
 
-        before { get projects_archived_index_path }
+        before { get projects_archives_path }
 
         it 'アーカイブ済みのプロジェクト名を取得できること' do
           expect(response.body).to include archived_project.name
@@ -22,7 +22,7 @@ RSpec.describe "Projects::Archived", type: :request do
       context 'プロジェクトが他の組織のものである場合' do
         let!(:archived_project) { create(:project, :archived) }
 
-        before { get projects_archived_index_path }
+        before { get projects_archives_path }
 
         it 'アーカイブ済みのプロジェクト名を取得できないこと' do
           expect(response.body).not_to include archived_project.name
@@ -31,7 +31,7 @@ RSpec.describe "Projects::Archived", type: :request do
     end
 
     context 'ユーザーが組織に所属していない場合' do
-      before { get projects_archived_index_path }
+      before { get projects_archives_path }
 
       it '組織作成ページにリダイレクトされること' do
         expect(response).to redirect_to new_organization_path
@@ -39,7 +39,7 @@ RSpec.describe "Projects::Archived", type: :request do
     end
   end
 
-  describe "POST /projects/archived" do
+  describe "POST /projects/archives" do
     context 'ユーザーが組織に所属している場合' do
       let!(:organization) { create(:organization, users: [user]) }
 
@@ -49,7 +49,7 @@ RSpec.describe "Projects::Archived", type: :request do
 
         it 'プロジェクトをアーカイブできること' do
           expect do
-            post projects_archived_index_path, params: params
+            post projects_archives_path, params: params
           end.to change { project.reload.is_archived }.from(false).to(true)
           expect(response).to redirect_to projects_path
         end
@@ -61,7 +61,7 @@ RSpec.describe "Projects::Archived", type: :request do
 
         it 'プロジェクトをアーカイブできず、プロジェクト一覧ページにリダイレクトされること' do
           expect do
-            post projects_archived_index_path, params: params
+            post projects_archives_path, params: params
           end.not_to change { project.reload.is_archived }.from(false)
           expect(response).to redirect_to projects_path
         end
@@ -74,7 +74,7 @@ RSpec.describe "Projects::Archived", type: :request do
 
       it 'プロジェクトをアーカイブできず、組織作成ページにリダイレクトされること' do
         expect do
-          post projects_archived_index_path, params: params
+          post projects_archives_path, params: params
         end.not_to change { project.reload.is_archived }.from(false)
         expect(response).to redirect_to new_organization_path
       end

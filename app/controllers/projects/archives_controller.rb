@@ -1,4 +1,4 @@
-class Projects::ArchivedController < ApplicationController
+class Projects::ArchivesController < ApplicationController
   before_action :set_project, only: :create
   before_action -> {
     block_user_belongs_to_other_organization(@project)
