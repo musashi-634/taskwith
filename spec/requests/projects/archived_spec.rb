@@ -38,4 +38,46 @@ RSpec.describe "Projects::Archived", type: :request do
       end
     end
   end
+
+  describe "POST /projects/archived" do
+    context 'ユーザーが組織に所属している場合' do
+      let!(:organization) { create(:organization, users: [user]) }
+
+      context '所属組織のプロジェクトの場合' do
+        let(:project) { create(:project, organization: user.organization) }
+        let(:params) { { id: project.id } }
+
+        it 'プロジェクトをアーカイブできること' do
+          expect do
+            post projects_archived_index_path, params: params
+          end.to change { project.reload.is_archived }.from(false).to(true)
+          expect(response).to redirect_to projects_path
+        end
+      end
+
+      context '他の組織のプロジェクトの場合' do
+        let(:project) { create(:project) }
+        let(:params) { { id: project.id } }
+
+        it 'プロジェクトをアーカイブできず、プロジェクト一覧ページにリダイレクトされること' do
+          expect do
+            post projects_archived_index_path, params: params
+          end.not_to change { project.reload.is_archived }.from(false)
+          expect(response).to redirect_to projects_path
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let(:project) { create(:project) }
+      let(:params) { { id: project.id } }
+
+      it 'プロジェクトをアーカイブできず、組織作成ページにリダイレクトされること' do
+        expect do
+          post projects_archived_index_path, params: params
+        end.not_to change { project.reload.is_archived }.from(false)
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
 end
