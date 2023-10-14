@@ -175,9 +175,12 @@ RSpec.describe "Tasks", type: :request do
 
   describe "PATCH /tasks/:id" do
     context 'ユーザーが組織に所属している場合' do
-      let(:project) { create(:project, users: [user]) }
+      let(:project) { create(:project) }
 
-      before { project.organization.users << user }
+      before do
+        project.organization.users << user
+        project.users << user
+      end
 
       context '所属組織のタスクの場合' do
         let(:task) { create(:task, project: project) }

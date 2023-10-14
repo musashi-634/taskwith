@@ -115,7 +115,7 @@ RSpec.describe 'Tasks', type: :system do
     end
   end
 
-  describe 'タスク編集機能' do
+  describe 'タスク更新機能' do
     let(:task) { create(:task) }
     let(:new_task) { build(:custom_task) }
 

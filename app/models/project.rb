@@ -3,6 +3,7 @@ class Project < ApplicationRecord
 
   has_many :project_members, dependent: :destroy
   has_many :users, through: :project_members
+  validates :user_ids, inclusion: { in: ->(project) { project.organization.user_ids } }
 
   has_many :tasks, dependent: :destroy
 
@@ -14,4 +15,8 @@ class Project < ApplicationRecord
   scope :archived, -> { where(is_archived: true) }
 
   scope :descend_by_updated_at, -> { order(updated_at: :desc) }
+
+  def display_done_state
+    is_done ? '完了' : '未完了'
+  end
 end

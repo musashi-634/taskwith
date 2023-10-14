@@ -5,8 +5,8 @@ RSpec.describe Task, type: :model do
     let(:project) { create(:project) }
 
     it 'プロジェクトメンバーだけを許可する' do
-      project_member = create(:user, projects: [project])
-      task = build(:task, project: project, users: [project_member])
+      project_member = create(:user, organization: project.organization, projects: [project])
+      task = build(:task, project: project.reload, users: [project_member])
       expect(task).to be_valid
 
       not_project_member = create(:user)

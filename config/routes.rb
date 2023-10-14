@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     resource :organization
 
     namespace :projects do
-      resources :archived, only: :index
+      resources :archives, only: %i(index create destroy)
     end
     resources :projects do
       namespace :tasks do

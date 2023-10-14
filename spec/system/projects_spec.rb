@@ -21,6 +21,27 @@ RSpec.describe 'Projects', type: :system do
     end
   end
 
+  describe 'プロジェクト更新機能' do
+    let(:project) { create(:project) }
+    let(:new_project) { build(:custom_project) }
+
+    before { project.organization.users << user }
+
+    it 'プロジェクト情報を更新できること' do
+      visit project_path(project)
+      click_on '編集'
+
+      expect do
+        fill_in 'project[name]', with: new_project.name
+        click_on '保存'
+      end.to change { project.reload.name }.from(project.name).to(new_project.name)
+
+      expect(current_path).to eq projects_path
+      expect(page).to have_content 'プロジェクト情報を更新しました。'
+      expect(page).to have_content new_project.name
+    end
+  end
+
   describe 'ヘッダー' do
     let!(:project) do
       create(:project, is_archived: false, organization: user.organization, users: [user])

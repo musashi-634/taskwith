@@ -1,0 +1,33 @@
+<div class="container">
+  <h1 class="mt-5 mb-3">プロジェクト詳細</h1>
+  <div>
+    <div class="mb-3">
+      <div class="fw-bold"><%= t('activerecord.attributes.project.name') %></div>
+      <div class="ms-3"><%= @project.name %></div>
+    </div>
+    <div class="mb-3">
+      <div class="fw-bold"><%= t('activerecord.attributes.project.description') %></div>
+      <div class="ms-3"><%= @project.description %></div>
+    </div>
+    <div class="mb-3">
+      <div class="fw-bold"><%= t('activerecord.attributes.project.is_done') %></div>
+      <div class="ms-3"><%= @project.display_done_state %></div>
+    </div>
+    <div class="mb-3 section-users">
+      <div class="fw-bold"><%= t('activerecord.attributes.project.users') %></div>
+      <div class="ms-3">
+        <% @project_members.each_with_index do |user, i| %>
+          <%= "、" if !i.zero? %>
+          <%= user.name %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <%= button_to 'アーカイブ', projects_archives_path, params: { id: @project.id }, class: 'btn btn-primary', data: { turbo_confirm: 'プロジェクトをアーカイブします。よろしいですか？' } %>
+    </div>
+    <div><%= link_to "編集", edit_project_path(@project) %></div>
+    <div><%= link_to "戻る", 'javascript:history.back()' %></div>
+  </div>
+</div>
