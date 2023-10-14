@@ -19,9 +19,9 @@
                 <%= project.name %>
               </td>
               <td>
-                <div class="float-end">
-                  <%= link_to "アーカイブから戻す", "#", class: "btn btn-primary btn-sm" %>
-                  <%= link_to "削除", "#", class: "btn btn-secondary btn-sm" %>
+                <div class="d-flex justify-content-end">
+                  <%= button_to '復元', projects_archive_path(project), method: :delete, class: 'btn btn-primary btn-sm', data: { turbo_confirm: 'プロジェクトをアーカイブから復元します。よろしいですか？' } %>
+                  <%= button_to "削除", "#", method: :get, class: "btn btn-secondary btn-sm ms-1" %>
                 </div>
               </td>
             </tr>

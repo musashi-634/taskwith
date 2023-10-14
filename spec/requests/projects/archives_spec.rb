@@ -44,10 +44,10 @@ RSpec.describe "Projects::Archives", type: :request do
       let!(:organization) { create(:organization, users: [user]) }
 
       context '所属組織のプロジェクトの場合' do
-        let(:project) { create(:project, organization: user.organization) }
+        let(:project) { create(:project, organization: organization) }
         let(:params) { { id: project.id } }
 
-        it 'プロジェクトをアーカイブできること' do
+        it 'プロジェクトをアーカイブ化できること' do
           expect do
             post projects_archives_path, params: params
           end.to change { project.reload.is_archived }.from(false).to(true)
@@ -59,7 +59,7 @@ RSpec.describe "Projects::Archives", type: :request do
         let(:project) { create(:project) }
         let(:params) { { id: project.id } }
 
-        it 'プロジェクトをアーカイブできず、プロジェクト一覧ページにリダイレクトされること' do
+        it 'プロジェクトをアーカイブ化できず、プロジェクト一覧ページにリダイレクトされること' do
           expect do
             post projects_archives_path, params: params
           end.not_to change { project.reload.is_archived }.from(false)
@@ -72,10 +72,49 @@ RSpec.describe "Projects::Archives", type: :request do
       let(:project) { create(:project) }
       let(:params) { { id: project.id } }
 
-      it 'プロジェクトをアーカイブできず、組織作成ページにリダイレクトされること' do
+      it 'プロジェクトをアーカイブ化できず、組織作成ページにリダイレクトされること' do
         expect do
           post projects_archives_path, params: params
         end.not_to change { project.reload.is_archived }.from(false)
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
+
+  describe "DELETE /projects/archives/:id" do
+    context 'ユーザーが組織に所属している場合' do
+      let!(:organization) { create(:organization, users: [user]) }
+
+      context '所属組織のプロジェクトの場合' do
+        let(:archived_project) { create(:project, :archived, organization: organization) }
+
+        it 'プロジェクトを非アーカイブ化できること' do
+          expect do
+            delete projects_archive_path(archived_project)
+          end.to change { archived_project.reload.is_archived }.from(true).to(false)
+          expect(response).to redirect_to projects_archives_path
+        end
+      end
+
+      context '他の組織のプロジェクトの場合' do
+        let(:archived_project) { create(:project, :archived) }
+
+        it 'プロジェクトを非アーカイブ化できず、プロジェクト一覧ページにリダイレクトされること' do
+          expect do
+            delete projects_archive_path(archived_project)
+          end.not_to change { archived_project.reload.is_archived }.from(true)
+          expect(response).to redirect_to projects_path
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let(:archived_project) { create(:project, :archived) }
+
+      it 'プロジェクトを非アーカイブ化できず、組織作成ページにリダイレクトされること' do
+        expect do
+          delete projects_archive_path(archived_project)
+        end.not_to change { archived_project.reload.is_archived }.from(true)
         expect(response).to redirect_to new_organization_path
       end
     end
