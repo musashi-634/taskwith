@@ -43,6 +43,12 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def destroy
+    @project.destroy
+    flash[:notice] = 'プロジェクトを削除しました。'
+    redirect_to projects_archives_path
+  end
+
   private
 
   def set_project
