@@ -245,4 +245,43 @@ RSpec.describe "Projects", type: :request do
       end
     end
   end
+
+  describe "DELETE /projects/:id" do
+    context 'ユーザーが組織に所属している場合' do
+      let!(:organization) { create(:organization, users: [user]) }
+
+      context '所属組織のプロジェクトの場合' do
+        let!(:project) { create(:project, organization: organization) }
+
+        it 'プロジェクトを削除できること' do
+          expect do
+            delete project_path(project)
+          end.to change { Project.count }.by(-1)
+          expect(response).to redirect_to projects_archives_path
+        end
+      end
+
+      context '他の組織のプロジェクトの場合' do
+        let!(:project) { create(:project) }
+
+        it 'プロジェクトが削除されず、プロジェクト一覧ページにリダイレクトされること' do
+          expect do
+            delete project_path(project)
+          end.not_to change { Project.count }
+          expect(response).to redirect_to projects_path
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let!(:project) { create(:project) }
+
+      it 'プロジェクトが削除されず、組織作成ページにリダイレクトされること' do
+        expect do
+          delete project_path(project)
+        end.not_to change { Project.count }
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
 end
