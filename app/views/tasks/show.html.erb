@@ -32,6 +32,9 @@
     </div>
   </div>
   <div>
+    <div>
+      <%= button_to '削除', task_path(@task), method: :delete, class: 'btn btn-secondary', data: { turbo_confirm: 'タスクを削除します。よろしいですか？' } %>
+    </div>
     <div><%= link_to "編集", edit_task_path(@task) %></div>
     <div><%= link_to "戻る", 'javascript:history.back()' %></div>
   </div>
