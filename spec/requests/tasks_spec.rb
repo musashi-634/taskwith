@@ -238,4 +238,45 @@ RSpec.describe "Tasks", type: :request do
       end
     end
   end
+
+  describe "DELETE /tasks/:id" do
+    context 'ユーザーが組織に所属している場合' do
+      let(:project) { create(:project) }
+
+      before { project.organization.users << user }
+
+      context '所属組織のタスクの場合' do
+        let!(:task) { create(:task, project: project) }
+
+        it 'タスクを削除できること' do
+          expect do
+            delete task_path(task)
+          end.to change { Task.count }.by(-1)
+          expect(response).to redirect_to project_tasks_path(project)
+        end
+      end
+
+      context '他の組織のタスクの場合' do
+        let!(:task) { create(:task) }
+
+        it 'タスクが削除されず、プロジェクト一覧ページにリダイレクトされること' do
+          expect do
+            delete task_path(task)
+          end.not_to change { Task.count }
+          expect(response).to redirect_to projects_path
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let!(:task) { create(:task) }
+
+      it 'タスクが削除されず、組織作成ページにリダイレクトされること' do
+        expect do
+          delete task_path(task)
+        end.not_to change { Task.count }
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
 end

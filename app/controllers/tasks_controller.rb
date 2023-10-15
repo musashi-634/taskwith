@@ -50,6 +50,12 @@ class TasksController < ApplicationController
     end
   end
 
+  def destroy
+    @task.destroy
+    flash[:notice] = 'タスクを削除しました。'
+    redirect_to project_tasks_path(@task.project)
+  end
+
   private
 
   def set_project
