@@ -1,4 +1,9 @@
 class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :trackable and :omniauthable
+  devise :invitable, :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable, :timeoutable
+
   belongs_to :organization, optional: true
 
   has_many :project_members, dependent: :destroy
@@ -9,8 +14,12 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :trackable and :omniauthable
-  devise :invitable, :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :timeoutable
+  GUEST_EMAIL = 'guest@example.com'.freeze
+
+  def self.guest
+    find_or_create_by!(email: GUEST_EMAIL) do |user|
+      user.name = 'ゲストユーザー'
+      user.password = SecureRandom.urlsafe_base64
+    end
+  end
 end

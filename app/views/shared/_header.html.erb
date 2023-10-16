@@ -29,7 +29,7 @@
           </div>
         <% end %>
       </div>
-      <div>
+      <div class="d-flex">
         <% if user_signed_in? %>
           <div class="dropdown">
             <%= link_to current_user.name, "#", class: "dropdown-toggle text-light", data: { bs_toggle: "dropdown" } %>
@@ -44,7 +44,7 @@
           </div>
         <% else %>
           <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline-light me-2" %>
-          <%= link_to "ゲストログイン", "#", class: "btn btn-outline-light me-2" %>
+          <%= button_to "ゲストログイン", users_guest_session_path, class: "btn btn-outline-light me-2" %>
           <%= link_to "新規登録", new_user_registration_path, class: "btn btn-warning" %>
         <% end %>
       </div>
