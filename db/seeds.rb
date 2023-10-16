@@ -27,7 +27,7 @@ puts '==================== creating user ===================='
 #         |-- 星野
 #         |-- 斎藤
 
-USER_PASSWORD = 'test123'
+USER_PASSWORD = Rails.application.credentials.dig(:seeds, :user_password)
 
 yamada_user = jmd_organization.users.create!(
   name: '山田　太郎',
