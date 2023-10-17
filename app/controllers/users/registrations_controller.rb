@@ -1,4 +1,6 @@
 class Users::RegistrationsController < DeviseInvitable::RegistrationsController
+  before_action :block_guest_user, only: %i(update destroy)
+
   def destroy
     super do |user|
       organization = user.organization
@@ -12,5 +14,13 @@ class Users::RegistrationsController < DeviseInvitable::RegistrationsController
 
   def after_update_path_for(resource)
     users_path
+  end
+
+  private
+
+  def block_guest_user
+    if resource.email == User::GUEST_EMAIL
+      redirect_to projects_path, alert: 'ゲストユーザーは更新・削除できません。'
+    end
   end
 end

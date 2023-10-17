@@ -52,104 +52,124 @@ RSpec.describe "Users::Registrations", type: :request do
   end
 
   describe "PATCH /users" do
-    let!(:user) { create(:user) }
-
     context 'ログインしている場合' do
-      before { sign_in user }
+      context '一般ユーザーの場合' do
+        let!(:user) { create(:user) }
 
-      context 'パスワードを更新しない場合' do
-        context '有効な属性値の場合' do
-          let(:user_attributes) do
-            attributes_for(:custom_user).slice(:name, :email).
-              merge({ current_password: user.password })
+        before { sign_in user }
+
+        context 'パスワードを更新しない場合' do
+          context '有効な属性値の場合' do
+            let(:user_attributes) do
+              attributes_for(:custom_user).slice(:name, :email).
+                merge({ current_password: user.password })
+            end
+
+            it 'ユーザー名を更新できること' do
+              expect do
+                patch user_registration_path, params: { user: user_attributes }
+              end.to change { user.reload.name }.from(user.name).to(user_attributes[:name])
+            end
+
+            it 'メールアドレスを更新できること' do
+              expect do
+                patch user_registration_path, params: { user: user_attributes }
+              end.to change { user.reload.email }.from(user.email).to(user_attributes[:email])
+            end
           end
 
-          it 'ユーザー名を更新できること' do
-            expect do
-              patch user_registration_path, params: { user: user_attributes }
-            end.to change { user.reload.name }.from(user.name).to(user_attributes[:name])
+          context '無効な属性値の場合' do
+            let(:user_attributes) do
+              attributes_for(:user, :invalid).slice(:name, :email).
+                merge({ current_password: user.password })
+            end
+
+            it 'アカウント情報を更新できないこと' do
+              expect do
+                patch user_registration_path, params: { user: user_attributes }
+              end.not_to change { user.reload.name }.from(user.name)
+              expect(response).to have_http_status :unprocessable_entity
+            end
           end
 
-          it 'メールアドレスを更新できること' do
-            expect do
-              patch user_registration_path, params: { user: user_attributes }
-            end.to change { user.reload.email }.from(user.email).to(user_attributes[:email])
+          context '現在のパスワードが未入力の場合' do
+            let(:user_attributes) { attributes_for(:custom_user).slice(:name, :email) }
+
+            it 'アカウント情報を更新できないこと' do
+              expect do
+                patch user_registration_path, params: { user: user_attributes }
+              end.not_to change { user.reload.name }.from(user.name)
+              expect(response).to have_http_status :unprocessable_entity
+            end
           end
         end
 
-        context '無効な属性値の場合' do
-          let(:user_attributes) do
-            attributes_for(:user, :invalid).slice(:name, :email).
-              merge({ current_password: user.password })
+        context 'パスワードを更新する場合' do
+          context '有効な属性値の場合' do
+            let(:user_attributes) do
+              attributes_for(:custom_user).merge({ current_password: user.password })
+            end
+
+            it 'パスワードを更新できること' do
+              expect do
+                patch user_registration_path, params: { user: user_attributes }
+              end.to change {
+                user.reload.valid_password?(user_attributes[:password])
+              }.from(false).to(true)
+            end
           end
 
-          it 'アカウント情報を更新できないこと' do
-            expect do
-              patch user_registration_path, params: { user: user_attributes }
-            end.not_to change { user.reload.name }.from(user.name)
-            expect(response).to have_http_status :unprocessable_entity
+          context '無効な属性値の場合' do
+            let(:user_attributes) do
+              attributes_for(:custom_user, password: 'aaaaaa', password_confirmation: 'bbbbbb').
+                merge({ current_password: user.password })
+            end
+
+            it 'パスワードを更新できないこと' do
+              expect do
+                patch user_registration_path, params: { user: user_attributes }
+              end.not_to change {
+                user.reload.valid_password?(user_attributes[:password])
+              }.from(false)
+              expect(response).to have_http_status :unprocessable_entity
+            end
           end
-        end
 
-        context '現在のパスワードが未入力の場合' do
-          let(:user_attributes) { attributes_for(:custom_user).slice(:name, :email) }
+          context '現在のパスワードが未入力の場合' do
+            let(:user_attributes) { attributes_for(:custom_user) }
 
-          it 'アカウント情報を更新できないこと' do
-            expect do
-              patch user_registration_path, params: { user: user_attributes }
-            end.not_to change { user.reload.name }.from(user.name)
-            expect(response).to have_http_status :unprocessable_entity
+            it 'パスワードを更新できないこと' do
+              expect do
+                patch user_registration_path, params: { user: user_attributes }
+              end.not_to change {
+                user.reload.valid_password?(user_attributes[:password])
+              }.from(false)
+              expect(response).to have_http_status :unprocessable_entity
+            end
           end
         end
       end
 
-      context 'パスワードを更新する場合' do
-        context '有効な属性値の場合' do
-          let(:user_attributes) do
-            attributes_for(:custom_user).merge({ current_password: user.password })
-          end
-
-          it 'パスワードを更新できること' do
-            expect do
-              patch user_registration_path, params: { user: user_attributes }
-            end.to change {
-              user.reload.valid_password?(user_attributes[:password])
-            }.from(false).to(true)
-          end
+      context 'ゲストユーザーの場合' do
+        let!(:guest_user) { create(:guest_user) }
+        let(:user_attributes) do
+          attributes_for(:custom_user).slice(:name, :email).
+            merge({ current_password: guest_user.password })
         end
 
-        context '無効な属性値の場合' do
-          let(:user_attributes) do
-            attributes_for(:custom_user, password: 'aaaaaa', password_confirmation: 'bbbbbb').
-              merge({ current_password: user.password })
-          end
+        before { sign_in guest_user }
 
-          it 'パスワードを更新できないこと' do
-            expect do
-              patch user_registration_path, params: { user: user_attributes }
-            end.not_to change {
-              user.reload.valid_password?(user_attributes[:password])
-            }.from(false)
-            expect(response).to have_http_status :unprocessable_entity
-          end
-        end
-
-        context '現在のパスワードが未入力の場合' do
-          let(:user_attributes) { attributes_for(:custom_user) }
-
-          it 'パスワードを更新できないこと' do
-            expect do
-              patch user_registration_path, params: { user: user_attributes }
-            end.not_to change {
-              user.reload.valid_password?(user_attributes[:password])
-            }.from(false)
-            expect(response).to have_http_status :unprocessable_entity
-          end
+        it 'アカウント情報が更新されず、プロジェクト一覧ページにリダイレクトされること' do
+          expect do
+            patch user_registration_path, params: { user: user_attributes }
+          end.not_to change { guest_user.reload.name }.from(guest_user.name)
+          expect(response).to redirect_to projects_path
         end
       end
     end
 
     context 'ログインしていない場合' do
+      let!(:user) { create(:user) }
       let(:user_attributes) do
         attributes_for(:custom_user).slice(:name, :email).
           merge({ current_password: user.password })
@@ -165,58 +185,75 @@ RSpec.describe "Users::Registrations", type: :request do
   end
 
   describe "DELETE /users" do
-    let!(:user) { create(:user) }
-
     context 'ログインしている場合' do
-      before { sign_in user }
+      context '一般ユーザーの場合' do
+        let!(:user) { create(:user) }
 
-      context '組織に所属している場合' do
-        let!(:organization) { create(:organization, users: [user]) }
+        before { sign_in user }
 
-        context '組織メンバーが1人の場合' do
-          it 'ユーザーが削除されること' do
-            expect do
-              delete user_registration_path
-            end.to change { User.count }.by(-1)
-            expect(response).to redirect_to root_path
+        context '組織に所属している場合' do
+          let!(:organization) { create(:organization, users: [user]) }
+
+          context '組織メンバーが1人の場合' do
+            it 'ユーザーが削除されること' do
+              expect do
+                delete user_registration_path
+              end.to change { User.count }.by(-1)
+              expect(response).to redirect_to root_path
+            end
+
+            it '所属組織が削除されること' do
+              expect do
+                delete user_registration_path
+              end.to change { Organization.count }.by(-1)
+            end
           end
 
-          it '所属組織が削除されること' do
-            expect do
-              delete user_registration_path
-            end.to change { Organization.count }.by(-1)
+          context '組織メンバーが複数の場合' do
+            before { organization.users << create(:user) }
+
+            it 'ユーザーが削除されること' do
+              expect do
+                delete user_registration_path
+              end.to change { User.count }.by(-1)
+              expect(response).to redirect_to root_path
+            end
+
+            it '所属組織が削除されないこと' do
+              expect do
+                delete user_registration_path
+              end.not_to change { Organization.count }
+            end
           end
         end
 
-        context '組織メンバーが複数の場合' do
-          before { organization.users << create(:user) }
-
+        context '組織に所属していない場合' do
           it 'ユーザーが削除されること' do
             expect do
               delete user_registration_path
             end.to change { User.count }.by(-1)
             expect(response).to redirect_to root_path
-          end
-
-          it '所属組織が削除されないこと' do
-            expect do
-              delete user_registration_path
-            end.not_to change { Organization.count }
           end
         end
       end
 
-      context '組織に所属していない場合' do
-        it 'ユーザーが削除されること' do
+      context 'ゲストユーザーの場合' do
+        let!(:guest_user) { create(:guest_user) }
+
+        before { sign_in guest_user }
+
+        it 'ユーザーが削除されず、プロジェクト一覧ページにリダイレクトされること' do
           expect do
             delete user_registration_path
-          end.to change { User.count }.by(-1)
-          expect(response).to redirect_to root_path
+          end.not_to change { User.count }
+          expect(response).to redirect_to projects_path
         end
       end
     end
 
     context 'ログインしていない場合' do
+      let!(:user) { create(:user) }
+
       it 'ユーザーが削除されず、ログインページにリダイレクトされること' do
         expect do
           delete user_registration_path

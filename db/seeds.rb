@@ -23,11 +23,15 @@ puts '==================== creating user ===================='
 #   |-- 佐藤リーダー（新規開発業務）
 #   |     |-- Alice
 #   |     |-- Bob
+#   |     |-- ゲストユーザー
 #   |-- 鈴木リーダー（不具合対応業務）
 #         |-- 星野
 #         |-- 斎藤
 
-USER_PASSWORD = 'test123'
+USER_PASSWORD = Rails.application.credentials.dig(:seeds, :user_password)
+
+guest_user = User.guest
+jmd_organization.users << guest_user
 
 yamada_user = jmd_organization.users.create!(
   name: '山田　太郎',
@@ -94,14 +98,14 @@ product_development_project = jmd_organization.projects.create!(
   description: '大規模病院向けの製品Bの開発。',
   is_done: false,
   is_archived: false,
-  users: [yamada_user, sato_user, bob_user, alice_user]
+  users: [yamada_user, sato_user, bob_user, alice_user, guest_user]
 )
 safety_regulations_project = jmd_organization.projects.create!(
   name: '安全法令Aの対応',
   description: '20XX年XX月に施行される海外の安全法令Aの対応。設けられた安全基準に対し、全件対応必須。対象装置は、法令適用後に出荷されるもの全て。',
   is_done: false,
   is_archived: false,
-  users: [yamada_user, sato_user, alice_user]
+  users: [yamada_user, sato_user, alice_user, guest_user]
 )
 
 # 不具合対応業務
@@ -160,7 +164,7 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(1),
   description: '筐体と機構を優先すること。',
   is_done: true,
-  users: [sato_user, alice_user, bob_user],
+  users: [sato_user, alice_user, bob_user, guest_user],
 )
 product_development_project.tasks.create!(
   name: '図面作成',
@@ -168,7 +172,7 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(1),
   description: '',
   is_done: false,
-  users: [alice_user, bob_user],
+  users: [bob_user, guest_user],
 )
 product_development_project.tasks.create!(
   name: '部品手配',
@@ -176,7 +180,7 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(1),
   description: '4台分手配。手配可能なものがあれば順次手配する。',
   is_done: false,
-  users: [alice_user, bob_user],
+  users: [bob_user, guest_user],
 )
 product_development_project.tasks.create!(
   name: '組立',
@@ -184,7 +188,7 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(7),
   description: '',
   is_done: false,
-  users: [alice_user, bob_user],
+  users: [bob_user, guest_user],
 )
 product_development_project.tasks.create!(
   name: '設計検証',
@@ -192,7 +196,7 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(11),
   description: '',
   is_done: false,
-  users: [sato_user, alice_user, bob_user],
+  users: [sato_user, alice_user, bob_user, guest_user],
 )
 product_development_project.tasks.create!(
   name: 'QAへの入検',
@@ -200,7 +204,7 @@ product_development_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(15),
   description: '',
   is_done: false,
-  users: [sato_user, alice_user, bob_user],
+  users: [sato_user, alice_user, bob_user, guest_user],
 )
 
 safety_regulations_project.tasks.create!(
@@ -217,7 +221,7 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(6),
   description: '',
   is_done: true,
-  users: [alice_user],
+  users: [alice_user, guest_user],
 )
 safety_regulations_project.tasks.create!(
   name: '図面作成',
@@ -225,7 +229,7 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(5),
   description: '',
   is_done: true,
-  users: [alice_user],
+  users: [guest_user],
 )
 safety_regulations_project.tasks.create!(
   name: '部品手配',
@@ -233,7 +237,7 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_ago(5),
   description: '',
   is_done: true,
-  users: [alice_user],
+  users: [guest_user],
 )
 safety_regulations_project.tasks.create!(
   name: '設計検証',
@@ -241,7 +245,7 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY,
   description: '',
   is_done: false,
-  users: [alice_user],
+  users: [alice_user, guest_user],
 )
 safety_regulations_project.tasks.create!(
   name: 'QAへの入検',
@@ -249,7 +253,7 @@ safety_regulations_project.tasks.create!(
   end_at: THIS_FRIDAY.weeks_since(1),
   description: '',
   is_done: false,
-  users: [alice_user],
+  users: [alice_user, guest_user],
 )
 safety_regulations_project.tasks.create!(
   name: '変更連絡書の発行',

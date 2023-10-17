@@ -39,19 +39,33 @@ RSpec.describe 'Users', type: :system do
   end
 
   describe 'ログイン機能' do
-    let(:user) { create(:user, :with_organization) }
+    context '一般ユーザーの場合' do
+      let(:user) { create(:user, :with_organization) }
 
-    it 'ログイン後にプロジェクト一覧ページに遷移し、ログインメッセージが表示されること' do
-      visit new_user_session_path
+      it 'ログイン後にプロジェクト一覧ページに遷移し、ログインメッセージが表示されること' do
+        visit new_user_session_path
 
-      fill_in 'user[email]', with: user.email
-      fill_in 'user[password]', with: user.password
-      within 'form' do
-        click_on 'ログイン'
+        fill_in 'user[email]', with: user.email
+        fill_in 'user[password]', with: user.password
+        within '.new_user' do
+          click_on 'ログイン'
+        end
+
+        expect(current_path).to eq projects_path
+        expect(page).to have_content 'ログインしました。'
       end
+    end
 
-      expect(current_path).to eq projects_path
-      expect(page).to have_content 'ログインしました。'
+    context 'ゲストユーザーの場合' do
+      let!(:guest_user) { create(:guest_user, :with_organization) }
+
+      it 'ログイン後にプロジェクト一覧ページに遷移し、ログインメッセージが表示されること' do
+        visit home_index_path
+        click_on 'ゲストログイン'
+
+        expect(current_path).to eq projects_path
+        expect(page).to have_content 'ゲストユーザーとしてログインしました。'
+      end
     end
   end
 
@@ -84,7 +98,7 @@ RSpec.describe 'Users', type: :system do
       fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: user.password
       fill_in 'user[password_confirmation]', with: user.password_confirmation
-      within 'form' do
+      within '.new_user' do
         click_on 'アカウント登録'
       end
 

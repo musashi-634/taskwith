@@ -20,5 +20,10 @@ FactoryBot.define do
       email { 'custom@example.com' }
       password { 'custompassword' }
     end
+
+    factory :guest_user do
+      name { 'guest user' }
+      email { User::GUEST_EMAIL }
+    end
   end
 end
