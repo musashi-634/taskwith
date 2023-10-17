@@ -64,9 +64,9 @@ hoshino_user = jmd_organization.users.create!(
   password: USER_PASSWORD,
 )
 saito_user = jmd_organization.users.create!(
-name: '斎藤　修',
-email: 'osamu.saito@example.com',
-password: USER_PASSWORD,
+  name: '斎藤　修',
+  email: 'osamu.saito@example.com',
+  password: USER_PASSWORD,
 )
 
 # 神奈川製鉄株式会社
