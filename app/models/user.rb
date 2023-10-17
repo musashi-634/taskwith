@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :tasks, through: :task_staffs
 
   validates :name, presence: true
+  validates :is_admin, inclusion: [true, false]
 
   GUEST_EMAIL = 'guest@example.com'.freeze
 

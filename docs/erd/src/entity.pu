@@ -15,6 +15,7 @@
     name <color:gray>string</color>
     email <color:gray>string</color>
     password <color:gray>string</color>
+    is_admin <color:gray>boolean</color>
     created_at <color:gray>datetime</color>
     updated_at <color:gray>datetime</color>
   }
