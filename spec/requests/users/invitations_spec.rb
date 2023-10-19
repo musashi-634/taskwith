@@ -33,95 +33,124 @@ RSpec.describe "Users::Invitations", type: :request do
     before { sign_in user }
 
     context '招待作成者が組織に所属している場合' do
-      before { create(:organization, users: [user]) }
+      context '管理者の場合' do
+        before { Organization.create_with_admin(attributes_for(:organization), user) }
 
-      context '新規ユーザーを招待する場合' do
-        let(:user_attributes) { attributes_for(:user).slice(:email) }
+        context '新規ユーザーを招待する場合' do
+          let(:user_attributes) { attributes_for(:user).slice(:email) }
 
-        it '招待メールを送信できること' do
-          expect do
+          it '招待メールを送信できること' do
+            expect do
+              post user_invitation_path, params: { user: user_attributes }
+            end.to change { ActionMailer::Base.deliveries.size }.by(1)
+          end
+
+          it '招待メールの宛先と件名が適切なこと' do
             post user_invitation_path, params: { user: user_attributes }
-          end.to change { ActionMailer::Base.deliveries.size }.by(1)
+            invitation_mail = ActionMailer::Base.deliveries.last
+
+            expect(invitation_mail.to).to eq [user_attributes[:email]]
+            expect(invitation_mail.subject).to eq(
+              "[TaskWith] #{user.name}さんから、「#{user.organization.name}」という組織に招待されました"
+            )
+          end
+
+          it '被招待者に所望の属性値が設定されること' do
+            post user_invitation_path, params: { user: user_attributes }
+
+            expect(User.last.email).to eq user_attributes[:email]
+            expect(User.last.invited_by).to eq user
+          end
         end
 
-        it '招待メールの宛先と件名が適切なこと' do
-          post user_invitation_path, params: { user: user_attributes }
-          invitation_mail = ActionMailer::Base.deliveries.last
+        context '組織に所属していない既存のユーザーを招待する場合' do
+          let(:invitee) { create(:user) }
+          let(:user_attributes) { { email: invitee.email } }
 
-          expect(invitation_mail.to).to eq [user_attributes[:email]]
-          expect(invitation_mail.subject).to eq(
-            "[TaskWith] #{user.name}さんから、「#{user.organization.name}」という組織に招待されました"
-          )
+          it '組織に参加できること' do
+            post user_invitation_path, params: { user: user_attributes }
+            expect { invitee.reload }.
+              to change { invitee.organization }.from(nil).to(user.organization)
+          end
+
+          it '招待作成者が設定されること' do
+            post user_invitation_path, params: { user: user_attributes }
+            expect { invitee.reload }.to change { invitee.invited_by }.from(nil).to(user)
+          end
+
+          it '招待承認日時が設定されること' do
+            post user_invitation_path, params: { user: user_attributes }
+            expect { invitee.reload }.to change { invitee.invitation_accepted_at }.from(nil)
+          end
+
+          it 'パスワードが変更されていないこと' do
+            post user_invitation_path, params: { user: user_attributes }
+            expect { invitee.reload }.not_to change {
+              invitee.valid_password?(invitee.password)
+            }.from(true)
+          end
+
+          it '招待メールが送信されていないこと' do
+            expect do
+              post user_invitation_path, params: { user: user_attributes }
+            end.not_to change { ActionMailer::Base.deliveries.size }
+          end
         end
 
-        it '被招待者に所望の属性値が設定されること' do
-          post user_invitation_path, params: { user: user_attributes }
+        context '組織に所属している既存のユーザーを招待する場合' do
+          let(:invitee) { create(:user, :with_organization) }
+          let(:user_attributes) { { email: invitee.email } }
 
-          expect(User.last.email).to eq user_attributes[:email]
-          expect(User.last.invited_by).to eq user
+          before { post user_invitation_path, params: { user: user_attributes } }
+
+          it '組織に参加できないこと' do
+            expect { invitee.reload }.
+              not_to change { invitee.organization }.from(invitee.organization)
+            expect(flash[:alert]).to eq "#{invitee.email}はすでにいずれかの組織に所属しています。"
+            expect(response).to have_http_status :unprocessable_entity
+          end
+
+          it '招待作成者が設定されないこと' do
+            expect { invitee.reload }.not_to change { invitee.invited_by }.from(nil)
+          end
+        end
+
+        context '無効な属性値の場合' do
+          let(:user_attributes) { attributes_for(:user, :invalid).slice(:email) }
+
+          it '招待メールを送信できないこと' do
+            expect do
+              post user_invitation_path, params: { user: user_attributes }
+            end.not_to change { ActionMailer::Base.deliveries.size }
+            expect(response).to have_http_status :unprocessable_entity
+          end
         end
       end
 
-      context '組織に所属していない既存のユーザーを招待する場合' do
-        let(:invitee) { create(:user) }
-        let(:user_attributes) { { email: invitee.email } }
+      context '管理者ではない場合' do
+        before { create(:organization, users: [user]) }
 
-        it '組織に参加できること' do
-          post user_invitation_path, params: { user: user_attributes }
-          expect { invitee.reload }.
-            to change { invitee.organization }.from(nil).to(user.organization)
+        context '既存のユーザーを指定した場合' do
+          let(:invitee) { create(:user) }
+          let(:user_attributes) { { email: invitee.email } }
+
+          it '被招待者が組織に参加できず、プロジェクト一覧ページにリダイレクトされること' do
+            expect do
+              post user_invitation_path, params: { user: user_attributes }
+            end.not_to change { invitee.reload.organization }.from(nil)
+            expect(response).to redirect_to projects_path
+          end
         end
 
-        it '招待作成者が設定されること' do
-          post user_invitation_path, params: { user: user_attributes }
-          expect { invitee.reload }.to change { invitee.invited_by }.from(nil).to(user)
-        end
+        context 'その他の場合' do
+          let(:user_attributes) { attributes_for(:user).slice(:email) }
 
-        it '招待承認日時が設定されること' do
-          post user_invitation_path, params: { user: user_attributes }
-          expect { invitee.reload }.to change { invitee.invitation_accepted_at }.from(nil)
-        end
-
-        it 'パスワードが変更されていないこと' do
-          post user_invitation_path, params: { user: user_attributes }
-          expect { invitee.reload }.not_to change {
-            invitee.valid_password?(invitee.password)
-          }.from(true)
-        end
-
-        it '招待メールが送信されていないこと' do
-          expect do
-            post user_invitation_path, params: { user: user_attributes }
-          end.not_to change { ActionMailer::Base.deliveries.size }
-        end
-      end
-
-      context '組織に所属している既存のユーザーを招待する場合' do
-        let(:invitee) { create(:user, :with_organization) }
-        let(:user_attributes) { { email: invitee.email } }
-
-        before { post user_invitation_path, params: { user: user_attributes } }
-
-        it '組織に参加できないこと' do
-          expect { invitee.reload }.
-            not_to change { invitee.organization }.from(invitee.organization)
-          expect(flash[:alert]).to eq "#{invitee.email}はすでにいずれかの組織に所属しています。"
-          expect(response).to have_http_status :unprocessable_entity
-        end
-
-        it '招待作成者が設定されないこと' do
-          expect { invitee.reload }.not_to change { invitee.invited_by }.from(nil)
-        end
-      end
-
-      context '無効な属性値の場合' do
-        let(:user_attributes) { attributes_for(:user, :invalid).slice(:email) }
-
-        it '招待メールを送信できないこと' do
-          expect do
-            post user_invitation_path, params: { user: user_attributes }
-          end.not_to change { ActionMailer::Base.deliveries.size }
-          expect(response).to have_http_status :unprocessable_entity
+          it '招待メールが送信されず、プロジェクト一覧ページにリダイレクトされること' do
+            expect do
+              post user_invitation_path, params: { user: user_attributes }
+            end.not_to change { ActionMailer::Base.deliveries.size }
+            expect(response).to redirect_to projects_path
+          end
         end
       end
     end

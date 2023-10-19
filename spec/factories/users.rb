@@ -11,6 +11,10 @@ FactoryBot.define do
       password { nil }
     end
 
+    trait :admin do
+      is_admin { true }
+    end
+
     trait :with_organization do
       association :organization
     end

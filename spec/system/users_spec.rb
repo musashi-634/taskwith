@@ -146,7 +146,7 @@ RSpec.describe 'Users', type: :system do
   end
 
   describe 'ユーザー招待機能' do
-    let(:user) { create(:user, :with_organization) }
+    let(:user) { create(:user, :with_organization, :admin) }
 
     before { login_as(user, :scope => :user) }
 
