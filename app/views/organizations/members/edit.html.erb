@@ -1,5 +1,5 @@
 <div class="container">
-  <h1 class="mt-5">組織メンバー詳細</h1>
+  <h1 class="mt-5">組織メンバー編集</h1>
   <div class="information border rounded mt-3 p-3">
     <div class="container mt-3">
       <div class="row border-bottom p-2">
@@ -23,8 +23,17 @@
           <%= t('activerecord.attributes.user.is_admin') %>
         </div>
         <div class="col-9">
-          <%= @member.display_admin_privilege %>
-          <%= link_to "変更", edit_organizations_member_path(@member), class: 'ms-3' %>
+          <%= form_with model: @member, url: organizations_member_path, class: 'd-flex' do |f| %>
+            <div>
+              <%= f.label :is_admin, '管理者' %>
+              <%= f.check_box :is_admin %>
+            </div>
+            <div class="ms-3">
+              <%= f.submit "保存" %>
+              <%= link_to "キャンセル", 'javascript:history.back()' %>
+            </div>
+          <% end %>
+          <%= render "shared/error_messages", object: @member %>
         </div>
       </div>
     </div>

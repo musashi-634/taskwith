@@ -44,4 +44,43 @@ RSpec.describe "Organizations::Members", type: :request do
       end
     end
   end
+
+  # edit
+  describe "GET /organizations/members/:id/edit" do
+    context 'ユーザーが組織に所属している場合' do
+      let!(:organization) { create(:organization, users: [user]) }
+
+      context '所属組織のメンバーを指定した場合' do
+        let(:other_user) { create(:user, organization: organization) }
+
+        before { get edit_organizations_member_path(other_user) }
+
+        it '組織メンバー詳細ページにアクセスできること' do
+          expect(response).to have_http_status 200
+          expect(response.body).to include other_user.name
+          expect(response.body).to include other_user.email
+        end
+      end
+
+      context '所属組織のメンバー以外を指定した場合' do
+        let(:other_user) { create(:user, :with_organization) }
+
+        it 'エラーが発生すること' do
+          expect do
+            get edit_organizations_member_path(other_user)
+          end.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let(:other_user) { create(:user, :with_organization) }
+
+      before { get edit_organizations_member_path(other_user) }
+
+      it '組織作成ページにリダイレクトされること' do
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
 end
