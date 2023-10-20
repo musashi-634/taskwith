@@ -35,4 +35,22 @@ RSpec.describe 'Organizations', type: :system do
       end
     end
   end
+
+  describe '組織メンバー更新機能' do
+    let!(:organization) { Organization.create_with_admin(attributes_for(:organization), user) }
+    let!(:other_member) { create(:user, organization: organization) }
+
+    it 'メンバーの権限を更新できること' do
+      visit organizations_member_path(other_member)
+      click_on '変更'
+
+      expect do
+        check '管理者'
+        click_on '保存'
+      end.to change { other_member.reload.is_admin }.from(false).to(true)
+
+      expect(current_path).to eq organization_path
+      expect(page).to have_content '組織メンバーの権限を更新しました。'
+    end
+  end
 end

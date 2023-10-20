@@ -83,4 +83,85 @@ RSpec.describe "Organizations::Members", type: :request do
       end
     end
   end
+
+  # update
+  describe "PATCH /organizations/members/:id" do
+    context 'ユーザーが組織に所属している場合' do
+      context '管理者の場合' do
+        let!(:organization) { Organization.create_with_admin(attributes_for(:organization), user) }
+
+        context '所属組織の自分以外のメンバーを指定した場合' do
+          let!(:other_user) { create(:user, organization: organization) }
+
+          context '有効な属性値の場合' do
+            let(:user_attributes) { { is_admin: true } }
+
+            it '権限を変更できること' do
+              expect do
+                patch organizations_member_path(other_user), params: { user: user_attributes }
+              end.to change { other_user.reload.is_admin }.from(false).to(true)
+            end
+          end
+
+          context '無効な属性値の場合' do
+            let(:user_attributes) { { is_admin: nil } }
+
+            it '権限を変更できないこと' do
+              expect do
+                patch organizations_member_path(other_user), params: { user: user_attributes }
+              end.not_to change { other_user.reload.is_admin }.from(false)
+              expect(response).to have_http_status :unprocessable_entity
+            end
+          end
+        end
+
+        context '自分自身を指定した場合' do
+          let(:user_attributes) { { is_admin: false } }
+
+          it '権限を変更できず、プロジェクト一覧ページにリダイレクトされること' do
+            expect do
+              patch organizations_member_path(user), params: { user: user_attributes }
+            end.not_to change { user.reload.is_admin }.from(true)
+            expect(response).to redirect_to projects_path
+          end
+        end
+
+        context '所属組織のメンバー以外を指定した場合' do
+          let!(:other_user) { create(:user, :with_organization) }
+          let(:user_attributes) { { is_admin: true } }
+
+          it 'エラーが発生すること' do
+            expect do
+              patch organizations_member_path(other_user), params: { user: user_attributes }
+            end.to raise_error ActiveRecord::RecordNotFound
+          end
+        end
+      end
+
+      context '一般ユーザーの場合' do
+        let!(:organization) { create(:organization, users: [user]) }
+        let!(:other_user) { create(:user, organization: organization) }
+        let(:user_attributes) { { is_admin: true } }
+
+        it '権限を変更できず、プロジェクト一覧ページにリダイレクトされること' do
+          expect do
+            patch organizations_member_path(other_user), params: { user: user_attributes }
+          end.not_to change { other_user.reload.is_admin }.from(false)
+          expect(response).to redirect_to projects_path
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let!(:other_user) { create(:user, :with_organization) }
+      let(:user_attributes) { { is_admin: true } }
+
+      it '権限を変更できず、組織作成ページにリダイレクトされること' do
+        expect do
+          patch organizations_member_path(other_user), params: { user: user_attributes }
+        end.not_to change { other_user.reload.is_admin }.from(false)
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
 end
