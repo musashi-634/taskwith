@@ -15,7 +15,9 @@ Rails.application.routes.draw do
     devise_scope :user do
       post 'users/guests/sign_in', to: 'users/sessions/guests#create', as: 'users_guest_session'
     end
-    get 'users', to: 'users#show'
+    namespace :users do
+      resource :account, only: :show
+    end
 
     resource :organization
 

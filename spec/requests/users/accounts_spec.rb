@@ -1,13 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe "Users", type: :request do
-  describe "GET /users" do
+RSpec.describe "Users::Account", type: :request do
+  # show
+  describe "GET /users/account" do
     context 'ログインしている場合' do
       let(:user) { create(:user) }
 
       before do
         sign_in user
-        get users_path
+        get users_account_path
       end
 
       it 'アカウント情報を取得できること' do
@@ -18,7 +19,7 @@ RSpec.describe "Users", type: :request do
     end
 
     context 'ログインしていない場合' do
-      before { get users_path }
+      before { get users_account_path }
 
       it 'ログインページにリダイレクトされること' do
         expect(response).to redirect_to user_session_path

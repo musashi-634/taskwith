@@ -124,7 +124,7 @@ RSpec.describe 'Users', type: :system do
       end.to change { user.reload.name }.from(user.name).to(new_user.name)
 
       expect(user.email).to eq new_user.email
-      expect(current_path).to eq users_path
+      expect(current_path).to eq users_account_path
       expect(page).to have_content 'アカウント情報を変更しました。'
     end
 
@@ -140,7 +140,7 @@ RSpec.describe 'Users', type: :system do
         click_on '更新'
       end.to change { user.reload.valid_password?(new_user.password) }.from(false).to(true)
 
-      expect(current_path).to eq users_path
+      expect(current_path).to eq users_account_path
       expect(page).to have_content 'アカウント情報を変更しました。'
     end
   end

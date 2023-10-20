@@ -13,7 +13,7 @@ class Users::RegistrationsController < DeviseInvitable::RegistrationsController
   protected
 
   def after_update_path_for(resource)
-    users_path
+    users_account_path
   end
 
   private
