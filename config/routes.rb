@@ -19,6 +19,9 @@ Rails.application.routes.draw do
       resource :account, only: :show
     end
 
+    namespace :organizations do
+      resources :members, only: %i(show edit update)
+    end
     resource :organization
 
     namespace :projects do

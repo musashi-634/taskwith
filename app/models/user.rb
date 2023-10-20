@@ -23,4 +23,8 @@ class User < ApplicationRecord
       user.password = SecureRandom.urlsafe_base64
     end
   end
+
+  def display_admin_privilege
+    is_admin? ? '管理者' : '一般'
+  end
 end
