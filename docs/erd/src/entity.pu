@@ -11,7 +11,7 @@
   entity "users" {
     + id [PK] <color:gray>integer</color>
     --
-    # organization_id [FK] <color:gray>integer</color>
+    # organization_id [FK] <color:gray>bigint</color>
     name <color:gray>string</color>
     email <color:gray>string</color>
     password <color:gray>string</color>
