@@ -39,7 +39,7 @@ RSpec.describe 'Users', type: :system do
   end
 
   describe 'ログイン機能' do
-    context '一般ユーザーの場合' do
+    context '通常ユーザーの場合' do
       let(:user) { create(:user, :with_organization) }
 
       it 'ログイン後にプロジェクト一覧ページに遷移し、ログインメッセージが表示されること' do

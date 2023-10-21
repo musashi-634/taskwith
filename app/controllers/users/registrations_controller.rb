@@ -4,7 +4,7 @@ class Users::RegistrationsController < DeviseInvitable::RegistrationsController
   def destroy
     super do |user|
       organization = user.organization
-      if organization && organization.reload.users.blank?
+      if organization && user.is_admin? && organization.reload.users.where(is_admin: true).blank?
         organization.destroy
       end
     end

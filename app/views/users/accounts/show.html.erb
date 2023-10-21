@@ -35,8 +35,10 @@
   <div class="information border rounded mt-3 p-3">
     <h3>アカウント削除</h3>
     <div>
-      この操作は元には戻せません。<br>
-      また、組織に他のメンバーがいない場合、組織も削除されます。
+      この操作は元に戻せません。<br>
+      <% if current_user.is_admin? %>
+        また、組織の管理者があなただけの場合、組織も削除されます。
+      <% end %>
       <%= button_to 'アカウント削除', user_registration_path, data: { turbo_confirm: '本当によろしいですか？' }, method: :delete, class: 'btn btn-danger' %>
     </div>
   </div>
