@@ -35,7 +35,7 @@
   entity "tasks" {
     + id [PK] <color:gray>integer</color>
     --
-    # project_id [FK] <color:gray>integer</color>
+    # project_id [FK] <color:gray>bigint</color>
     # parent_id [FK] <color:gray>integer</color>
     name <color:gray>string</color>
     start_at <color:gray>date</color>

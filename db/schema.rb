@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_22_051309) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_22_061122) do
   create_table "organizations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_051309) do
   end
 
   create_table "tasks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.integer "project_id"
+    t.bigint "project_id"
     t.string "name"
     t.date "start_at"
     t.date "end_at"
@@ -54,6 +54,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_051309) do
     t.integer "row_order"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "fk_rails_02e851e3b7"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -84,5 +85,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_051309) do
   end
 
   add_foreign_key "projects", "organizations"
+  add_foreign_key "tasks", "projects"
   add_foreign_key "users", "organizations"
 end
