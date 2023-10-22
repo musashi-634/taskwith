@@ -54,8 +54,8 @@
   entity "project_members" {
     + id [PK] <color:gray>integer</color>
     --
-    # project_id [FK] <color:gray>integer</color>
-    # user_id [FK] <color:gray>integer</color>
+    # project_id [FK] <color:gray>bigint</color>
+    # user_id [FK] <color:gray>bigint</color>
     created_at <color:gray>datetime</color>
     updated_at <color:gray>datetime</color>
   }
