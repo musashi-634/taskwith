@@ -36,17 +36,12 @@
     + id [PK] <color:gray>integer</color>
     --
     # project_id [FK] <color:gray>bigint</color>
-    # parent_id [FK] <color:gray>integer</color>
     name <color:gray>string</color>
     start_at <color:gray>date</color>
     end_at <color:gray>date</color>
     description <color:gray>text</color>
     is_done <color:gray>boolean</color>
     row_order <color:gray>integer</color>
-    lft <color:gray>integer</color>
-    rgt <color:gray>integer</color>
-    depth <color:gray>integer</color>
-    permalink <color:gray>string</color>
     created_at <color:gray>datetime</color>
     updated_at <color:gray>datetime</color>
   }
