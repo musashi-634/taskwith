@@ -23,7 +23,7 @@
   entity "projects" {
     + id [PK] <color:gray>integer</color>
     --
-    # organization_id [FK] <color:gray>integer</color>
+    # organization_id [FK] <color:gray>bigint</color>
     name <color:gray>string</color>
     description <color:gray>text</color>
     is_done <color:gray>boolean</color>
