@@ -39,7 +39,7 @@ class OrganizationsController < ApplicationController
   def destroy
     @organization.transaction do
       @organization.users = []
-      @organization.destroy
+      @organization.destroy!
     end
     flash[:notice] = '組織を削除しました。'
     redirect_to new_organization_path
