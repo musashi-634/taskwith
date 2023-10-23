@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     end
 
     namespace :organizations do
-      resources :members, only: %i(show edit update)
+      resources :members, only: %i(show edit update destroy)
     end
     resource :organization
 
