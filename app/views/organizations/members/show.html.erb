@@ -24,7 +24,9 @@
         </div>
         <div class="col-9">
           <%= @member.display_admin_privilege %>
-          <%= link_to "変更", edit_organizations_member_path(@member), class: 'ms-3' %>
+          <% if current_user.is_admin? %>
+            <%= link_to "変更", edit_organizations_member_path(@member), class: 'ms-3' %>
+          <% end %>
         </div>
       </div>
     </div>
