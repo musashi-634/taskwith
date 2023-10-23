@@ -5,5 +5,9 @@ FactoryBot.define do
     trait :invalid do
       name { nil }
     end
+
+    factory :custom_organization do
+      name { 'custom organization' }
+    end
   end
 end

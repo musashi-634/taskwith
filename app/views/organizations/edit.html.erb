@@ -1,0 +1,15 @@
+<div class="container">
+  <h1 class="mt-5">組織編集</h1>
+  <%= form_with model: @organization do |f| %>
+    <%= render "shared/error_messages", object: @organization %>
+    <div>
+      <%= f.label :name %>
+      <span class="badge bg-danger">必須</span><br>
+      <%= f.text_field :name, autofocus: true %>
+    </div>
+    <div>
+      <%= f.submit "保存" %>
+    </div>
+  <% end %>
+  <%= link_to "キャンセル", 'javascript:history.back()' %>
+</div>
