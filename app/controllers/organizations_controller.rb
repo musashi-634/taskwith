@@ -1,6 +1,7 @@
 class OrganizationsController < ApplicationController
   skip_before_action :block_user_belongs_to_no_organization, only: %i(new create)
   before_action :block_user_belongs_to_organization, only: %i(new create)
+  before_action :set_organization, only: %i(show edit update destroy)
 
   def new
     @organization = Organization.new
@@ -18,8 +19,10 @@ class OrganizationsController < ApplicationController
   end
 
   def show
-    @organization = current_user.organization
     @members = @organization.users
+  end
+
+  def edit
   end
 
   private
@@ -29,6 +32,10 @@ class OrganizationsController < ApplicationController
       flash[:alert] = 'すでに組織に所属しています。'
       redirect_to organization_path
     end
+  end
+
+  def set_organization
+    @organization = current_user.organization
   end
 
   def organization_params

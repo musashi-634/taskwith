@@ -99,4 +99,26 @@ RSpec.describe "Organizations", type: :request do
       end
     end
   end
+
+  # edit
+  describe "GET /organization/edit" do
+    context 'ユーザーが組織に所属している場合' do
+      let!(:organization) { create(:organization, users: [user]) }
+
+      before { get edit_organization_path }
+
+      it '組織編集ページにアクセスできること' do
+        expect(response).to have_http_status 200
+        expect(response.body).to include '組織編集'
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      before { get edit_organization_path }
+
+      it '組織作成ページにリダイレクトされること' do
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
 end
