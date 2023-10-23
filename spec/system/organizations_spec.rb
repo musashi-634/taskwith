@@ -19,6 +19,25 @@ RSpec.describe 'Organizations', type: :system do
     end
   end
 
+  describe '組織更新機能' do
+    let!(:organization) { Organization.create_with_admin(attributes_for(:organization), user) }
+    let(:new_organization) { build(:custom_organization) }
+
+    it '組織を更新できること' do
+      visit organization_path
+      click_on '編集'
+
+      expect do
+        fill_in 'organization[name]', with: new_organization.name
+        click_on '保存'
+      end.to change { organization.reload.name }.from(organization.name).to(new_organization.name)
+
+      expect(current_path).to eq organization_path
+      expect(page).to have_content '組織情報を更新しました。'
+      expect(page).to have_content new_organization.name
+    end
+  end
+
   describe '組織設定ページ' do
     let!(:organization) { create(:organization, users: [user]) }
 
