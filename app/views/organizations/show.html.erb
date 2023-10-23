@@ -47,4 +47,14 @@
       <% end %>
     </ul>
   </div>
+  <% if current_user.is_admin? %>
+    <div class="information border rounded mt-3 p-3">
+      <h2>組織削除</h2>
+      <div>
+        この操作は元に戻せません。<br>
+        組織内のプロジェクトなども削除されます。
+        <%= button_to '組織削除', organization_path, data: { turbo_confirm: '本当によろしいですか？' }, method: :delete, class: 'btn btn-danger' %>
+      </div>
+    </div>
+  <% end %>
 </div>

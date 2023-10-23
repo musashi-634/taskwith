@@ -36,6 +36,15 @@ class OrganizationsController < ApplicationController
     end
   end
 
+  def destroy
+    @organization.transaction do
+      @organization.users = []
+      @organization.destroy
+    end
+    flash[:notice] = '組織を削除しました。'
+    redirect_to new_organization_path
+  end
+
   private
 
   def block_user_belongs_to_organization
