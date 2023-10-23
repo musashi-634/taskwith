@@ -177,4 +177,41 @@ RSpec.describe "Organizations", type: :request do
       end
     end
   end
+
+  # destroy
+  describe "DELETE /organization" do
+    context 'ユーザーが組織に所属している場合' do
+      context '管理者の場合' do
+        let!(:organization) { Organization.create_with_admin(attributes_for(:organization), user) }
+
+        it '組織を削除できること' do
+          expect do
+            delete organization_path
+          end.to change { Organization.count }.by(-1)
+        end
+      end
+
+      context '管理者でない場合' do
+        let!(:organization) { create(:organization, users: [user]) }
+
+        it '組織が削除されず、プロジェクト一覧ページにリダイレクトされること' do
+          expect do
+            delete organization_path
+          end.not_to change { Organization.count }
+          expect(response).to redirect_to projects_path
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let!(:organization) { create(:organization) }
+
+      it '組織が削除されず、組織作成ページにリダイレクトされること' do
+        expect do
+          delete organization_path
+        end.not_to change { Organization.count }
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
 end
