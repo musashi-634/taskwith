@@ -1,7 +1,7 @@
 {
   "name": "taskwith",
   "scripts": {
-    "postdeploy": "bundle exec rake db:schema:load db:seed"
+    "postdeploy": "bundle exec rake db:drop db:create db:schema:load db:seed"
   },
   "env": {
     "DISABLE_DATABASE_ENVIRONMENT_CHECK": {
