@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :tasks, through: :task_staffs
 
   validates :name, presence: true
+  validates :is_admin, inclusion: [true, false]
 
   GUEST_EMAIL = 'guest@example.com'.freeze
 
@@ -21,5 +22,9 @@ class User < ApplicationRecord
       user.name = 'ゲストユーザー'
       user.password = SecureRandom.urlsafe_base64
     end
+  end
+
+  def display_admin_privilege
+    is_admin? ? '管理者' : '一般'
   end
 end

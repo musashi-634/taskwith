@@ -7,11 +7,8 @@ class OrganizationsController < ApplicationController
   end
 
   def create
-    @organization = Organization.new(
-      **params.require(:organization).permit(:name),
-      users: [current_user]
-    )
-    if @organization.save
+    @organization = Organization.create_with_admin(organization_params, current_user)
+    if @organization.errors.blank?
       flash[:notice] = '組織を作成しました。'
       redirect_to organization_path
     else
@@ -32,5 +29,9 @@ class OrganizationsController < ApplicationController
       flash[:alert] = 'すでに組織に所属しています。'
       redirect_to organization_path
     end
+  end
+
+  def organization_params
+    params.require(:organization).permit(:name)
   end
 end

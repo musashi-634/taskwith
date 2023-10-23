@@ -9,12 +9,11 @@
   skinparam linetype ortho
 
   organizations ||--o{ projects
-  organizations ||..|{ users
+  organizations |o..|{ users
   projects ||--o{ tasks
-  projects ||..o{ project_members
-  tasks ||--o{ tasks
-  tasks ||..o{ task_staffs
-  users ||..o{ project_members
-  users ||..o{ task_staffs
+  projects ||--o{ project_members
+  tasks ||--o{ task_staffs
+  users ||--o{ project_members
+  users ||--o{ task_staffs
 
 @enduml

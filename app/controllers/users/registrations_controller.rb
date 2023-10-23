@@ -4,8 +4,11 @@ class Users::RegistrationsController < DeviseInvitable::RegistrationsController
   def destroy
     super do |user|
       organization = user.organization
-      if organization && organization.reload.users.blank?
-        organization.destroy
+      if organization && user.is_admin? && organization.reload.users.where(is_admin: true).blank?
+        organization.transaction do
+          organization.users = []
+          organization.destroy
+        end
       end
     end
   end
@@ -13,7 +16,7 @@ class Users::RegistrationsController < DeviseInvitable::RegistrationsController
   protected
 
   def after_update_path_for(resource)
-    users_path
+    users_account_path
   end
 
   private

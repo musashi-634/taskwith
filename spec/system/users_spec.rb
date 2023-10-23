@@ -39,7 +39,7 @@ RSpec.describe 'Users', type: :system do
   end
 
   describe 'ログイン機能' do
-    context '一般ユーザーの場合' do
+    context '通常ユーザーの場合' do
       let(:user) { create(:user, :with_organization) }
 
       it 'ログイン後にプロジェクト一覧ページに遷移し、ログインメッセージが表示されること' do
@@ -124,7 +124,7 @@ RSpec.describe 'Users', type: :system do
       end.to change { user.reload.name }.from(user.name).to(new_user.name)
 
       expect(user.email).to eq new_user.email
-      expect(current_path).to eq users_path
+      expect(current_path).to eq users_account_path
       expect(page).to have_content 'アカウント情報を変更しました。'
     end
 
@@ -140,13 +140,13 @@ RSpec.describe 'Users', type: :system do
         click_on '更新'
       end.to change { user.reload.valid_password?(new_user.password) }.from(false).to(true)
 
-      expect(current_path).to eq users_path
+      expect(current_path).to eq users_account_path
       expect(page).to have_content 'アカウント情報を変更しました。'
     end
   end
 
   describe 'ユーザー招待機能' do
-    let(:user) { create(:user, :with_organization) }
+    let(:user) { create(:user, :with_organization, :admin) }
 
     before { login_as(user, :scope => :user) }
 

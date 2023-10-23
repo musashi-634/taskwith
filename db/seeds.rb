@@ -37,6 +37,7 @@ yamada_user = jmd_organization.users.create!(
   name: '山田　太郎',
   email: 'taro.yamada@example.com',
   password: USER_PASSWORD,
+  is_admin: true,
 )
 sato_user = jmd_organization.users.create!(
   name: '佐藤　守',
@@ -74,6 +75,7 @@ tanaka_user = kanagawa_steel_organization.users.create!(
   name: '田中　花子',
   email: 'hanako.tanaka@example.com',
   password: USER_PASSWORD,
+  is_admin: true,
 )
 
 # 無所属

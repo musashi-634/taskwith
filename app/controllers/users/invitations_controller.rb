@@ -1,5 +1,6 @@
 class Users::InvitationsController < Devise::InvitationsController
   before_action :block_user_belongs_to_no_organization, only: %i(new create)
+  before_action :block_not_admin, except: %i(new edit update)
 
   def create
     @user = User.find_by(email: params[:user][:email])
@@ -42,5 +43,11 @@ class Users::InvitationsController < Devise::InvitationsController
 
   def after_accept_path_for(resource)
     projects_path
+  end
+
+  private
+
+  def block_not_admin
+    redirect_to projects_path unless current_user.is_admin?
   end
 end

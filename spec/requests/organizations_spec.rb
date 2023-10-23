@@ -5,6 +5,7 @@ RSpec.describe "Organizations", type: :request do
 
   before { sign_in user }
 
+  # show
   describe "GET /organization" do
     context 'ユーザーが組織に所属している場合' do
       let!(:organization) { create(:organization, users: [user]) }
@@ -30,6 +31,7 @@ RSpec.describe "Organizations", type: :request do
     end
   end
 
+  # new
   describe "GET /organization/new" do
     context 'ユーザーが組織に所属していない場合' do
       before { get new_organization_path }
@@ -52,6 +54,7 @@ RSpec.describe "Organizations", type: :request do
     end
   end
 
+  # create
   describe "POST /organization" do
     context 'ユーザーが組織に所属していない場合' do
       context '有効な属性値の場合' do
@@ -62,6 +65,12 @@ RSpec.describe "Organizations", type: :request do
             post organization_path, params: { organization: organization_attributes }
           end.to change { Organization.count }.by(1)
           expect(Organization.last.users).to eq [user]
+        end
+
+        it '作成者が管理者になること' do
+          expect do
+            post organization_path, params: { organization: organization_attributes }
+          end.to change { user.reload.is_admin? }.from(false).to(true)
         end
       end
 

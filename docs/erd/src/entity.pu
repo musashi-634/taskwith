@@ -11,10 +11,11 @@
   entity "users" {
     + id [PK] <color:gray>integer</color>
     --
-    # organization_id [FK] <color:gray>integer</color>
+    # organization_id [FK] <color:gray>bigint</color>
     name <color:gray>string</color>
     email <color:gray>string</color>
     password <color:gray>string</color>
+    is_admin <color:gray>boolean</color>
     created_at <color:gray>datetime</color>
     updated_at <color:gray>datetime</color>
   }
@@ -22,7 +23,7 @@
   entity "projects" {
     + id [PK] <color:gray>integer</color>
     --
-    # organization_id [FK] <color:gray>integer</color>
+    # organization_id [FK] <color:gray>bigint</color>
     name <color:gray>string</color>
     description <color:gray>text</color>
     is_done <color:gray>boolean</color>
@@ -34,18 +35,13 @@
   entity "tasks" {
     + id [PK] <color:gray>integer</color>
     --
-    # project_id [FK] <color:gray>integer</color>
-    # parent_id [FK] <color:gray>integer</color>
+    # project_id [FK] <color:gray>bigint</color>
     name <color:gray>string</color>
     start_at <color:gray>date</color>
     end_at <color:gray>date</color>
     description <color:gray>text</color>
     is_done <color:gray>boolean</color>
     row_order <color:gray>integer</color>
-    lft <color:gray>integer</color>
-    rgt <color:gray>integer</color>
-    depth <color:gray>integer</color>
-    permalink <color:gray>string</color>
     created_at <color:gray>datetime</color>
     updated_at <color:gray>datetime</color>
   }
@@ -53,8 +49,8 @@
   entity "project_members" {
     + id [PK] <color:gray>integer</color>
     --
-    # project_id [FK] <color:gray>integer</color>
-    # user_id [FK] <color:gray>integer</color>
+    # project_id [FK] <color:gray>bigint</color>
+    # user_id [FK] <color:gray>bigint</color>
     created_at <color:gray>datetime</color>
     updated_at <color:gray>datetime</color>
   }
@@ -62,8 +58,8 @@
   entity "task_staffs" {
     + id [PK] <color:gray>integer</color>
     --
-    # task_id [FK] <color:gray>integer</color>
-    # user_id [FK] <color:gray>integer</color>
+    # task_id [FK] <color:gray>bigint</color>
+    # user_id [FK] <color:gray>bigint</color>
     created_at <color:gray>datetime</color>
     updated_at <color:gray>datetime</color>
   }

@@ -22,6 +22,8 @@ ja:
         is_done: 完了状態
         row_order: ソート順序
         users: 担当者
+      user:
+        is_admin: 権限
   attributes:
     created_at: 作成日時
     updated_at: 更新日時
