@@ -60,7 +60,7 @@ RSpec.describe 'Users', type: :system do
       let!(:guest_user) { create(:guest_user, :with_organization) }
 
       it 'ログイン後にプロジェクト一覧ページに遷移し、ログインメッセージが表示されること' do
-        visit home_index_path
+        visit home_path
         click_on 'ゲストログイン'
 
         expect(current_path).to eq projects_path

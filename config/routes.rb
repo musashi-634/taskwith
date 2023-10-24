@@ -2,8 +2,8 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   shallow do
-    root 'home#index'
-    resources :home, only: :index
+    root 'homes#show'
+    resource :home, only: :show
 
     devise_for(
       :users,
