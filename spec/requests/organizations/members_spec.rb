@@ -174,10 +174,27 @@ RSpec.describe "Organizations::Members", type: :request do
         context '所属組織の自分以外のメンバーを指定した場合' do
           let!(:other_user) { create(:user, organization: organization) }
 
+          before do
+            project = create(:project, organization: organization.reload, users: [other_user])
+            create(:task, project: project, users: [other_user])
+          end
+
           it '組織メンバーを脱退させられること' do
             expect do
               delete organizations_member_path(other_user)
             end.to change { organization.reload.users.count }.by(-1)
+          end
+
+          it 'プロジェクトメンバーから情報が削除されること' do
+            expect do
+              delete organizations_member_path(other_user)
+            end.to change { other_user.reload.projects.count }.by(-1)
+          end
+
+          it 'タスク担当者から情報が削除されること' do
+            expect do
+              delete organizations_member_path(other_user)
+            end.to change { other_user.reload.tasks.count }.by(-1)
           end
         end
 

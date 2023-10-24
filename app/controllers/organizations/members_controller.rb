@@ -20,7 +20,11 @@ class Organizations::MembersController < ApplicationController
   end
 
   def destroy
-    @member.update!(organization_id: nil)
+    @member.transaction do
+      @member.update!(organization_id: nil)
+      @member.project_members.map(&:destroy!)
+      @member.task_staffs.map(&:destroy!)
+    end
     flash[:notice] = "#{@member.name}を脱退させました。"
     redirect_to organization_path
   end
