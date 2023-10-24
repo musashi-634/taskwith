@@ -7,7 +7,7 @@ class Users::RegistrationsController < DeviseInvitable::RegistrationsController
       if organization && user.is_admin? && organization.reload.users.where(is_admin: true).blank?
         organization.transaction do
           organization.users = []
-          organization.destroy
+          organization.destroy!
         end
       end
     end

@@ -164,4 +164,83 @@ RSpec.describe "Organizations::Members", type: :request do
       end
     end
   end
+
+  # destroy
+  describe "DELETE /organizations/members/:id" do
+    context 'ユーザーが組織に所属している場合' do
+      context '管理者の場合' do
+        let!(:organization) { Organization.create_with_admin(attributes_for(:organization), user) }
+
+        context '所属組織の自分以外のメンバーを指定した場合' do
+          let!(:other_user) { create(:user, organization: organization) }
+
+          before do
+            project = create(:project, organization: organization.reload, users: [other_user])
+            create(:task, project: project, users: [other_user])
+          end
+
+          it '組織メンバーを脱退させられること' do
+            expect do
+              delete organizations_member_path(other_user)
+            end.to change { organization.reload.users.count }.by(-1)
+          end
+
+          it 'プロジェクトメンバーから情報が削除されること' do
+            expect do
+              delete organizations_member_path(other_user)
+            end.to change { other_user.reload.projects.count }.by(-1)
+          end
+
+          it 'タスク担当者から情報が削除されること' do
+            expect do
+              delete organizations_member_path(other_user)
+            end.to change { other_user.reload.tasks.count }.by(-1)
+          end
+        end
+
+        context '自分自身を指定した場合' do
+          it '組織を脱退できず、プロジェクト一覧ページにリダイレクトされること' do
+            expect do
+              delete organizations_member_path(user)
+            end.not_to change { organization.reload.users.count }
+            expect(response).to redirect_to projects_path
+          end
+        end
+
+        context '所属組織のメンバー以外を指定した場合' do
+          let!(:other_user) { create(:user, :with_organization) }
+
+          it 'エラーが発生すること' do
+            expect do
+              delete organizations_member_path(other_user)
+            end.to raise_error ActiveRecord::RecordNotFound
+          end
+        end
+      end
+
+      context '一般ユーザーの場合' do
+        let!(:organization) { create(:organization, users: [user]) }
+        let!(:other_user) { create(:user, organization: organization) }
+
+        it '組織メンバーを脱退させられず、プロジェクト一覧ページにリダイレクトされること' do
+          expect do
+            delete organizations_member_path(other_user)
+          end.not_to change { organization.reload.users.count }
+          expect(response).to redirect_to projects_path
+        end
+      end
+    end
+
+    context 'ユーザーが組織に所属していない場合' do
+      let!(:organization) { create(:organization) }
+      let!(:other_user) { create(:user, organization: organization) }
+
+      it '組織メンバーを脱退させられず、組織作成ページにリダイレクトされること' do
+        expect do
+          delete organizations_member_path(other_user)
+        end.not_to change { organization.reload.users.count }
+        expect(response).to redirect_to new_organization_path
+      end
+    end
+  end
 end

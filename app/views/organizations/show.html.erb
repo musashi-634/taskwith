@@ -36,11 +36,14 @@
     <ul class="container mt-3 mb-0">
       <% @members.each.with_index(1) do |member, i| %>
         <li class="row p-2 <%= "border-bottom" unless i == @members.length %>">
-          <div class="col"><%= member.name %></div>
-          <div class="col"><%= member.display_admin_privilege %></div>
-          <div class="col">
+          <div class="col d-flex align-items-center"><%= member.name %></div>
+          <div class="col d-flex align-items-center"><%= member.display_admin_privilege %></div>
+          <div class="col d-flex align-items-center">
             <% unless member == current_user %>
               <%= link_to "詳細", organizations_member_path(member) %>
+              <% if current_user.is_admin? %>
+                <%= button_to '脱退', organizations_member_path(member), data: { turbo_confirm: '本当によろしいですか？' }, method: :delete, class: 'btn btn-danger btn-sm ms-1' %>
+              <% end %>
             <% end %>
           </div>
         </li>

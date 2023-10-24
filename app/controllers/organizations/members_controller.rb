@@ -1,7 +1,7 @@
 class Organizations::MembersController < ApplicationController
   before_action :block_normal_user, except: %i(index new show edit)
   before_action :block_myself, except: %i(index new show edit)
-  before_action :set_member, only: %i(show edit update)
+  before_action :set_member, only: %i(show edit update destroy)
 
   def show
   end
@@ -17,6 +17,16 @@ class Organizations::MembersController < ApplicationController
       flash.now[:alert] = '組織メンバーの権限を更新できませんでした。'
       render 'edit', status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @member.transaction do
+      @member.update!(organization_id: nil)
+      @member.project_members.map(&:destroy!)
+      @member.task_staffs.map(&:destroy!)
+    end
+    flash[:notice] = "#{@member.name}を脱退させました。"
+    redirect_to organization_path
   end
 
   private
