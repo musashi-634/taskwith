@@ -5,12 +5,21 @@ export default class extends Controller {
   static values = { offsetDay: Number }
 
   connect() {
+    this.scrollToTodayAmount = this.calcScrollToTodayAmount();
     this.scrollToToday();
   }
 
+  calcScrollToTodayAmount() {
+    const offsetWidth = this.todayTarget.offsetWidth;
+    const styles = getComputedStyle(this.todayTarget);
+    const marginRight = parseInt(styles.marginRight);
+    const marginLeft = parseInt(styles.marginLeft);
+    const gridColumnStart = parseInt(styles.gridColumnStart);
+
+    return (offsetWidth + marginRight + marginLeft) * (gridColumnStart - 1 + this.offsetDayValue);
+  }
+
   scrollToToday() {
-    const timelineColumnWidth = this.todayTarget.offsetWidth;
-    const todayGridColumn = parseInt(getComputedStyle(this.todayTarget).gridColumnStart);
-    this.chartTarget.scrollLeft = timelineColumnWidth * (todayGridColumn - 1 + this.offsetDayValue);
+    this.chartTarget.scrollLeft = this.scrollToTodayAmount
   }
 }

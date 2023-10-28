@@ -3,7 +3,7 @@
      data-gantt-chart-offset-day-value="-2">
   <div class="my-3 d-flex align-items-center justify-content-between">
     <h1 class="fs-5 fw-bold m-0"><%= @project.name %></h1>
-    <button class="btn btn-primary btn-sm"
+    <button class="btn btn-primary text-light btn-sm"
             data-action="click->gantt-chart#scrollToToday">今日</button>
   </div>
   <div class="row overflow-hidden">
@@ -15,7 +15,7 @@
           <div class="position-relative">
             <%= t('activerecord.attributes.task.name') %>
             <%= link_to "+", new_project_task_path,
-                class: 'btn btn-primary position-absolute bottom-0 end-0 mb-1 me-1 px-2 py-0' %>
+                class: 'btn btn-primary text-light position-absolute bottom-0 end-0 mb-1 me-1 px-2 py-0' %>
           </div>
           <div><%= t('activerecord.attributes.task.users') %></div>
           <div><%= t('activerecord.attributes.task.start_at') %></div>
@@ -32,7 +32,7 @@
           </div>
           <div class="gantt-days gantt-timeline-row">
             <% @timeline_dates.each.with_index(1) do |date, column| %>
-              <div class="<%= "today" if column == @today_grid_column %><%= " weekend" if weekend?(date) %>"
+              <div class="<%= "today" if column == @today_grid_column %><%= " saturday" if date.wday == 6 %><%= " sunday" if date.wday == 0 %>"
                    style="grid-column: <%= column %>;"
                    data-gantt-chart-target="<%= "today" if column == @today_grid_column %>">
                 <%= date.day %>
@@ -48,7 +48,7 @@
           <div class="gantt-task-content"></div>
           <div class="gantt-timeline-row">
             <% @timeline_dates.each.with_index(1) do |date, column| %>
-              <div class="<%= " weekend" if weekend?(date) %>" style="grid-column: <%= column %>;"></div>
+              <div class="<%= "today" if column == @today_grid_column %><%= " weekend" if weekend?(date) %>" style="grid-column: <%= column %>;"></div>
             <% end %>
           </div>
         </div>
@@ -70,7 +70,6 @@
                   <div class="gantt-bar"
                       style="<%= calculate_grid_column(@timeline_dates, task.start_at, task.end_at) %>"
                   ></div>
-                  <div class="today-line" style="grid-column: <%= @today_grid_column %>;"></div>
                 </div>
               </div>
             <% end %>
