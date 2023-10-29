@@ -100,7 +100,7 @@ RSpec.describe 'Tasks', type: :system do
 
     it 'タスクを登録できること' do
       visit project_tasks_path(project)
-      click_on '+'
+      click_on 'Add task'
 
       expect(current_path).to eq new_project_task_path(project)
 

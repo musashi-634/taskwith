@@ -5,3 +5,9 @@
   --bs-btn-active-color: #{$light};
   --bs-btn-disabled-color: #{$light};
 }
+
+.btn-outline-primary,
+.btn-outline-danger {
+  --bs-btn-hover-color: #{$light};
+  --bs-btn-active-color: #{$light};
+}

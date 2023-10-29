@@ -15,7 +15,7 @@
         <tbody>
           <% @archived_projects.each do |project| %>
             <tr>
-              <td class=<%= "text-black-50" if project.is_done %>>
+              <td class=<%= "text-done" if project.is_done %>>
                 <%= project.name %>
               </td>
               <td>
