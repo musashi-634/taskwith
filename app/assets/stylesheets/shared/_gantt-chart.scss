@@ -8,6 +8,8 @@ main:has(.gantt-chart) {
 }
 .gantt-chart {
   --timeline-column-num: 42;
+  --gantt-task-header-max-width: 500px;
+  --task-start-at-width: 80px;
   @extend .d-grid;
   @extend .bg-white;
   @extend .border;
@@ -16,7 +18,7 @@ main:has(.gantt-chart) {
   @extend .h-100;
   @extend .small;
   @extend .p-0;
-  grid-template-rows: 90px 1fr;
+  grid-template-rows: 80px 1fr;
 }
 .gantt-header {
   @extend .sticky-top;
@@ -25,10 +27,13 @@ main:has(.gantt-chart) {
 }
 .gantt-row {
   @extend .d-grid;
-  grid-template-columns: minmax(500px, auto);
+  grid-template-columns: 1fr;
 
   @include media-breakpoint-up(sm) {
-    grid-template-columns: 500px 1fr;
+    grid-template-columns: calc(var(--gantt-task-header-max-width) - var(--task-start-at-width) * 2) 1fr;
+  }
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: var(--gantt-task-header-max-width) 1fr;
   }
 }
 .gantt-task-header,
@@ -36,19 +41,31 @@ main:has(.gantt-chart) {
   @extend .d-grid;
   @extend .position-sticky;
   @extend .start-0;
-  grid-template-columns: 2fr 1fr 80px 80px;
+  grid-template-columns: 3fr 2fr;
   border-right: 1px solid var(--bs-gray-400);
   border-bottom: 1px solid var(--bs-gray-400);
   z-index: 1;
 
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: 3fr 2fr var(--task-start-at-width) var(--task-start-at-width);
+  }
+
   &>div {
-    @extend .d-grid;
-    @extend .p-1;
+    display: grid;
+    @extend .p-2;
     @extend .text-center;
     place-items: center;
 
-    &:not(:last-child) {
-      border-right: 1px dotted var(--bs-gray-400);
+    &:not(:first-child) {
+      border-left: 1px dotted var(--bs-gray-400);
+    }
+  }
+  .task-start-at,
+  .task-end-at {
+    display: none;
+
+    @include media-breakpoint-up(lg) {
+      display: grid;
     }
   }
 }
@@ -58,8 +75,17 @@ main:has(.gantt-chart) {
 .gantt-task-content {
   @extend .bg-white;
 
-  &>div:first-child {
+  .task-name {
+    @extend .ps-3;
     place-items: center start;
+
+    span {
+      display: inline;
+
+      @include media-breakpoint-up(lg) {
+        display: none;
+      }
+    }
   }
 }
 .add-task .gantt-task-content {
@@ -68,7 +94,7 @@ main:has(.gantt-chart) {
 .gantt-scale-header {
   @extend .d-none;
   @extend .d-sm-grid;
-  grid-template-rows: 1fr 2fr;
+  grid-template-rows: 3fr 5fr;
 }
 .gantt-timeline-row {
   @extend .d-none;
