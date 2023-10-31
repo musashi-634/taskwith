@@ -4,5 +4,7 @@ $custom-colors: (
   "done": $gray-500,
 );
 
+$done: map-get($custom-colors, "done");
+
 // Merge the maps
 $theme-colors: map-merge($theme-colors, $custom-colors);

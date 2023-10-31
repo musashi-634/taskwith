@@ -16,7 +16,10 @@
             <div class="offcanvas-body">
               <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li class="nav-item mb-4">
-                  <%= link_to "プロジェクト一覧", projects_path, class: "text-decoration-none text-light" %>
+                  <%= link_to projects_path, class: "text-decoration-none text-light d-flex align-items-center gap-2" do %>
+                    <i class="bi bi-kanban-fill fs-5"></i>
+                    <div>プロジェクト</div>
+                  <% end %>
                 </li>
                 <li class="nav-item"><span class="fw-bold">マイプロジェクト</span>
                   <ul class="py-2">
@@ -35,7 +38,12 @@
       <div class="d-flex">
         <% if user_signed_in? %>
           <div class="dropdown">
-            <%= link_to current_user.name, "#", class: "dropdown-toggle text-light text-decoration-none", data: { bs_toggle: "dropdown" } %>
+            <%= link_to "#",
+                class: "dropdown-toggle text-light text-decoration-none d-flex align-items-center gap-2",
+                data: { bs_toggle: "dropdown" } do %>
+              <i class="bi bi-person-circle fs-3"></i>
+              <div><%= current_user.name %></div>
+            <% end %>
             <ul class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
               <li><%= link_to 'アカウント設定', users_account_path, class: "dropdown-item" %></li>
               <li><%= link_to '組織設定', organization_path, class: "dropdown-item" %></li>
