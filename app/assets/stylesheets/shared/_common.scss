@@ -1,3 +1,7 @@
 main {
   z-index: 0;
 }
+
+.field_with_errors input {
+  border-color: $danger;
+}
