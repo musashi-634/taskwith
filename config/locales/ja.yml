@@ -11,7 +11,7 @@ ja:
       project:
         name: プロジェクト名
         description: 説明
-        is_done: 完了状態
+        is_done: 完了
         is_archived: アーカイブ
         users: メンバー
       task:
