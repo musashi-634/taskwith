@@ -19,7 +19,7 @@ ja:
         start_at: 開始日
         end_at: 終了日
         description: 説明
-        is_done: 完了状態
+        is_done: 完了
         row_order: ソート順序
         users: 担当者
       user:

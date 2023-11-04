@@ -127,7 +127,7 @@ RSpec.describe 'Tasks', type: :system do
 
       expect do
         fill_in 'task[name]', with: new_task.name
-        click_on '保存'
+        click_on '更新'
       end.to change { task.reload.name }.from(task.name).to(new_task.name)
 
       expect(current_path).to eq project_tasks_path(task.project)
