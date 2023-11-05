@@ -25,7 +25,7 @@ class Organizations::MembersController < ApplicationController
       @member.project_members.map(&:destroy!)
       @member.task_staffs.map(&:destroy!)
     end
-    flash[:notice] = "#{@member.name}を脱退させました。"
+    flash[:notice] = "#{@member.name}さんを脱退させました。"
     redirect_to organization_path
   end
 

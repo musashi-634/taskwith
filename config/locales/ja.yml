@@ -8,6 +8,7 @@ ja:
       organization:
         id: 組織ID
         name: 組織名
+        users: メンバー
       project:
         name: プロジェクト名
         description: 説明

@@ -3,20 +3,22 @@
     <div class="col-lg-7 text-center text-lg-start">
       <h1 class="display-4 fw-bold lh-1 mb-3">新規組織作成</h1>
       <p class="col-lg-10 fs-4">
-        プロジェクトやタスクを作成する前に、まずは組織に参加しましょう。<br>
-        招待メールから既存の組織に参加するか、新しい組織を作成しましょう。
+        プロジェクトやタスクを作成する前に、<br>まずは組織に参加しましょう。<br>
+        既存の組織への招待を受けるか、<br>新しい組織を作成しましょう。
       </p>
     </div>
     <div class="col-md-10 mx-auto col-lg-5">
-      <%= form_with model: @organization, class: "p-4 p-md-5 border rounded-3 bg-light" do |f| %>
-        <%= render "shared/error_messages", object: @organization %>
+      <%= form_with model: @organization, class: "p-4 p-md-5 border rounded-3 bg-white" do |f| %>
         <div class="mb-3">
-          <%= f.label :name, class: "form-label" %>
-          <span class="badge bg-danger form-label">必須</span><br>
+          <%= f.label :name, class: "form-label" do %>
+            <%= t('activerecord.attributes.organization.name') %>
+            <span class="badge bg-danger">必須</span>
+          <% end %>
           <%= f.text_field :name, placeholder: "〇〇株式会社、プライベート", class: "form-control", autofocus: true %>
+          <%= render "shared/error_messages_for_attribute", object: @organization, attribute: :name %>
         </div>
         <div>
-          <%= f.submit "新規組織作成", class: "w-100 btn btn-lg btn-primary" %>
+          <%= f.submit "作成", class: "w-100 btn btn-lg btn-primary" %>
         </div>
       <% end %>
     </div>

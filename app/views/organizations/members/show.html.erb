@@ -1,33 +1,31 @@
 <div class="container">
-  <h1 class="mt-5">組織メンバー詳細</h1>
-  <div class="information border rounded mt-3 p-3">
-    <div class="container mt-3">
-      <div class="row border-bottom p-2">
-        <div class="col-3 fw-bold">
-          <%= t('activerecord.attributes.user.name') %>
-        </div>
-        <div class="col-9">
-          <%= @member.name %>
-        </div>
+  <h1 class="my-5">組織メンバー詳細</h1>
+  <div class="information border rounded mb-5 p-3 bg-white">
+    <div class="row border-bottom mx-0 p-3">
+      <div class="col-12 col-md-3 mb-2 mb-md-0 fw-bold">
+        <%= t('activerecord.attributes.user.name') %>
       </div>
-      <div class="row border-bottom p-2">
-        <div class="col-3 fw-bold">
-          <%= t('activerecord.attributes.user.email') %>
-        </div>
-        <div class="col-9">
-          <%= @member.email %>
-        </div>
+      <div class="col-12 col-md-9">
+        <%= @member.name %>
       </div>
-      <div class="row p-2">
-        <div class="col-3 fw-bold">
-          <%= t('activerecord.attributes.user.is_admin') %>
-        </div>
-        <div class="col-9">
-          <%= @member.display_admin_privilege %>
-          <% if current_user.is_admin? %>
-            <%= link_to "変更", edit_organizations_member_path(@member), class: 'ms-3' %>
-          <% end %>
-        </div>
+    </div>
+    <div class="row border-bottom mx-0 p-3">
+      <div class="col-12 col-md-3 mb-2 mb-md-0 fw-bold">
+        <%= t('activerecord.attributes.user.email') %>
+      </div>
+      <div class="col-12 col-md-9">
+        <%= @member.email %>
+      </div>
+    </div>
+    <div class="row align-items-center mx-0 p-3">
+      <div class="col-12 col-md-3 mb-2 mb-md-0 fw-bold">
+        <%= t('activerecord.attributes.user.is_admin') %>
+      </div>
+      <div class="col-12 col-md-9 d-flex align-items-center gap-3">
+        <%= @member.display_admin_privilege %>
+        <% if current_user.is_admin? %>
+          <%= link_to "変更", edit_organizations_member_path(@member), class: 'btn btn-primary btn-sm' %>
+        <% end %>
       </div>
     </div>
   </div>

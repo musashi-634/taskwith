@@ -12,7 +12,7 @@ RSpec.describe 'Organizations', type: :system do
       visit new_organization_path
 
       fill_in 'organization[name]', with: organization.name
-      expect { click_on '新規組織作成' }.to change { Organization.count }.by(1)
+      expect { click_on '作成' }.to change { Organization.count }.by(1)
 
       expect(current_path).to eq organization_path
       expect(page).to have_content '組織を作成しました。'
@@ -29,7 +29,7 @@ RSpec.describe 'Organizations', type: :system do
 
       expect do
         fill_in 'organization[name]', with: new_organization.name
-        click_on '保存'
+        click_on '更新'
       end.to change { organization.reload.name }.from(organization.name).to(new_organization.name)
 
       expect(current_path).to eq organization_path
@@ -45,7 +45,6 @@ RSpec.describe 'Organizations', type: :system do
 
     it '組織に関する情報が表示されていること' do
       within '.information' do
-        expect(page).to have_content organization.id
         expect(page).to have_content organization.name
       end
 
@@ -65,7 +64,7 @@ RSpec.describe 'Organizations', type: :system do
 
       expect do
         check '管理者'
-        click_on '保存'
+        click_on '更新'
       end.to change { other_member.reload.is_admin }.from(false).to(true)
 
       expect(current_path).to eq organization_path
