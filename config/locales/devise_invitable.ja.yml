@@ -9,25 +9,25 @@ ja:
         user_added: '%{email}が組織に参加しました。'
         already_joined: '%{email}はすでにいずれかの組織に所属しています。'
         invitation_token_invalid: '招待コードが不正です。'
-        updated: 'アカウント情報が設定されました。お使いのアカウントでログインできます。'
+        updated: 'アカウント情報が設定されました。お使いのアカウントでログイン可能になりました。'
         updated_not_active: 'アカウント情報が設定されました。'
         no_invitations_remaining: 'これ以上招待できません。'
         invitation_removed: '招待を取り消しました。'
     mailer:
       invitation_instructions:
-        user_subject: '[TaskWith] %{user_name}さんから、「%{organization_name}」という組織に招待されました'
+        user_subject: '[TaskWith] %{user_name}様から、「%{organization_name}」という組織に招待されました'
   users:
     invitations:
       new:
         header: '招待の作成'
-        submit_button: '招待する'
+        submit_button: '招待'
       edit:
         header: 'アカウント情報の設定'
-        submit_button: 'アカウント情報を設定する'
+        submit_button: '設定'
     mailer:
       invitation_instructions:
-        hello: 'こんにちは、%{email}さん'
-        someone_invited_you: '%{user_name}（%{user_email}）さんから、「%{organization_name}」という組織に招待されました。以下のリンクから承認できます。'
+        hello: '%{email}様'
+        someone_invited_you: '%{user_name}（%{user_email}）様から、「%{organization_name}」という組織に招待されました。以下のリンクから承認できます。'
         accept: '招待を承認する'
         accept_until: 'この招待は%{due_date}まで有効です。'
         ignore: '招待を承認しない場合は、このメールを無視してください。あなたのアカウントは上記のリンク先にアクセスしアカウント情報を設定するまでは作成されません。'

@@ -51,7 +51,7 @@ RSpec.describe "Users::Invitations", type: :request do
 
             expect(invitation_mail.to).to eq [user_attributes[:email]]
             expect(invitation_mail.subject).to eq(
-              "[TaskWith] #{user.name}さんから、「#{user.organization.name}」という組織に招待されました"
+              "[TaskWith] #{user.name}様から、「#{user.organization.name}」という組織に招待されました"
             )
           end
 
