@@ -126,12 +126,12 @@ ja:
     registrations:
       edit:
         currently_waiting_confirmation_for_email: "%{email} の確認待ち"
-        leave_blank_if_you_don_t_want_to_change_it: （空欄のままなら変更しません）
+        leave_blank_if_you_don_t_want_to_change_it: 空欄のままなら変更しません
         title: "アカウント編集"
         update: 更新
-        we_need_your_current_password_to_confirm_your_changes: （変更を反映するには現在のパスワードを入力してください）
       new:
-        sign_up: アカウント登録
+        title: アカウント登録
+        sign_up: 登録
     sessions:
       new:
         sign_in: ログイン

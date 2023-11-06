@@ -98,9 +98,7 @@ RSpec.describe 'Users', type: :system do
       fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: user.password
       fill_in 'user[password_confirmation]', with: user.password_confirmation
-      within '.new_user' do
-        click_on 'アカウント登録'
-      end
+      click_on '登録'
 
       expect(current_path).to eq new_organization_path
       expect(page).to have_content 'アカウント登録が完了しました。'
