@@ -47,7 +47,7 @@ RSpec.describe 'Users', type: :system do
 
         fill_in 'user[email]', with: user.email
         fill_in 'user[password]', with: user.password
-        within '.new_user' do
+        within 'main' do
           click_on 'ログイン'
         end
 
