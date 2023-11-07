@@ -12,12 +12,12 @@
     <%= javascript_importmap_tags %>
     <meta name="google-site-verification" content="Y8MsLvXwGv3_bXwwGik3nWFLvm_6Q88OHjqq_wozzZw" />
   </head>
-  <body class="d-flex flex-column min-vh-100">
+  <body class="d-flex flex-column min-vh-100 text-dark" data-controller="tooltip">
     <%= render 'shared/header' %>
-    <main>
+    <main class="flex-grow-1 bg-light">
       <%= render 'shared/flash_messages' %>
       <%= yield %>
     </main>
-    <%= render 'shared/footer' if current_page?(root_path) || current_page?(home_index_path) %>
+    <%= render 'shared/footer' if current_page?(root_path) || current_page?(home_path) %>
   </body>
 </html>

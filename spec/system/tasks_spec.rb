@@ -100,7 +100,7 @@ RSpec.describe 'Tasks', type: :system do
 
     it 'タスクを登録できること' do
       visit project_tasks_path(project)
-      click_on '+'
+      click_on 'Add task'
 
       expect(current_path).to eq new_project_task_path(project)
 
@@ -127,7 +127,7 @@ RSpec.describe 'Tasks', type: :system do
 
       expect do
         fill_in 'task[name]', with: new_task.name
-        click_on '保存'
+        click_on '更新'
       end.to change { task.reload.name }.from(task.name).to(new_task.name)
 
       expect(current_path).to eq project_tasks_path(task.project)

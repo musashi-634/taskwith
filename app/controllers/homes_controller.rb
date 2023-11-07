@@ -1,7 +1,7 @@
-class HomeController < ApplicationController
+class HomesController < ApplicationController
   skip_before_action :authenticate_user!
   skip_before_action :block_user_belongs_to_no_organization
 
-  def index
+  def show
   end
 end

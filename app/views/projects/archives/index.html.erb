@@ -1,33 +1,31 @@
-<div class="container">
-  <h1 class="mt-5">アーカイブ済みのプロジェクト一覧</h1>
-  <div class="d-flex justify-content-end">
-    <%= link_to "戻る", 'javascript:history.back()' %>
-  </div>
-  <div class="row justify-content-center">
-    <div class="table-responsive col-lg-8">
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th scope="col"><%= t('activerecord.attributes.project.name') %></th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @archived_projects.each do |project| %>
-            <tr>
-              <td class=<%= "text-black-50" if project.is_done %>>
+<div class="container archives-index">
+  <h1 class="my-5">アーカイブ</h1>
+  <div class="row justify-content-center mb-5">
+    <div class="col col-lg-9">
+      <div class="bg-white border rounded p-3">
+        <div class="row mx-0 py-2 border-bottom fw-bold">
+          <div class="col-9">
+            <%= t('activerecord.attributes.project.name') %>
+          </div>
+          <div class="col-3">
+          </div>
+        </div>
+        <% @archived_projects.each.with_index(1) do |project, i| %>
+          <div class="row mx-0 py-2 <%= "border-bottom" unless i == @archived_projects.length %>">
+            <div class="col-9 d-flex align-items-center gap-2<%= " done-project" if project.is_done %>">
+              <i class="bi bi-check2-square text-success fs-5 d-none"></i>
+              <div>
                 <%= project.name %>
-              </td>
-              <td>
-                <div class="d-flex justify-content-end">
-                  <%= button_to '復元', projects_archive_path(project), method: :delete, class: 'btn btn-primary btn-sm', data: { turbo_confirm: 'プロジェクトをアーカイブから復元します。よろしいですか？' } %>
-                  <%= button_to '削除', project_path(project), method: :delete, class: 'btn btn-secondary btn-sm ms-1', data: { turbo_confirm: 'プロジェクトを削除します。よろしいですか？' } %>
-                </div>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+              </div>
+            </div>
+            <div class="col-3 d-flex justify-content-end gap-1 flex-wrap">
+              <%= button_to '復元', projects_archive_path(project), method: :delete, class: 'btn btn-primary btn-sm' %>
+              <%= button_to '削除', project_path(project), method: :delete, class: 'btn btn-danger btn-sm',
+                  data: { turbo_confirm: 'プロジェクトを削除します。よろしいですか？' } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

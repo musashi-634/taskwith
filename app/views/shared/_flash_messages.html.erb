@@ -1,10 +1,11 @@
-<% if notice %>
+<% if flash.present? %>
   <div data-turbo-cache="false">
-    <p class="notice"><%= notice %></p>
-  </div>
-<% end %>
-<% if alert %>
-  <div data-turbo-cache="false">
-    <p class="alert"><%= alert %></p>
+    <% flash.each do |message_type, message| %>
+      <% next if message_type == 'timedout' %><%# deviseの{ timeout: true }という不要なflashを無視 %>
+      <div class="alert alert-<%= message_type == 'alert' ? 'danger' : 'success' %> alert-dismissible fade show" role="alert">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
   </div>
 <% end %>

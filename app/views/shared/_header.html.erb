@@ -1,19 +1,22 @@
 <header class="sticky-top">
-  <nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid">
-      <div>
+  <nav class="navbar navbar-dark bg-dark text-light">
+    <div class="container-fluid align-items-center gap-2 px-3">
+      <div class="d-flex align-items-center gap-2">
         <% if user_signed_in? %>
-          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarDark">
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasNavbarDark">
+          <div class="offcanvas offcanvas-start bg-dark" tabindex="-1" id="offcanvasNavbar">
             <div class="offcanvas-header">
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
             </div>
             <div class="offcanvas-body">
               <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li class="nav-item mb-4">
-                  <%= link_to "プロジェクト一覧", projects_path, class: "text-decoration-none text-light" %>
+                  <%= link_to projects_path, class: "text-decoration-none text-light d-flex align-items-center gap-2" do %>
+                    <i class="bi bi-kanban-fill fs-5"></i>
+                    <div>プロジェクト</div>
+                  <% end %>
                 </li>
                 <li class="nav-item"><span class="fw-bold">マイプロジェクト</span>
                   <ul class="py-2">
@@ -28,11 +31,17 @@
             </div>
           </div>
         <% end %>
+        <%= link_to "TaskWith", user_signed_in? ? projects_path : root_path, class: "text-decoration-none text-light fs-3" %>
       </div>
-      <div class="d-flex">
+      <div class="d-flex justify-content-end flex-wrap gap-2 ms-auto">
         <% if user_signed_in? %>
           <div class="dropdown">
-            <%= link_to current_user.name, "#", class: "dropdown-toggle text-light", data: { bs_toggle: "dropdown" } %>
+            <%= link_to "#",
+                class: "dropdown-toggle text-light text-decoration-none d-flex align-items-center gap-2",
+                data: { bs_toggle: "dropdown" } do %>
+              <i class="bi bi-person-circle fs-3"></i>
+              <div><%= current_user.name %></div>
+            <% end %>
             <ul class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
               <li><%= link_to 'アカウント設定', users_account_path, class: "dropdown-item" %></li>
               <li><%= link_to '組織設定', organization_path, class: "dropdown-item" %></li>
@@ -43,8 +52,8 @@
             </ul>
           </div>
         <% else %>
-          <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline-light me-2" %>
-          <%= button_to "ゲストログイン", users_guest_session_path, class: "btn btn-outline-light me-2" %>
+          <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline-light" %>
+          <%= button_to "ゲストログイン", users_guest_session_path, class: "btn btn-outline-light" %>
           <%= link_to "新規登録", new_user_registration_path, class: "btn btn-warning" %>
         <% end %>
       </div>

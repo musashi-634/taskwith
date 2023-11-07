@@ -1,18 +1,25 @@
-<h2><%= t "users.invitations.new.header" %></h2>
-
-<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "users/shared/error_messages", resource: resource %>
-
-  <% resource.class.invite_key_fields.each do |field| -%>
-    <div class="field">
-      <%= f.label field %>
-      <span class="badge bg-danger">必須</span><br>
-      <%= f.text_field field %>
+<div class="container">
+  <h1 class="my-5">
+    <%= t "users.invitations.new.header" %>
+  </h1>
+  <%= form_with model: resource, url: invitation_path(resource_name), class: "pb-5" do |f| %>
+    <div class="row g-3 mb-4">
+      <div class="col-12">
+        <%= f.label :email, class: "form-label" do %>
+          <%= t("activerecord.attributes.#{resource.class.to_s.downcase}.email") %>
+          <span class="badge bg-danger">必須</span>
+        <% end %>
+        <%= f.email_field :email, class: "form-control", autofocus: true %>
+        <%= render "shared/error_messages_for_attribute", object: resource, attribute: :email %>
+      </div>
     </div>
-  <% end -%>
-
-  <div class="actions">
-    <%= f.submit t("users.invitations.new.submit_button") %>
-  </div>
-  <%= link_to "戻る", 'javascript:history.back()' %>
-<% end %>
+    <div class="row">
+      <div class="col-6">
+        <%= f.submit t("users.invitations.new.submit_button"), class: "btn btn-primary w-100" %>
+      </div>
+      <div class="col-6">
+        <%= link_to "キャンセル", 'javascript:history.back()', class: "btn btn-outline-secondary w-100" %>
+      </div>
+    </div>
+  <% end %>
+</div>

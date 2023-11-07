@@ -1,0 +1,11 @@
+.projects-index {
+  .card {
+    &.done-project {
+      color: $done;
+
+      i {
+        display: inline-block !important;
+      }
+    }
+  }
+}

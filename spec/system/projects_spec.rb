@@ -33,7 +33,7 @@ RSpec.describe 'Projects', type: :system do
 
       expect do
         fill_in 'project[name]', with: new_project.name
-        click_on '保存'
+        click_on '更新'
       end.to change { project.reload.name }.from(project.name).to(new_project.name)
 
       expect(current_path).to eq projects_path

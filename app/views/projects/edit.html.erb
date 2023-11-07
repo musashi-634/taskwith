@@ -1,29 +1,41 @@
 <div class="container">
-  <h1 class="mt-5">プロジェクト編集</h1>
-  <%= form_with model: @project do |f| %>
-    <%= render "shared/error_messages", object: @project %>
-    <div>
-      <%= f.label :name %>
-      <span class="badge bg-danger">必須</span><br>
-      <%= f.text_field :name, autofocus: true %>
+  <h1 class="my-5">プロジェクト編集</h1>
+  <%= form_with model: @project, class: "pb-5" do |f| %>
+    <div class="row g-3 mb-4">
+      <div class="col-12">
+        <%= f.label :name, class: "form-label" do %>
+          <%= t('activerecord.attributes.project.name') %>
+          <span class="badge bg-danger">必須</span>
+        <% end %>
+        <%= f.text_field :name, class: "form-control", autofocus: true %>
+        <%= render "shared/error_messages_for_attribute", object: @project, attribute: :name %>
+      </div>
+      <div class="col-12">
+        <%= f.label :description, class: "form-label" %>
+        <%= f.text_area :description, class: "form-control", rows: "5" %>
+        <%= render "shared/error_messages_for_attribute", object: @project, attribute: :description %>
+      </div>
+      <div class="col-12">
+        <%= f.label :user_ids, t('activerecord.attributes.project.users'), class: "form-label" %>
+        <%= f.collection_select :user_ids, @organization_members, :id, :name, {},
+            { multiple: true, placeholder: "#{t('activerecord.attributes.project.users')}を選択", data: { controller: "select" } } %>
+        <%= render "shared/error_messages_for_attribute", object: @project, attribute: :user_ids %>
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <%= f.check_box :is_done, class: "form-check-input" %>
+          <%= f.label :is_done, class: "form-check-label" %>
+          <%= render "shared/error_messages_for_attribute", object: @project, attribute: :is_done %>
+        </div>
+      </div>
     </div>
-    <div>
-      <%= f.label :description %><br>
-      <%= f.text_area :description %>
-    </div>
-    <div>
-      <%= f.label :is_done %><br>
-      <%= f.check_box :is_done %>
-    </div>
-    <div>
-      <%= f.label :users %><br>
-      <%= f.collection_check_boxes :user_ids, @organization_members, :id, :name do |b| %>
-        <%= b.label(class: 'me-3') { b.check_box + b.text } %>
-      <% end %>
-    </div>
-    <div>
-      <%= f.submit "保存" %>
+    <div class="row">
+      <div class="col-6">
+        <%= f.submit "更新", class: "btn btn-primary w-100" %>
+      </div>
+      <div class="col-6">
+        <%= link_to "キャンセル", 'javascript:history.back()', class: "btn btn-outline-secondary w-100" %>
+      </div>
     </div>
   <% end %>
-  <%= link_to "キャンセル", 'javascript:history.back()' %>
 </div>

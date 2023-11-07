@@ -13,7 +13,7 @@ RSpec.describe "Organizations", type: :request do
       before { get organization_path }
 
       it '組織情報を取得できること' do
-        expect(response.body).to include organization.id.to_s
+        expect(response).to have_http_status 200
         expect(response.body).to include organization.name
       end
 

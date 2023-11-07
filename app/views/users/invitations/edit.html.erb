@@ -1,33 +1,53 @@
-<h2><%= t "users.invitations.edit.header" %></h2>
-
-<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "users/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :invitation_token, readonly: true %>
-  <% if resource.invited_by.present? %>
-    <%= f.hidden_field :organization_id, readonly: true, value: resource.invited_by.organization.id %>
+<div class="container">
+  <h1 class="my-5">
+    <%= t "users.invitations.edit.header" %>
+  </h1>
+  <%= form_with model: resource, url: invitation_path(resource_name), class: "pb-5" do |f| %>
+    <%= f.hidden_field :invitation_token, readonly: true %>
+    <% if resource.invited_by.present? %>
+      <%= f.hidden_field :organization_id, readonly: true, value: resource.invited_by.organization.id %>
+    <% end %>
+    <% if f.object.class.require_password_on_accepting %>
+      <div class="row g-3 mb-4">
+        <div class="col-12">
+          <%= f.label :name, class: "form-label" do %>
+            <%= t("activerecord.attributes.#{resource.class.to_s.downcase}.name") %>
+            <span class="badge bg-danger">必須</span>
+          <% end %>
+          <%= f.text_field :name, class: "form-control", autofocus: true, autocomplete: "name" %>
+          <%= render "shared/error_messages_for_attribute", object: resource, attribute: :name %>
+        </div>
+        <div class="col-12">
+          <%= f.label :password, class: "form-label" do %>
+            <%= t("activerecord.attributes.#{resource.class.to_s.downcase}.password") %>
+            <span class="badge bg-danger">必須</span>
+            <% if @minimum_password_length %>
+              <br>
+              <em class="text-secondary">
+                <%= t('users.shared.minimum_password_length', count: @minimum_password_length) %>
+              </em>
+            <% end %>
+          <% end %>
+          <%= f.password_field :password, class: "form-control", autocomplete: "new-password" %>
+          <%= render "shared/error_messages_for_attribute", object: resource, attribute: :password %>
+        </div>
+        <div class="col-12">
+          <%= f.label :password_confirmation, class: "form-label" do %>
+            <%= t("activerecord.attributes.#{resource.class.to_s.downcase}.password_confirmation") %>
+            <span class="badge bg-danger">必須</span>
+          <% end %>
+          <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password" %>
+          <%= render "shared/error_messages_for_attribute", object: resource, attribute: :password_confirmation %>
+        </div>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="col-6">
+        <%= f.submit t("users.invitations.edit.submit_button"), class: "btn btn-primary w-100" %>
+      </div>
+      <div class="col-6">
+        <%= link_to "キャンセル", 'javascript:history.back()', class: "btn btn-outline-secondary w-100" %>
+      </div>
+    </div>
   <% end %>
-
-  <% if f.object.class.require_password_on_accepting %>
-    <div class="field">
-      <%= f.label :name %>
-      <span class="badge bg-danger">必須</span><br>
-      <%= f.text_field :name %>
-    </div>
-
-    <div class="field">
-      <%= f.label :password %>
-      <span class="badge bg-danger">必須</span><br>
-      <%= f.password_field :password %>
-    </div>
-
-    <div class="field">
-      <%= f.label :password_confirmation %>
-      <span class="badge bg-danger">必須</span><br>
-      <%= f.password_field :password_confirmation %>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit t("users.invitations.edit.submit_button") %>
-  </div>
-<% end %>
+</div>

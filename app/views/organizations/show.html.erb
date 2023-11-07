@@ -1,48 +1,60 @@
 <div class="container">
-  <h1 class="mt-5">組織設定</h1>
-  <div class="information border rounded mt-3 p-3">
-    <div class="d-flex justify-content-between align-items-end">
-      <h2 class="m-0">組織情報</h2>
+  <h1 class="my-5">組織設定</h1>
+  <div class="information border rounded mb-3 p-3 bg-white">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <h2 class="m-0">基本情報</h2>
       <% if current_user.is_admin? %>
-        <%= link_to "編集", edit_organization_path %>
+        <%= link_to "編集", edit_organization_path, class: "btn btn-primary" %>
       <% end %>
     </div>
-    <div class="container mt-3">
-      <div class="row border-bottom p-2">
-        <div class="col-3 fw-bold">
-          <%= t('activerecord.attributes.organization.id') %>
-        </div>
-        <div class="col-9">
-          <%= @organization.id %>
-        </div>
+    <div class="row mx-0 p-3">
+      <div class="col-12 col-md-3 mb-2 mb-md-0 fw-bold">
+        <%= t('activerecord.attributes.organization.name') %>
       </div>
-      <div class="row p-2">
-        <div class="col-3 fw-bold">
-          <%= t('activerecord.attributes.organization.name') %>
-        </div>
-        <div class="col-9">
-          <%= @organization.name %>
-        </div>
+      <div class="col-12 col-md-9">
+        <%= @organization.name %>
       </div>
     </div>
   </div>
-  <div class="members border rounded mt-3 p-3">
-    <div class="d-flex justify-content-between align-items-end">
-      <h2 class="m-0">組織メンバー<%= "(#{@members.length})" %></h2>
+  <div class="members border rounded mb-3 p-3 bg-white">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <h2 class="m-0">
+        <%= t('activerecord.attributes.organization.users') %>
+        <%= "(#{@members.length})" %>
+      </h2>
       <% if current_user.is_admin? %>
-        <%= link_to "招待", new_user_invitation_path, class: "btn btn-primary btn-sm" %>
+        <%= link_to "招待", new_user_invitation_path, class: "btn btn-primary" %>
       <% end %>
     </div>
-    <ul class="container mt-3 mb-0">
+    <div class="row align-items-center mx-0 py-2 border-bottom fw-bold">
+      <div class="col-6 col-sm-8 col-md-7">
+        <%= t('activerecord.attributes.user.name') %>
+      </div>
+      <div class="col col-sm-2">
+        <%= t('activerecord.attributes.user.is_admin') %>
+      </div>
+      <div class="col col-sm-2 col-md-3">
+      </div>
+    </div>
+    <ul class="mb-0 p-0">
       <% @members.each.with_index(1) do |member, i| %>
-        <li class="row p-2 <%= "border-bottom" unless i == @members.length %>">
-          <div class="col d-flex align-items-center"><%= member.name %></div>
-          <div class="col d-flex align-items-center"><%= member.display_admin_privilege %></div>
-          <div class="col d-flex align-items-center">
+        <li class="row align-items-center mx-0 py-2 <%= "border-bottom" unless i == @members.length %>">
+          <div class="col-6 col-sm-8 col-md-7 d-flex gap-1 flex-wrap">
+            <%= member.name %>
+            <span class="text-done ms-1 d-none d-sm-inline">(<%= member.email %>)</span>
+          </div>
+          <div class="col col-sm-2">
+            <%= member.display_admin_privilege %>
+          </div>
+          <div class="col col-sm-2 col-md-3 d-flex justify-content-end align-items-center gap-1 flex-wrap">
             <% unless member == current_user %>
-              <%= link_to "詳細", organizations_member_path(member) %>
+              <%= link_to "詳細", organizations_member_path(member), class: 'btn btn-outline-primary btn-sm' %>
               <% if current_user.is_admin? %>
-                <%= button_to '脱退', organizations_member_path(member), data: { turbo_confirm: '本当によろしいですか？' }, method: :delete, class: 'btn btn-danger btn-sm ms-1' %>
+                <%= button_to '脱退',
+                    organizations_member_path(member),
+                    class: 'btn btn-outline-danger btn-sm ms-1',
+                    method: :delete,
+                    data: { turbo_confirm: '本当によろしいですか？' } %>
               <% end %>
             <% end %>
           </div>
@@ -51,12 +63,20 @@
     </ul>
   </div>
   <% if current_user.is_admin? %>
-    <div class="information border rounded mt-3 p-3">
-      <h2>組織削除</h2>
-      <div>
-        この操作は元に戻せません。<br>
-        組織内のプロジェクトなども削除されます。
-        <%= button_to '組織削除', organization_path, data: { turbo_confirm: '本当によろしいですか？' }, method: :delete, class: 'btn btn-danger' %>
+    <div class="border rounded mb-5 p-3 bg-white">
+      <h2 class="mb-3">組織削除</h2>
+      <div class="d-flex justify-content-between flex-wrap gap-2">
+        <div>
+          この操作は元に戻せません。<br>
+          組織内のプロジェクトなども削除されます。
+        </div>
+        <div class="d-flex justify-content-end align-items-end">
+          <%= button_to '組織削除',
+              organization_path,
+              class: 'btn btn-danger',
+              method: :delete,
+              data: { turbo_confirm: '本当によろしいですか？' } %>
+        </div>
       </div>
     </div>
   <% end %>

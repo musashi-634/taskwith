@@ -47,7 +47,7 @@ RSpec.describe 'Users', type: :system do
 
         fill_in 'user[email]', with: user.email
         fill_in 'user[password]', with: user.password
-        within '.new_user' do
+        within 'main' do
           click_on 'ログイン'
         end
 
@@ -60,7 +60,7 @@ RSpec.describe 'Users', type: :system do
       let!(:guest_user) { create(:guest_user, :with_organization) }
 
       it 'ログイン後にプロジェクト一覧ページに遷移し、ログインメッセージが表示されること' do
-        visit home_index_path
+        visit home_path
         click_on 'ゲストログイン'
 
         expect(current_path).to eq projects_path
@@ -98,9 +98,7 @@ RSpec.describe 'Users', type: :system do
       fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: user.password
       fill_in 'user[password_confirmation]', with: user.password_confirmation
-      within '.new_user' do
-        click_on 'アカウント登録'
-      end
+      click_on '登録'
 
       expect(current_path).to eq new_organization_path
       expect(page).to have_content 'アカウント登録が完了しました。'
@@ -162,7 +160,7 @@ RSpec.describe 'Users', type: :system do
 
         expect do
           fill_in 'user[email]', with: invitee.email
-          click_on '招待する'
+          click_on '招待'
         end.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         expect(current_path).to eq organization_path
@@ -172,7 +170,7 @@ RSpec.describe 'Users', type: :system do
 
         # 招待された組織への参加
         invitation_mail = ActionMailer::Base.deliveries.last
-        join_organization_url = URI.extract(invitation_mail.html_part.body.to_s)[0]
+        join_organization_url = URI.extract(invitation_mail.body.to_s)[0]
 
         visit join_organization_url
         expect(page).to have_content 'アカウント情報の設定'
@@ -181,11 +179,11 @@ RSpec.describe 'Users', type: :system do
           fill_in 'user[name]', with: invitee.name
           fill_in 'user[password]', with: invitee.password
           fill_in 'user[password_confirmation]', with: invitee.password_confirmation
-          click_on 'アカウント情報を設定する'
+          click_on '設定'
         end.to change { User.last.organization }.from(nil).to(user.organization)
 
         expect(current_path).to eq projects_path
-        expect(page).to have_content 'アカウント情報が設定されました。お使いのアカウントでログインできます。'
+        expect(page).to have_content 'アカウント情報が設定されました。お使いのアカウントでログイン可能になりました。'
       end
     end
 
@@ -200,7 +198,7 @@ RSpec.describe 'Users', type: :system do
 
         expect do
           fill_in 'user[email]', with: invitee.email
-          click_on '招待する'
+          click_on '招待'
         end.to change { invitee.reload.organization }.from(nil).to(user.organization)
 
         expect(current_path).to eq organization_path
