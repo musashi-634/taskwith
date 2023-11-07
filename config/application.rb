@@ -22,5 +22,8 @@ module Taskwith
     config.i18n.default_locale = :ja
     # 複数のロケールファイルが読み込まれるようpathを通す
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
+
+    # imageタグにおけるloadingの設定
+    config.action_view.image_loading = 'lazy'
   end
 end
