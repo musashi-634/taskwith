@@ -1,24 +1,114 @@
-# README
+# TaskWith
+TaskWithは、ガントチャート方式のタスク管理ツールです。
+個人ではもちろん、チームでのタスク管理が可能です。
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+URL: https://taskwith-059601560e8c.herokuapp.com/
 
-Things you may want to cover:
+## 主要画面
+- 組織作成ページ
 
-* Ruby version
+  組織に所属しておらず、既存の組織から招待を受けていない場合は、まずは組織を作成する必要があります。組織に参加することで、プロジェクトやタスクの作成が可能になります。
 
-* System dependencies
+  ![app_screen_organization_create](https://github.com/musashi-634/taskwith/assets/115614313/473115d9-eb04-446d-ba29-dc11981f6f36)
 
-* Configuration
+- プロジェクト一覧ページ
 
-* Database creation
+  組織が所有するプロジェクトの一覧が表示されます。ここに表示しておく必要がないプロジェクトはアーカイブ可能です。
 
-* Database initialization
+  ![app_screen_projects](https://github.com/musashi-634/taskwith/assets/115614313/766949e5-7ad8-46c8-8d8d-21d8aa07da70)
 
-* How to run the test suite
+- タスク一覧ページ
 
-* Services (job queues, cache servers, search engines, etc.)
+  プロジェクトのタスクがガントチャート方式で表示されます。`Today`ボタンを押すことで、今日の日付の位置までスクロール可能です。また、タスクをドラッグアンドドロップすることで、並び替えが可能です。
 
-* Deployment instructions
+  ![app_screen_tasks](https://github.com/musashi-634/taskwith/assets/115614313/fd070ce8-a37c-411c-9214-bb007ca0c74f)
 
-* ...
+- サイドバー
+
+  プロジェクト一覧ページや、自身がアサインされたプロジェクトのタスク一覧ページに遷移することができます。
+
+  ![app_screen_navbar_offcanvas](https://github.com/musashi-634/taskwith/assets/115614313/da0db410-78be-4809-b818-99bb094c5996)
+
+- 組織設定ページ
+
+  組織の情報が表示されます。管理者は、組織の編集・削除や、メンバーの招待・脱退、権限の変更が可能です。
+
+  ![app_screen_organization](https://github.com/musashi-634/taskwith/assets/115614313/4c4d10bd-a9ba-4c70-bbdf-4c738eb96984)
+
+## 機能
+- ユーザー関係
+  - ユーザー登録機能
+  - ログイン・ログアウト機能
+  - ゲストログイン機能
+- 組織関係
+  - 組織登録機能
+  - 組織メンバー招待機能
+  - 組織管理者機能
+- プロジェクト関係
+  - プロジェクト登録機能
+  - プロジェクトの完了機能
+  - プロジェクトのアーカイブ機能
+  - プロジェクトメンバー登録機能
+- タスク関係
+  - タスク登録機能
+  - タスクの完了機能
+  - タスク担当者登録機能
+  - タスクのタイムライン表示機能
+  - ドラッグアンドドロップによるタスクの並び替え機能
+
+## ER図
+![erd](https://github.com/musashi-634/taskwith/assets/115614313/cb9e6acd-8457-42ca-b0a8-9291ca60b839)
+
+## 使用技術
+### フロントエンド
+- HTML
+- CSS
+  - Sprockets
+  - Bootstrap
+- JavaScript
+  - importmap
+  - Turbo
+  - Stimulus
+
+### バックエンド
+- Ruby 3.2.2
+- Rails 7.0.4
+- MySQL 8.0
+
+### インフラ
+- Docker / Docker Compose
+- Heroku
+
+### 主要Gem
+  - RSpec（テスティングフレームワーク）
+  - Rubocop（静的解析）
+  - Devise（認証）
+  - DeviseInvitable（招待）
+  - ranked-model（並び替え）
+  - Request.JS（JSからのHTTPリクエスト）
+
+### 主要JSライブラリ
+  - SortableJS（ドラッグアンドドロップによる並び替え）
+  - Tom Select（selectタグのUIを高機能化）
+
+## テスト
+- Rspec（194 examples）
+  - helper spec
+  - mailer spec
+  - model spec
+  - request spec
+  - system spec
+
+## 制作背景
+前職の機械設計では、業務指示は主にメールで出されていました。そのため、チームリーダーはタスクをメールに書き出す必要があり、チームメンバーはタスクを把握するのに、メールを都度見返すか、Excelなどでまとめておく必要がありました。
+
+これでは、タスク管理において無駄な時間が発生しており、効率化できるようなツールがあればいいなと日々感じていたので、チームで利用できるタスク管理ツールを制作しました。
+
+## こだわりのポイント
+- チームでのタスク管理
+
+  チームで利用できるようにすることで、タスクの共有が容易になるようにしました。具体的には、チームリーダーがタスクを列挙して担当者を割り振り、メンバーはそのタスクを確認するだけで、やるべきタスクを把握できます。また、メンバーが作業結果を都度反映させることで、チームリーダーはリアルタイムで作業進捗を把握することができます。
+
+- ガントチャート方式
+
+  前職の機械設計では、プロジェクトの大まかなスケジュールを管理するために、各工程の期間を視覚的に把握しやすいガントチャートをExcelで作成していました。そのため、本ツールでもガントチャート方式を採用しました。
